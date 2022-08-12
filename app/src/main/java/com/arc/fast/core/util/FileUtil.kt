@@ -300,6 +300,63 @@ data class UriFileInfo(
     var path: String?
 )
 
+fun String?.copyFile(
+    toFileDir: String,
+    toFileName: String? = null
+): String? {
+    if (isNullOrBlank()) return null
+    return copyFile(toFileDir, toFileName)
+}
+
+/**
+ * 复制文件
+ */
+@JvmOverloads
+fun File.copyFile(
+    toFileDir: String?,
+    toFileName: String? = null
+): String? {
+    if (toFileDir.isNullOrBlank() && toFileName.isNullOrBlank()) {
+        return null
+    }
+    val fromFile = File(fromFilePath)
+    if (!fromFile.exists()) {
+        return null
+    }
+    // 默认目标目录为原目录
+    if (isEmptyOrBlank(toFileDir)) {
+        toFileDir = getFileDirectory(fromFilePath)
+    }
+    // 默认新文件名为原文件名
+    if (isEmptyOrBlank(toFileName)) {
+        toFileName = fromFile.name
+    }
+    // 判断目标目录是否存在
+    mkdirIfNotExists(toFileDir)
+    // 创建目标文件
+    toFileDir = getSupplementaryDirPath(toFileDir)
+    val toFile = File(toFileDir + toFileName)
+    // 开始复制
+    var inputStream: InputStream? = null
+    var outputStream: OutputStream? = null
+    try {
+        inputStream = FileInputStream(fromFile)
+        outputStream = FileOutputStream(toFile)
+        var byteCount = 0
+        val bytes = ByteArray(1024)
+        while (inputStream.read(bytes).also { byteCount = it } != -1) {
+            outputStream.write(bytes, 0, byteCount)
+        }
+        return toFile.absolutePath
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        tryClose(inputStream)
+        tryClose(outputStream)
+    }
+    return null
+}
+
 object FileUtil {
 
 
