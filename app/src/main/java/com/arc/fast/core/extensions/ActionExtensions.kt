@@ -1,9 +1,9 @@
 package com.arc.fast.core.extensions
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
@@ -12,15 +12,14 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.arc.fast.core.R
+import com.arc.fast.core.file.asUri
+import com.arc.fast.core.file.fileMimeType
 import java.io.File
 
 
@@ -166,77 +165,88 @@ fun Activity.restartApp(isFinish: Boolean = true) {
  */
 fun Fragment.restartApp(isFinish: Boolean = true) = activity?.restartApp(isFinish)
 
-
+/**
+ * 根据path打开对应的app
+ */
+@SuppressLint("QueryPermissionsNeeded")
 fun Context.openAppByPath(
     path: String,
-    mimeType: String = path.mimeType,
+    mimeType: String = path.fileMimeType.value,
     authority: String? = null
-) {
-    if (path.isInternetResources) {
-        openAppByUri(Uri.parse(path), mimeType)
-    } else if (authority != null) {
-        openAppByFile(File(path), mimeType, authority)
-    }
-}
+): Boolean = if (path.isInternetResources) {
+    openBrowser(path)
+} else if (authority != null) {
+    openAppByFile(File(path), mimeType, authority)
+} else false
 
-fun Context.openAppByUri(uri: Uri, mimeType: String) {
-    var intent = Intent(Intent.ACTION_VIEW)
+/**
+ * 根据uri打开对应的app
+ */
+@SuppressLint("QueryPermissionsNeeded")
+fun Context.openAppByUri(uri: Uri, mimeType: String): Boolean = try {
+    val intent = Intent(Intent.ACTION_VIEW)
     intent.setDataAndType(uri, mimeType)
     if (intent.resolveActivity(packageManager) == null) {
-        Toast.makeText(
-            this,
-            R.string.text_not_find_open_app_by_mime_type.string,
-            Toast.LENGTH_LONG
-        )
-            .show()
-        return
+        false
+    } else {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        true
     }
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    startActivity(intent)
+} catch (e: Exception) {
+    false
 }
 
+/**
+ * 根据file打开对应的app
+ */
+@SuppressLint("QueryPermissionsNeeded")
 fun Context.openAppByFile(
     file: File,
-    mimeType: String = file.absolutePath.mimeType,
+    mimeType: String = file.absolutePath.fileMimeType.value,
+    /*The authority of a FileProvider defined in a <provider> element in your app's manifest.*/
     authority: String
-) {
-    if (!file.exists()) {
-        return
-    }
-    var intent = Intent(Intent.ACTION_VIEW)
+): Boolean = if (!file.exists()) {
+    false
+} else try {
+    var intent: Intent? = null
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         // android N以上必须获取Uri权限，否则无法正常使用
-        var uri = FileProvider.getUriForFile(this, authority, file)
-        intent.setDataAndType(uri, mimeType);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        val uri = file.asUri(this, authority)
+        if (uri != null) {
+            intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, mimeType)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        }
     } else {
         // anddroid N以下可以直接设置Uri
-        var uri = file.toUri()
-        intent.setDataAndType(uri, mimeType)
+        intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(file.toUri(), mimeType)
+        }
     }
-    if (intent.resolveActivity(packageManager) == null) {
-        Toast.makeText(
-            this,
-            R.string.text_not_find_open_app_by_mime_type.string,
-            Toast.LENGTH_LONG
-        )
-            .show()
-        return
+    if (intent?.resolveActivity(packageManager) == null) {
+        false
+    } else {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        true
     }
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    startActivity(intent)
+} catch (e: Exception) {
+    false
 }
 
-fun Context.openBrowser(url: String): Boolean {
-    try {
-        if (url.isInternetResources) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            })
-            return true
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return false
+/**
+ * 根据url打开浏览器
+ */
+fun Context.openBrowser(url: String): Boolean = try {
+    if (url.isInternetResources) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
+        true
+    } else false
+} catch (e: Exception) {
+    e.printStackTrace()
+    false
 }

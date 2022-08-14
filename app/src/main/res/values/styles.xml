@@ -1,0 +1,7 @@
+<resources>
+    <!--底部弹窗进出动画-->
+    <style name="StyleArcFastAnimDialogDownEnterExit">
+        <item name="android:windowEnterAnimation">@anim/arc_fast_anim_dialog_down_enter</item>
+        <item name="android:windowExitAnimation">@anim/arc_fast_anim_dialog_down_exit</item>
+    </style>
+</resources>

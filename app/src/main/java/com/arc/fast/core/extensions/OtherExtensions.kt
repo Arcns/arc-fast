@@ -18,6 +18,30 @@ inline fun <reified T> Collection<T>.toArrayList(): ArrayList<T> {
 }
 
 /**
+ * 倒序循环输出
+ */
+public inline fun <T> List<T>.reverseForEach(action: (T) -> Unit): Unit {
+    val count = count()
+    for (index in count - 1 downTo 0) action(this[index])
+}
+
+/**
+ * 倒序循环输出
+ */
+public inline fun <T> List<T>.reverseForEachIndexed(action: (index: Int, T) -> Unit): Unit {
+    val count = count()
+    for (index in count - 1 downTo 0) action(index, this[index])
+}
+
+/**
+ * 根据value查找key
+ */
+fun <R, T> Map<R, T>.getKey(value: T): R? {
+    if (!values.contains(value)) return null
+    return keys.firstOrNull { get(it) == value }
+}
+
+/**
  * 复制到粘贴板
  */
 fun String.copyToClipboard() {

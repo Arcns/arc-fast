@@ -26,3 +26,6 @@ fun tryInvoke(execute: () -> Unit): Boolean = try {
  * 当前是否为主线程
  */
 val isMainThread: Boolean get() = Looper.getMainLooper() == Looper.myLooper()
+
+fun notNullOrBlankElse(value: String?, elseValue: String): String =
+    if (value.isNullOrBlank()) elseValue else value

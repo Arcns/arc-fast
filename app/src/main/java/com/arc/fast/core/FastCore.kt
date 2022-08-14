@@ -1,10 +1,16 @@
 package com.arc.fast.core
 
+import android.app.Activity
+import android.app.Application
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
+import com.arc.fast.core.util.getStatusBarHeight
+import com.arc.fast.core.util.getSystemBarHeight
+import com.arc.fast.core.util.systemStatusBarHeight
 
 class FastCore {
     private lateinit var mApplicationContext: Context
@@ -21,8 +27,39 @@ class FastCore {
     }
 
     fun setApplicationContext(applicationContext: Context) {
+        if (!mInitializationCompleted) {
+            (mApplicationContext.applicationContext as Application).registerActivityLifecycleCallbacks(
+                object : Application.ActivityLifecycleCallbacks {
+                    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                        initSystemBarHeight(activity)
+                    }
+
+                    override fun onActivityStarted(activity: Activity) {
+                    }
+
+                    override fun onActivityResumed(activity: Activity) {
+                    }
+
+                    override fun onActivityPaused(activity: Activity) {
+                    }
+
+                    override fun onActivityStopped(activity: Activity) {
+                    }
+
+                    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+                    }
+
+                    override fun onActivityDestroyed(activity: Activity) {
+                    }
+                })
+            mInitializationCompleted = true
+        }
         mApplicationContext = applicationContext
-        mInitializationCompleted = true
+    }
+
+    private fun initSystemBarHeight(activity: Activity) {
+        if (systemStatusBarHeight > 0) return
+        activity.getSystemBarHeight { _, _ -> }
     }
 
     companion object {

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "arc-fast-core"
+rootProject.name("arc-fast-core"
 include ':app'
