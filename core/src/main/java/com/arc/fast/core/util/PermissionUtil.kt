@@ -50,7 +50,7 @@ class PermissionUtil {
     val isReady: Boolean get() = launcher != null
 
     // 当前请求已显示过理由了(避免再拒绝后重复显示)
-    private var currentRequestHasShownRationale = false
+    private var currentRequestHasShownRationalePermissions: List<String>? = null
 
     constructor(activity: FragmentActivity) {
         this.activity = activity
@@ -145,6 +145,7 @@ class PermissionUtil {
         val permissionRationales = HashMap<String, Int>()
         // 先查询当前的权限结果
         var beforeRationale: String? = null
+        var beforeRationalePermissions = ArrayList<String>()
         permissionRequests.forEach {
             val permission = it.permission
             if (it.rationaleRes != null) {
@@ -172,6 +173,7 @@ class PermissionUtil {
                             overallRationaleRes?.let { overallRationale ->
                                 requireActivity.getString(overallRationale)
                             }
+                        beforeRationalePermissions.add(permission)
                     }
                     if (it.rationaleRes != null) {
                         if (beforeRationale.isNullOrBlank()) {
@@ -179,6 +181,7 @@ class PermissionUtil {
                         } else {
                             beforeRationale += "\n${requireActivity.getString(it.rationaleRes)}"
                         }
+                        beforeRationalePermissions.add(permission)
                     }
                 }
             }
@@ -208,7 +211,7 @@ class PermissionUtil {
         })
         // 开始请求
         if (beforeRationale.isNullOrBlank()) {
-            currentRequestHasShownRationale = false
+            currentRequestHasShownRationalePermissions = null
             launcher?.launch(deniedPermissions.toTypedArray())
         } else {
             // 显示理由
@@ -218,7 +221,7 @@ class PermissionUtil {
                 R.string.arc_fast_ok.string,
                 {
                     // 确认
-                    currentRequestHasShownRationale = true
+                    currentRequestHasShownRationalePermissions = beforeRationalePermissions
                     launcher?.launch(deniedPermissions.toTypedArray())
                 },
                 R.string.arc_fast_cancel.string,
@@ -249,15 +252,17 @@ class PermissionUtil {
                     it.key
                 )
             ) {
-                if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale =
-                    overallRationaleRes?.let { overallRationale ->
-                        requireActivity.getString(overallRationale)
-                    }
-                val rationaleRes = permissionRationales[it.key]
-                if (rationaleRes != null) {
+                if (currentRequestHasShownRationalePermissions?.contains(it.key) != true) {
                     if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale =
-                        requireActivity.getString(rationaleRes)
-                    else donTAskAgainRationale += "\n${requireActivity.getString(rationaleRes)}"
+                        overallRationaleRes?.let { overallRationale ->
+                            requireActivity.getString(overallRationale)
+                        }
+                    val rationaleRes = permissionRationales[it.key]
+                    if (rationaleRes != null) {
+                        if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale =
+                            requireActivity.getString(rationaleRes)
+                        else donTAskAgainRationale += "\n${requireActivity.getString(rationaleRes)}"
+                    }
                 }
                 // 拒绝授予权限，且不允许再询问
                 PermissionResult.DeniedAndDonTAskAgain
@@ -271,7 +276,7 @@ class PermissionUtil {
             permissionResult.values.firstOrNull { it != PermissionResult.Granted } == null,
             permissionResult
         )
-        if (!donTAskAgainRationale.isNullOrBlank() && !currentRequestHasShownRationale) {
+        if (!donTAskAgainRationale.isNullOrBlank()) {
             // 拒绝授予权限，且不允许再询问时，弹出提示
             showAlertDialog(
                 requireActivity,
