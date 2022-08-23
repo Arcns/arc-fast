@@ -10,10 +10,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.R
+import com.arc.fast.core.extensions.isInternetResources
+import com.arc.fast.sample.*
 import com.arc.fast.sample.data.LocalData
+import com.arc.fast.sample.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
+import com.arc.fast.sample.dialog.TestBottomDialog
+import com.arc.fast.sample.dialog.TestCenterDialog
 import com.arc.fast.sample.extension.titleTextView
 import com.arc.fast.sample.utils.NavTransitionOptions
 import com.arc.fast.sample.utils.SHARED_ELEMENT_APP_NAME
@@ -95,28 +98,44 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
         // 点击菜单回调
         viewModel.eventMenuClick.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
-            val sharedElementView = if (it.isFullScreen) null else
-                viewModel.valueMenuList.value?.response?.data?.indexOf(it)?.let { itemIndex ->
-                    if (itemIndex >= 0) binding.rvContent.findViewHolderForAdapterPosition(itemIndex) else null
+            onMenuClick(it)
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun onMenuClick(menu: Menu) {
+        if (menu.url?.isInternetResources == true) {
+            val sharedElementView = if (menu.isFullScreen) null else
+                viewModel.valueMenuList.value?.response?.data?.indexOf(menu)?.let { itemIndex ->
+                    if (itemIndex >= 0) binding.rvContent.findViewHolderForAdapterPosition(
+                        itemIndex
+                    ) else null
                 }?.itemView?.findViewById<View>(R.id.tvTitle)
-            if (sharedElementView != null && !it.title.isNullOrBlank()) {
+            if (sharedElementView != null && !menu.title.isNullOrBlank()) {
                 // 设置元素转场动画
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToWebViewFragment(
-                        it
+                        menu
                     ),
                     FragmentNavigatorExtras(
-                        sharedElementView to it.title!!
+                        sharedElementView to menu.title!!
                     )
                 )
             } else {
                 findNavController().navigate(
                     MainFragmentDirections.actionMainFragmentToWebViewFragment(
-                        it
+                        menu
                     )
                 )
             }
-        }.launchIn(lifecycleScope)
+        } else if (menu.url == ACTION_SCAN) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToScanFragment()
+            )
+        } else if (menu.url == ACTION_BOTTOM_DIALOG) {
+            TestBottomDialog().show(parentFragmentManager, null)
+        } else if (menu.url == ACTION_CENTER_DIALOG) {
+            TestCenterDialog().show(parentFragmentManager, null)
+        }
     }
 
 }

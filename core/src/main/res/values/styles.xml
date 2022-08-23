@@ -4,4 +4,9 @@
         <item name="android:windowEnterAnimation">@anim/arc_fast_anim_dialog_down_enter</item>
         <item name="android:windowExitAnimation">@anim/arc_fast_anim_dialog_down_exit</item>
     </style>
+    <!--缩放弹窗进出动画-->
+    <style name="StyleArcFastAnimDialogScaleEnterExit">
+        <item name="android:windowEnterAnimation">@anim/arc_fast_anim_dialog_scale_enter</item>
+        <item name="android:windowExitAnimation">@anim/arc_fast_anim_dialog_scale_exit</item>
+    </style>
 </resources>

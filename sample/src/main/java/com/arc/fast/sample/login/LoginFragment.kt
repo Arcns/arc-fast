@@ -9,7 +9,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.R
 import com.arc.fast.sample.data.ApiStatus
@@ -17,6 +16,7 @@ import com.arc.fast.sample.data.LocalData
 import com.arc.fast.sample.databinding.FragmentLoginBinding
 import com.arc.fast.sample.utils.NavTransitionOptions
 import com.arc.fast.sample.utils.SHARED_ELEMENT_APP_NAME
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -55,7 +55,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
                 }.setNegativeButton(R.string.cancel) { _, _ -> }.show()
         }
         viewModel.eventLoginResult.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
-            if (it.status == ApiStatus.SUCCESS) {
+            // 测试用，任何清空均可以进入主页
+            if (it.status == ApiStatus.SUCCESS || it.status == ApiStatus.ERROR) {
                 findNavController().navigate(
                     LoginFragmentDirections.actionLoginFragmentToMainFragment(),
                     FragmentNavigatorExtras(

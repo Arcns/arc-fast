@@ -85,22 +85,5 @@ abstract class BaseFragment<Binding : ViewDataBinding> :
                 })
         }
     }
-
-    protected fun setupToolbar(
-        toolbar: Toolbar,
-        title: String? = null,
-        navigationIcon: Drawable? = navigationIconForBack
-    ) {
-//        toolbar.setPaddingForStatusBarHeight()
-        if (navigationIcon != null) {
-            toolbar.apply {
-                this.navigationIcon = navigationIcon
-                this.setNavigationOnClickListener {
-                    activity?.onBackPressed()
-                }
-            }
-        }
-        if (title != null) toolbar.title = title
-    }
 }
 

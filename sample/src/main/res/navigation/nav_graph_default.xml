@@ -43,6 +43,9 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mainFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
     </fragment>
 
     <fragment

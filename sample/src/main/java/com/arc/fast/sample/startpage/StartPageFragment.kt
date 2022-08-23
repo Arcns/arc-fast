@@ -34,7 +34,9 @@ class StartPageFragment : BaseFragment<FragmentStartPageBinding>() {
         lifecycleScope.launch {
             delay(500)
             appViewModel.appUpdate()
+            LocalData.currentLoginSecret = "test" // 测试数据
             if (LocalData.currentLoginSecret.isNullOrBlank()) {
+                // 未登陆
                 findNavController().navigate(
                     StartPageFragmentDirections.actionStartPageFragmentToLoginFragment(),
                     FragmentNavigatorExtras(
@@ -42,6 +44,7 @@ class StartPageFragment : BaseFragment<FragmentStartPageBinding>() {
                     )
                 )
             } else {
+                // 已登陆
                 findNavController().navigate(
                     StartPageFragmentDirections.actionStartPageFragmentToMainFragment(),
                     FragmentNavigatorExtras(

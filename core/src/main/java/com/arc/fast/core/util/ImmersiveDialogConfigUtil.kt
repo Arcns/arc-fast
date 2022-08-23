@@ -6,9 +6,12 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -16,11 +19,40 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.arc.fast.core.R
 
+
 /**
- * 沉浸式视窗工具
+ * 沉浸式弹窗
+ */
+abstract class ImmersiveDialog : DialogFragment() {
+    // 沉浸式弹窗工具
+    protected val immersiveDialogConfigUtil by lazy {
+        ImmersiveDialogConfigUtil(immersiveDialogConfig)
+    }
+
+    // 沉浸式配置
+    protected abstract val immersiveDialogConfig: ImmersiveDialogConfig?
+
+    // 布局id
+    protected abstract val layoutId: Int
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        immersiveDialogConfigUtil.applyConfigToDialog(this, null)
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return immersiveDialogConfigUtil.wrapDialogContentView(this, inflater, layoutId)
+    }
+}
+
+/**
+ * 沉浸式弹窗工具
  */
 class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null) {
-
 
     /**
      * 应用配置到弹窗，请在Dialog的onViewCreated中调用
@@ -36,18 +68,23 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
             setCanceledOnTouchOutside(dialogConfig.canceledOnTouchOutside)
         }
         window.attributes = window.attributes.apply {
+            gravity = dialogConfig.gravity
             width = WindowManager.LayoutParams.MATCH_PARENT
             height = WindowManager.LayoutParams.MATCH_PARENT
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 layoutInDisplayCutoutMode =
                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
             }
+            flags = (WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).let {
+                flags and it.inv() or (it and it)
+            }
             if (dialogConfig.backgroundDimAmount != -1f) {
                 dimAmount = dialogConfig.backgroundDimAmount
             }
         }
         window.apply {
-            setGravity(dialogConfig.gravity)
+            // 删除默认背景
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             // 设置动画
             setWindowAnimations(dialogConfig.animations)
             //禁用默认的dialog外屏幕变暗效果，禁用后dimAmount将无效
@@ -55,12 +92,14 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                 clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
             // 控制状态栏和导航栏
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
+            WindowCompat.setDecorFitsSystemWindows(this, false)
+//            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+//            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
             //内容扩展到导航栏，改设置会导致无法修改前景颜色
             // setType(WindowManager.LayoutParams.TYPE_APPLICATION_PANEL);
 
@@ -130,8 +169,8 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                         isVisible = false
                         setBackgroundColor(dialogConfig.backgroundColor)
                         fitsSystemWindows = false
-                        systemUiVisibility =
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        systemUiVisibility =
+//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         if (dialogConfig.canceledOnTouchOutside) {
                             setOnClickListener {
                                 dialogFragment.dismiss()
@@ -173,6 +212,7 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                                 layoutInDisplayCutoutMode =
                                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
                             }
+                            flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
                         }
                     )
                     // 显示时尝试设置背景
@@ -263,9 +303,9 @@ class ImmersiveDialogConfig(
                 Gravity.CENTER,
                 Color.TRANSPARENT,
                 Color.TRANSPARENT,
-                true,
+                false,
                 0f,
-                0,
+                R.style.StyleArcFastAnimDialogScaleEnterExit,
                 true,
                 true,
                 true,

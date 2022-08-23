@@ -68,11 +68,11 @@ class WebViewFragment : BaseFragment<FragmentWebViewBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvHome.setOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.tvBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+        binding.toolbar.apply {
+            this.navigationIcon = navigationIconForBack
+            this.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
