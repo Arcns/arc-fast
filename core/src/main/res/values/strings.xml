@@ -1,0 +1,5 @@
+<resources>
+    <string name="arc_fast_cancel">取消</string>
+    <string name="arc_fast_ok">确定</string>
+    <string name="arc_fast_setting">设置</string>
+</resources>

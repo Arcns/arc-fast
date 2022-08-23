@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextViewPlus">
+        <attr name="leftImgHeight" format="dimension" />
+        <attr name="leftImgWidth" format="dimension" />
+        <attr name="rightImgHeight" format="dimension" />
+        <attr name="rightImgWidth" format="dimension" />
+        <attr name="topImgHeight" format="dimension" />
+        <attr name="topImgWidth" format="dimension" />
+        <attr name="bottomImgHeight" format="dimension" />
+        <attr name="bottomImgWidth" format="dimension" />
+    </declare-styleable>
+</resources>

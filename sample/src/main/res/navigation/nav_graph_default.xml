@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_default"
+    app:startDestination="@id/startPageFragment">
+
+    <fragment
+        android:id="@+id/startPageFragment"
+        android:name="com.arc.fast.sample.startpage.StartPageFragment">
+        <action
+            android:id="@+id/action_startPageFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/startPageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_startPageFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/startPageFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_startPageFragment_to_testFragment"
+            app:destination="@id/testFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.arc.fast.sample.login.LoginFragment">
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.arc.fast.sample.main.MainFragment">
+
+        <action
+            android:id="@+id/action_mainFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.arc.fast.sample.webview.WebViewFragment">
+
+        <argument
+            android:name="menu"
+            app:argType="com.arc.fast.sample.data.entity.Menu" />
+        <action
+            android:id="@+id/action_webViewFragment_to_scanFragment"
+            app:destination="@id/scanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.arc.fast.sample.scan.ScanFragment"
+        android:label="ScanFragment" />
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.arc.fast.sample.startpage.TestFragment"
+        android:label="TestFragment" />
+</navigation>
