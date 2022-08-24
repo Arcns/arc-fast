@@ -147,6 +147,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             )
         } else if (menu.url == ACTION_TOP_POPUP) {
             TestTopPopupWindow(requireContext()).showAsDropDown(binding.toolbar)
+        } else if (menu.url == ACTION_TEST) {
+            findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }
     }
 

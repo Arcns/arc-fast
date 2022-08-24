@@ -17,9 +17,6 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@id/startPageFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_startPageFragment_to_testFragment"
-            app:destination="@id/testFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -65,6 +62,6 @@
         android:label="ScanFragment" />
     <fragment
         android:id="@+id/testFragment"
-        android:name="com.arc.fast.sample.startpage.TestFragment"
-        android:label="TestFragment" />
+        android:name="com.arc.fast.sample.test.TestFragment"
+        android:label="TestFragment" /><action android:id="@+id/action_global_testFragment" app:destination="@id/testFragment"/>
 </navigation>

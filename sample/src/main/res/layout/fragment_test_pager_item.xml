@@ -7,12 +7,13 @@
         <import type="android.view.View" />
     </data>
 
-
-    <com.arc.fast.sample.test.NestedRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_2"
-        android:fitsSystemWindows="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:spanCount="2" />
 </layout>
