@@ -75,11 +75,15 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                 layoutInDisplayCutoutMode =
                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
             }
-            flags = (WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).let {
-                flags and it.inv() or (it and it)
-            }
+            flags =
+                (WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).let {
+                    flags and it.inv() or (it and it)
+                }
             if (dialogConfig.backgroundDimAmount != -1f) {
                 dimAmount = dialogConfig.backgroundDimAmount
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                fitInsetsTypes = WindowInsets.Type.ime()
             }
         }
         window.apply {
@@ -94,15 +98,15 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
             // 控制状态栏和导航栏
             statusBarColor = Color.TRANSPARENT
             navigationBarColor = Color.TRANSPARENT
-            WindowCompat.setDecorFitsSystemWindows(this, false)
 //            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 //            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
+            WindowCompat.setDecorFitsSystemWindows(this, false)
 //            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 //                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
-            //内容扩展到导航栏，改设置会导致无法修改前景颜色
+//                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                    )
+            //内容扩展到导航栏，该设置会导致无法修改前景颜色
             // setType(WindowManager.LayoutParams.TYPE_APPLICATION_PANEL);
-
         }
         // 状态栏和导航栏前景颜色
         WindowInsetsControllerCompat(window, window.decorView).apply {
@@ -203,7 +207,7 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                         dialogBackgroundView,
                         WindowManager.LayoutParams(
                             WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
                             PixelFormat.TRANSLUCENT
                         ).apply {
                             token = dialogFragment.activity?.window?.decorView?.windowToken
@@ -212,7 +216,9 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                                 layoutInDisplayCutoutMode =
                                     WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
                             }
-                            flags = WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                fitInsetsTypes = WindowInsets.Type.ime()
+                            }
                         }
                     )
                     // 显示时尝试设置背景

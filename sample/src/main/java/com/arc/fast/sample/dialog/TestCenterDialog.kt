@@ -16,8 +16,8 @@ class TestCenterDialog : ImmersiveBindingDialog<DialogTestCenterBinding>() {
 
     override val immersiveDialogConfig
         get() = ImmersiveDialogConfig.createFullScreenDialogConfig().apply {
-//            height = 300.dp
-//            width = 300.dp
+            height = 300.dp
+            width = 300.dp
             backgroundColor = R.color.md_theme_light_primary_transparent_26.color
         }
 

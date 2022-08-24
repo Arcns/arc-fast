@@ -2,10 +2,7 @@ package com.arc.fast.sample.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arc.fast.sample.ACTION_BOTTOM_DIALOG
-import com.arc.fast.sample.ACTION_CENTER_DIALOG
-import com.arc.fast.sample.ACTION_SCAN
-import com.arc.fast.sample.AppViewModel
+import com.arc.fast.sample.*
 import com.arc.fast.sample.data.DataSource
 import com.arc.fast.sample.data.entity.ApiResult
 import com.arc.fast.sample.data.entity.Menu
@@ -40,7 +37,9 @@ class MainViewModel : ViewModel() {
                         Menu("webview", "http://www.baidu.com", 0),
                         Menu("scan", ACTION_SCAN, 1),
                         Menu("bottom dialog", ACTION_BOTTOM_DIALOG, 1),
-                        Menu("center dialog", ACTION_CENTER_DIALOG, 1)
+                        Menu("center dialog", ACTION_CENTER_DIALOG, 1),
+                        Menu("bottom popup", ACTION_BOTTOM_POPUP, 1),
+                        Menu("top popup", ACTION_TOP_POPUP, 1)
                     )
                 )
                 valueMenuList.value = ApiResult.Success(response, response.data)
