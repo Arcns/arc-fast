@@ -19,6 +19,7 @@ class TestBottomPopupWindow(val context: Context) :
 
     override fun getImmersivePopupWindowConfig(context: Context) =
         ImmersivePopupWindowConfig.createBottomPopupWindow(context).apply {
+            enableNavigationBar = true /*显示页面的导航栏*/
             backgroundColor = R.color.md_theme_light_primary_transparent_26.color
         }
 

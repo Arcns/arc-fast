@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.math.MathUtils
 import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.ViewCompat
@@ -17,21 +16,21 @@ class NestedRecyclerView(context: Context, attrs: AttributeSet?) :
     private var nestedScrollTarget: View? = null
     private var nestedScrollTargetWasUnableToScroll = false
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        // 没有嵌套滚动目标时不做操作
-        if (nestedScrollTarget == null) return super.dispatchTouchEvent(ev)
-
-        // 先禁用拦截事件
-        requestDisallowInterceptTouchEvent(true)
-        // 执行其他默认操作
-        var handled = super.dispatchTouchEvent(ev)
-        // 恢复拦截
-        requestDisallowInterceptTouchEvent(false)
-        if (!handled || nestedScrollTargetWasUnableToScroll) {
-            handled = super.dispatchTouchEvent(ev)
-        }
-        return handled
-    }
+//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+//        // 没有嵌套滚动目标时不做操作
+//        if (nestedScrollTarget == null) return super.dispatchTouchEvent(ev)
+//
+//        // 先禁用拦截事件
+//        requestDisallowInterceptTouchEvent(true)
+//        // 执行其他默认操作
+//        var handled = super.dispatchTouchEvent(ev)
+//        // 恢复拦截
+//        requestDisallowInterceptTouchEvent(false)
+//        if (!handled || nestedScrollTargetWasUnableToScroll) {
+//            handled = super.dispatchTouchEvent(ev)
+//        }
+//        return handled
+//    }
 
     override fun onNestedScroll(
         target: View,
@@ -130,36 +129,37 @@ class NestedRecyclerView(context: Context, attrs: AttributeSet?) :
 
     private fun scrollUp(dy: Int, consumed: IntArray) {
         val oldScrollY = scrollY
-        scrollBy(0, dy)
+//        scrollBy(0, dy)
+        nestedScrollBy(0, dy)
         consumed[1] = scrollY - oldScrollY
     }
 
-    override fun scrollTo(x: Int, y: Int) {
-        val validY = MathUtils.clamp(y, 0, headerHeight)
-        super.scrollTo(x, validY)
-    }
+//    override fun scrollTo(x: Int, y: Int) {
+////        val validY = MathUtils.clamp(y, 0, headerHeight)
+//        super.scrollTo(x, validY)
+//    }
 
     /*--------------------------------------------------------------------------------------------*/
 
     // 简单把第一个 child 作为 header
-    private var headerHeight = 0
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (childCount > 0) {
-            val headView = getChildAt(0)
-            measureChildWithMargins(headView, widthMeasureSpec, 0, MeasureSpec.UNSPECIFIED, 0)
-            headerHeight = headView.measuredHeight
-            super.onMeasure(
-                widthMeasureSpec,
-                MeasureSpec.makeMeasureSpec(
-                    MeasureSpec.getSize(heightMeasureSpec) + headerHeight,
-                    MeasureSpec.EXACTLY
-                )
-            )
-        } else {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        }
-    }
+//    private var headerHeight = 0
+//
+//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//        if (childCount > 0) {
+//            val headView = getChildAt(0)
+//            measureChildWithMargins(headView, widthMeasureSpec, 0, MeasureSpec.UNSPECIFIED, 0)
+//            headerHeight = headView.measuredHeight
+//            super.onMeasure(
+//                widthMeasureSpec,
+//                MeasureSpec.makeMeasureSpec(
+//                    MeasureSpec.getSize(heightMeasureSpec) + headerHeight,
+//                    MeasureSpec.EXACTLY
+//                )
+//            )
+//        } else {
+//            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+//        }
+//    }
 
 
     private fun setTarget(target: View?) {

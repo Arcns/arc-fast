@@ -534,11 +534,13 @@ class PermissionUtil {
     }
 }
 
-class FastPermissionFragment(val onFast: (Fragment, PermissionUtil) -> Unit) :
+class FastPermissionFragment(val onFast: ((Fragment, PermissionUtil) -> Unit)?) :
     Fragment() {
+    constructor() : this(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        onFast.invoke(this, PermissionUtil(this))
+        onFast?.invoke(this, PermissionUtil(this))
     }
 }
 

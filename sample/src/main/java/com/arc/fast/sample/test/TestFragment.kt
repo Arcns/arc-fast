@@ -27,7 +27,7 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvData.itemAnimator?.changeDuration = 0
         val data = ArrayList<TestListItem>()
-        for (i in 1..20) {
+        for (i in 1..80) {
             data.add(TestListItem.TestTitle("test menu $i"))
         }
         val pagerData = ArrayList<TestPagerItem>()
@@ -39,6 +39,9 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
             pagerData.add(TestPagerItem("pager $i", items))
         }
         data.add(TestListItem.TestPager(pagerData))
+        for (i in 1..20) {
+            data.add(TestListItem.TestTitle("test menu $i"))
+        }
         binding.rvData.addItemDecoration(object : ItemDecoration() {
             private val dp10 by lazy { 10.dp }
             override fun getItemOffsets(

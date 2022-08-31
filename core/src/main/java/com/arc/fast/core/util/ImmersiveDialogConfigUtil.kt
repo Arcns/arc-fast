@@ -3,6 +3,7 @@ package com.arc.fast.core.util
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -70,20 +72,24 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
         window.attributes = window.attributes.apply {
             gravity = dialogConfig.gravity
             width = WindowManager.LayoutParams.MATCH_PARENT
-            height = WindowManager.LayoutParams.MATCH_PARENT
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                layoutInDisplayCutoutMode =
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-            }
-            flags =
-                (WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).let {
-                    flags and it.inv() or (it and it)
+            if (!dialogConfig.enableSoftInputAdjustResize) {
+                height = WindowManager.LayoutParams.MATCH_PARENT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    layoutInDisplayCutoutMode =
+                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
                 }
+                flags =
+                    (WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS).let {
+                        flags and it.inv() or (it and it)
+                    }
+            } else {
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
             if (dialogConfig.backgroundDimAmount != -1f) {
                 dimAmount = dialogConfig.backgroundDimAmount
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                fitInsetsTypes = WindowInsets.Type.ime()
+                fitInsetsTypes = fitInsetsTypes and WindowInsetsCompat.Type.systemBars().inv()
             }
         }
         window.apply {
@@ -95,26 +101,39 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
             if (!dialogConfig.backgroundDimEnabled) {
                 clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
-            // 控制状态栏和导航栏
-            statusBarColor = Color.TRANSPARENT
-            navigationBarColor = Color.TRANSPARENT
-//            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//            addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-            WindowCompat.setDecorFitsSystemWindows(this, false)
+            if (!dialogConfig.enableSoftInputAdjustResize) {
+                // 控制状态栏和导航栏
+                statusBarColor = Color.TRANSPARENT
+                navigationBarColor = Color.TRANSPARENT
+                WindowCompat.setDecorFitsSystemWindows(this, false)
 //            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 //                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 //                    )
-            //内容扩展到导航栏，该设置会导致无法修改前景颜色
-            // setType(WindowManager.LayoutParams.TYPE_APPLICATION_PANEL);
+                //内容扩展到导航栏，该设置会导致无法修改前景颜色
+                // setType(WindowManager.LayoutParams.TYPE_APPLICATION_PANEL);
+                // 状态栏和导航栏前景颜色
+                WindowInsetsControllerCompat(window, window.decorView).apply {
+                    isAppearanceLightStatusBars =
+                        !dialogConfig.isLightStatusBarForegroundColor
+                    isAppearanceLightNavigationBars =
+                        !dialogConfig.isLightNavigationBarForegroundColor
+                }
+                // 打开键盘时不重置弹窗布局大小
+                setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+            } else {
+                // 控制状态栏和导航栏
+                WindowCompat.setDecorFitsSystemWindows(this, true)
+                // 打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡
+                setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                // 关闭时收起软键盘
+                dialogFragment.setStyle(
+                    DialogFragment.STYLE_NORMAL,
+                    android.R.style.Theme_Black_NoTitleBar_Fullscreen
+                )
+            }
         }
-        // 状态栏和导航栏前景颜色
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars =
-                !dialogConfig.isLightStatusBarForegroundColor
-            isAppearanceLightNavigationBars =
-                !dialogConfig.isLightNavigationBarForegroundColor
-        }
+        dialogConfig.updateCustomDialogConfig?.invoke(dialogFragment.dialog!!, window)
     }
 
     /**
@@ -142,7 +161,12 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
         config: ImmersiveDialogConfig? = null
     ): View {
         val dialogConfig = config ?: defaultConfig
-        return if (dialogConfig == null || (dialogConfig.width == ViewGroup.LayoutParams.MATCH_PARENT && dialogConfig.height == ViewGroup.LayoutParams.MATCH_PARENT && dialogConfig.backgroundColor == Color.TRANSPARENT && dialogConfig.navigationColor == Color.TRANSPARENT)) {
+        addDialogBackgroundView(dialogFragment, inflater, dialogConfig)
+        return if (
+            dialogConfig == null ||
+            !dialogConfig.enableWrapDialogContentView ||
+            (dialogConfig.width == ViewGroup.LayoutParams.MATCH_PARENT && dialogConfig.height == ViewGroup.LayoutParams.MATCH_PARENT && dialogConfig.navigationColor == Color.TRANSPARENT)
+        ) {
             contentView
         } else {
             val rootView =
@@ -159,91 +183,6 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
             if (dialogConfig.canceledOnTouchOutside) {
                 rootView.setOnClickListener { dialogFragment.dismiss() }
                 contentView.setOnClickListener { }
-            }
-            // 设置背景颜色
-            if (!dialogConfig.backgroundDimEnabled && dialogConfig.backgroundColor != Color.TRANSPARENT) {
-                if (dialogConfig.animations == 0) {
-                    // 没有弹窗动画时，直接设置背景色即可
-                    rootView.setBackgroundColor(dialogConfig.backgroundColor)
-                } else {
-                    val windowManager =
-                        dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-                    // 有弹窗动画时，不能直接设置背景色，否则背景会跟随弹窗动画，需要把背景add到activity的window中
-                    val dialogBackgroundView = View(inflater.context).apply {
-                        isVisible = false
-                        setBackgroundColor(dialogConfig.backgroundColor)
-                        fitsSystemWindows = false
-//                        systemUiVisibility =
-//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        if (dialogConfig.canceledOnTouchOutside) {
-                            setOnClickListener {
-                                dialogFragment.dismiss()
-                            }
-                        }
-//                        if (dialogConfig.cancelable) {
-//                            setOnKeyListener { _, keyCode, _ ->
-//                                if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                                    dialogFragment.dismiss()
-//                                    return@setOnKeyListener true
-//                                }
-//                                false
-//                            }
-//                        }
-                    }
-                    val backgroundViewAnimator =
-                        ObjectAnimator.ofFloat(dialogBackgroundView, "alpha", 0f, 1f)
-                            .setDuration(300).apply {
-                                addListener(object : AnimatorListenerAdapter() {
-                                    override fun onAnimationEnd(animation: Animator?) {
-                                        if (dialogBackgroundView.alpha == 0f) {
-                                            windowManager.removeView(
-                                                dialogBackgroundView
-                                            )
-                                        }
-                                    }
-                                })
-                            }
-                    windowManager.addView(
-                        dialogBackgroundView,
-                        WindowManager.LayoutParams(
-                            WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                            WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
-                            PixelFormat.TRANSLUCENT
-                        ).apply {
-                            token = dialogFragment.activity?.window?.decorView?.windowToken
-                            gravity = Gravity.CENTER
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                layoutInDisplayCutoutMode =
-                                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-                            }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                fitInsetsTypes = WindowInsets.Type.ime()
-                            }
-                        }
-                    )
-                    // 显示时尝试设置背景
-                    dialogFragment.dialog?.setOnShowListener {
-                        backgroundViewAnimator.cancel()
-                        dialogBackgroundView.alpha = 0f
-                        dialogBackgroundView.isVisible = true
-                        backgroundViewAnimator.setFloatValues(0f, 1f)
-                        backgroundViewAnimator.startDelay = 100
-                        backgroundViewAnimator.start()
-                    }
-                    // 弹窗关闭时，删除背景
-                    dialogFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
-                        override fun onDestroy(owner: LifecycleOwner) {
-                            dialogFragment.lifecycle.removeObserver(this)
-
-                            backgroundViewAnimator.cancel()
-                            backgroundViewAnimator.setFloatValues(1f, 0f)
-                            backgroundViewAnimator.startDelay = 0
-                            backgroundViewAnimator.start()
-
-                            super.onDestroy(owner)
-                        }
-                    })
-                }
             }
             // 添加到父控件
             rootView.addView(
@@ -265,6 +204,96 @@ class ImmersiveDialogConfigUtil(val defaultConfig: ImmersiveDialogConfig? = null
                     }
                 })
             rootView
+        }
+    }
+
+    /**
+     * 设置背景,防止当有弹窗动画时，不能直接设置背景色，否则背景会跟随弹窗动画，需要把背景add到activity的window中
+     */
+    private fun addDialogBackgroundView(
+        dialogFragment: DialogFragment,
+        inflater: LayoutInflater,
+        dialogConfig: ImmersiveDialogConfig?
+    ) {
+
+        if (dialogConfig != null && !dialogConfig.backgroundDimEnabled && dialogConfig.backgroundColor != Color.TRANSPARENT) {
+            val windowManager =
+                dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            // 有弹窗动画时，不能直接设置背景色，否则背景会跟随弹窗动画，需要把背景add到activity的window中
+            val dialogBackgroundView = View(inflater.context).apply {
+                isVisible = false
+                setBackgroundColor(dialogConfig.backgroundColor)
+                fitsSystemWindows = false
+//                        systemUiVisibility =
+//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                if (dialogConfig.canceledOnTouchOutside) {
+                    setOnClickListener {
+                        dialogFragment.dismiss()
+                    }
+                }
+//                        if (dialogConfig.cancelable) {
+//                            setOnKeyListener { _, keyCode, _ ->
+//                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+//                                    dialogFragment.dismiss()
+//                                    return@setOnKeyListener true
+//                                }
+//                                false
+//                            }
+//                        }
+            }
+            val backgroundViewAnimator =
+                ObjectAnimator.ofFloat(dialogBackgroundView, "alpha", 0f, 1f)
+                    .setDuration(300).apply {
+                        addListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                if (dialogBackgroundView.alpha == 0f) {
+                                    windowManager.removeView(
+                                        dialogBackgroundView
+                                    )
+                                }
+                            }
+                        })
+                    }
+            windowManager.addView(
+                dialogBackgroundView,
+                WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                    PixelFormat.TRANSLUCENT
+                ).apply {
+                    token = dialogFragment.activity?.window?.decorView?.windowToken
+                    gravity = Gravity.CENTER
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        layoutInDisplayCutoutMode =
+                            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        fitInsetsTypes = WindowInsets.Type.ime()
+                    }
+                }
+            )
+            // 显示时尝试设置背景
+            dialogFragment.dialog?.setOnShowListener {
+                backgroundViewAnimator.cancel()
+                dialogBackgroundView.alpha = 0f
+                dialogBackgroundView.isVisible = true
+                backgroundViewAnimator.setFloatValues(0f, 1f)
+                backgroundViewAnimator.startDelay = 100
+                backgroundViewAnimator.start()
+            }
+            // 弹窗关闭时，删除背景
+            dialogFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    dialogFragment.lifecycle.removeObserver(this)
+
+                    backgroundViewAnimator.cancel()
+                    backgroundViewAnimator.setFloatValues(1f, 0f)
+                    backgroundViewAnimator.startDelay = 0
+                    backgroundViewAnimator.start()
+
+                    super.onDestroy(owner)
+                }
+            })
         }
     }
 }
@@ -298,7 +327,14 @@ class ImmersiveDialogConfig(
     var canceledOnTouchOutside: Boolean,
     var cancelable: Boolean,
     var isLightStatusBarForegroundColor: Boolean,
-    var isLightNavigationBarForegroundColor: Boolean
+    var isLightNavigationBarForegroundColor: Boolean,
+    // 启用根视图包裹,注意如果不启用backgroundColor,navigationColor等设置将无效
+    var enableWrapDialogContentView: Boolean = true,
+    // 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。
+    // 注意启用后，内容无法扩展到全屏，沉浸式背景颜色仅支持backgroundDimAmount
+    var enableSoftInputAdjustResize: Boolean = false,
+    // 更新dialog更多自定义配置
+    var updateCustomDialogConfig: ((dialog: Dialog, window: Window) -> Unit)? = null
 ) {
     companion object {
         @JvmStatic
@@ -334,6 +370,26 @@ class ImmersiveDialogConfig(
                 true,
                 true,
                 false
+            )
+        }
+
+        @JvmStatic
+        fun createSoftInputAdjustResizeDialogConfig(): ImmersiveDialogConfig {
+            return ImmersiveDialogConfig(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                Gravity.BOTTOM,
+                Color.TRANSPARENT,
+                Color.TRANSPARENT,
+                true,
+                -1f,
+                R.style.StyleArcFastAnimDialogDownEnterExit,
+                true,
+                true,
+                true,
+                true,
+                enableSoftInputAdjustResize = true,
+                enableWrapDialogContentView = false
             )
         }
     }

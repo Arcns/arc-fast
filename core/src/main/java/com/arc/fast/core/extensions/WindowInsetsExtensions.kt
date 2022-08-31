@@ -1,7 +1,10 @@
 package com.arc.fast.core.extensions
 
+import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.Insets
 import androidx.core.view.*
 
 /**
@@ -115,6 +118,151 @@ fun View.applySystemWindowsInsetsMargin(
             topMargin = margins.top + top
             rightMargin = margins.right + right
             bottomMargin = margins.bottom + bottom
+        }
+    }
+}
+
+/**
+ * 实现视图跟随键盘变化播放插帧动画
+ * 在 API 30+ 的设备上运行时，此功能在 IME 进入/退出屏幕时完美跟踪它
+ * 在 API 21-29 的设备上运行时，WindowInsetsAnimationCompat将运行一个动画，该动画试图模仿系统 IME 动画.
+ * 在 API < 21 的设备时,只能直接显示/隐藏
+ * https://github.com/android/user-interface-samples/tree/main/WindowInsetsAnimation
+ */
+fun View.applyWindowInsetIMEAnimation(
+    persistentInsetTypes: Int = WindowInsetsCompat.Type.systemBars(),
+    dispatchMode: Int = WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP,
+    rootView: View? = null
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && rootView != null) {
+        // 低于R版本的系统目前在dialog下会有无法接收到ime Insets回调的bug,因此暂时不做监听
+        val deferringInsetsListener = RootViewDeferringInsetsCallback(
+            persistentInsetTypes = WindowInsetsCompat.Type.systemBars(),
+            deferredInsetTypes = WindowInsetsCompat.Type.ime()
+        )
+        ViewCompat.setWindowInsetsAnimationCallback(rootView, deferringInsetsListener)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, deferringInsetsListener)
+    }
+    ViewCompat.setWindowInsetsAnimationCallback(
+        this,
+        TranslateDeferringInsetsAnimationCallback(
+            view = this,
+            persistentInsetTypes = persistentInsetTypes,
+            deferredInsetTypes = WindowInsetsCompat.Type.ime(),
+            dispatchMode = dispatchMode
+        )
+    )
+}
+
+/**
+ * 实现视图跟随inset变化播放插帧动画
+ * 在 API 30+ 的设备上运行时，此功能在 IME 进入/退出屏幕时完美跟踪它
+ * 在 API 21-29 的设备上运行时，WindowInsetsAnimationCompat将运行一个动画，该动画试图模仿系统 IME 动画.
+ * 在 API < 21 的设备时,只能直接显示/隐藏
+ * https://github.com/android/user-interface-samples/tree/main/WindowInsetsAnimation
+ */
+class TranslateDeferringInsetsAnimationCallback(
+    private val view: View,
+    private val persistentInsetTypes: Int,
+    private val deferredInsetTypes: Int,
+    dispatchMode: Int = DISPATCH_MODE_STOP
+) : WindowInsetsAnimationCompat.Callback(dispatchMode) {
+    init {
+        require(persistentInsetTypes and deferredInsetTypes == 0) {
+            "persistentInsetTypes and deferredInsetTypes can not contain any of " +
+                    " same WindowInsetsCompat.Type values"
+        }
+    }
+
+    override fun onProgress(
+        insets: WindowInsetsCompat,
+        runningAnimations: List<WindowInsetsAnimationCompat>
+    ): WindowInsetsCompat {
+        val typesInset = insets.getInsets(deferredInsetTypes)
+        val otherInset = insets.getInsets(persistentInsetTypes)
+        val diff = Insets.subtract(typesInset, otherInset).let {
+            Insets.max(it, Insets.NONE)
+        }
+
+        view.translationX = (diff.left - diff.right).toFloat()
+        view.translationY = (diff.top - diff.bottom).toFloat()
+        Log.e(
+            "aaaaaaaaaaaaa",
+            "setWindowInsetsAnimationCallback:" + (diff.top - diff.bottom).toFloat()
+        )
+
+        return insets
+    }
+
+    override fun onEnd(animation: WindowInsetsAnimationCompat) {
+        view.translationX = 0f
+        view.translationY = 0f
+    }
+}
+
+/**
+ * 根视图延迟插入回调
+ * 与TranslateDeferringInsetsAnimationCallback配合使用,使Insets Animation更加流畅,减少跳动和裁剪感
+ * https://github.com/android/user-interface-samples/tree/main/WindowInsetsAnimation
+ */
+class RootViewDeferringInsetsCallback(
+    val persistentInsetTypes: Int,
+    val deferredInsetTypes: Int
+) : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_CONTINUE_ON_SUBTREE),
+    OnApplyWindowInsetsListener {
+    init {
+        require(persistentInsetTypes and deferredInsetTypes == 0) {
+            "persistentInsetTypes and deferredInsetTypes can not contain any of " +
+                    " same WindowInsetsCompat.Type values"
+        }
+    }
+
+    private var view: View? = null
+    private var lastWindowInsets: WindowInsetsCompat? = null
+
+    private var deferredInsets = false
+
+    override fun onApplyWindowInsets(
+        v: View,
+        windowInsets: WindowInsetsCompat
+    ): WindowInsetsCompat {
+        view = v
+        lastWindowInsets = windowInsets
+
+        val types = when {
+            deferredInsets -> persistentInsetTypes
+            else -> persistentInsetTypes or deferredInsetTypes
+        }
+
+        val typeInsets = windowInsets.getInsets(types)
+        v.setPadding(typeInsets.left, typeInsets.top, typeInsets.right, typeInsets.bottom)
+        Log.e(
+            "RootViewDeferringInsetsCallback",
+            "RootViewDeferringInsetsCallback:" + typeInsets.bottom
+        )
+
+        return WindowInsetsCompat.CONSUMED
+    }
+
+    override fun onPrepare(animation: WindowInsetsAnimationCompat) {
+        if (animation.typeMask and deferredInsetTypes != 0) {
+            deferredInsets = true
+        }
+    }
+
+    override fun onProgress(
+        insets: WindowInsetsCompat,
+        runningAnims: List<WindowInsetsAnimationCompat>
+    ): WindowInsetsCompat {
+        return insets
+    }
+
+    override fun onEnd(animation: WindowInsetsAnimationCompat) {
+        if (deferredInsets && (animation.typeMask and deferredInsetTypes) != 0) {
+            deferredInsets = false
+            if (lastWindowInsets != null && view != null) {
+                ViewCompat.dispatchApplyWindowInsets(view!!, lastWindowInsets!!)
+            }
         }
     }
 }

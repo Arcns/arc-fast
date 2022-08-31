@@ -8,11 +8,13 @@
     </data>
 
 
-    <com.arc.fast.sample.test.NestedRecyclerView
+    <com.arc.fast.sample.view.nested.ParentRecyclerView
         android:id="@+id/rvData"
+        marginBottomSystemWindowInsets="@{true}"
+        marginTopSystemWindowInsets="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_2"
-        android:fitsSystemWindows="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    <!--    android:fitsSystemWindows="true"-->
 </layout>

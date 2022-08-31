@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -42,11 +43,30 @@ fun Activity.hideSoftInputFromWindow() {
  * 显示键盘
  */
 fun EditText.showSoftInput() = this.run {
+    fun View.showTheKeyboardNow() {
+        if (isFocused) {
+            post {
+                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)?.showSoftInput(
+                    this,
+                    0
+                )
+            }
+        }
+    }
     requestFocus()
-    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)?.showSoftInput(
-        this,
-        0
-    );
+    if (hasWindowFocus()) {
+        showTheKeyboardNow()
+    } else {
+        viewTreeObserver.addOnWindowFocusChangeListener(
+            object : ViewTreeObserver.OnWindowFocusChangeListener {
+                override fun onWindowFocusChanged(hasFocus: Boolean) {
+                    if (hasFocus) {
+                        this@showSoftInput.showTheKeyboardNow()
+                        viewTreeObserver.removeOnWindowFocusChangeListener(this)
+                    }
+                }
+            })
+    }
 }
 
 /**

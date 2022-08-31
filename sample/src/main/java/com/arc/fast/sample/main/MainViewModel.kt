@@ -38,6 +38,7 @@ class MainViewModel : ViewModel() {
                         Menu("scan", ACTION_SCAN, 1),
                         Menu("bottom dialog", ACTION_BOTTOM_DIALOG, 1),
                         Menu("center dialog", ACTION_CENTER_DIALOG, 1),
+                        Menu("input dialog", ACTION_INPUT_DIALOG, 1),
                         Menu("bottom popup", ACTION_BOTTOM_POPUP, 1),
                         Menu("top popup", ACTION_TOP_POPUP, 1),
                         Menu("test", ACTION_TEST, 0)
