@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.arc.fast.sample.data.LocalData
 import com.arc.fast.sample.data.entity.ApkInfo
 import com.arc.fast.sample.data.entity.AppUpdate
@@ -18,6 +17,7 @@ import com.arc.fast.sample.extension.setLightSystemBar
 import com.arc.fast.sample.utils.SimpleDownloadService
 import com.arc.fast.sample.utils.SimpleDownloadTask
 import com.arc.fast.sample.utils.SimpleDownloadUtil
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.greenrobot.eventbus.EventBus

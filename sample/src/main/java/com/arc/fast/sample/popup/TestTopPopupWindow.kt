@@ -1,6 +1,7 @@
 package com.arc.fast.sample.popup
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.arc.fast.core.extensions.color
@@ -19,6 +20,10 @@ class TestTopPopupWindow(val context: Context) :
 
     override fun getImmersivePopupWindowConfig(context: Context) =
         ImmersivePopupWindowConfig.createTopPopupWindow(context).apply {
+//            navigationColor = Color.BLACK /*显示页面的导航栏*/
+            isLightNavigationBarForegroundColor = true
+//            navigationColor = Color.TRANSPARENT
+//            isLightNavigationBarForegroundColor = null
             backgroundColor = R.color.md_theme_light_primary_transparent_26.color
         }
 

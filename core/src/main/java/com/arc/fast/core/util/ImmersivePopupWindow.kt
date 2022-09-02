@@ -7,14 +7,18 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.view.*
 import android.widget.PopupWindow
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import com.arc.fast.core.R
+
 
 /**
  * 沉浸式PopupWindow
@@ -22,25 +26,9 @@ import com.arc.fast.core.R
 abstract class ImmersivePopupWindow : PopupWindow {
     private var mY = 0
     private var mContext: Context? = null
-    private var mWindowManager: WindowManager? = null
-    private var mWindow: Window? = null
-    private var mBackgroundView: View? = null
     private var mImmersivePopupWindowConfig: ImmersivePopupWindowConfig? = null
-    private val hasInit: Boolean get() = mContext != null && mWindowManager != null && mWindow != null && mBackgroundView != null && mImmersivePopupWindowConfig != null
-    private val mBackgroundViewAnimator by lazy {
-        ObjectAnimator.ofFloat(mBackgroundView, "alpha", 0f, 1f)
-            .setDuration(300).apply {
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        if (mBackgroundView?.alpha == 0f) mBackgroundView?.isVisible = false
-                    }
-                })
-            }
-    }
-
-    // 原本的状态栏导航栏配置
-    private var mOriginalIsLightStatusBarForegroundColor: Boolean? = null
-    private var mOriginalIsLightNavigationBarForegroundColor: Boolean? = null
+    private var mBackground: ImmersivePopupWindowBackground? = null
+    private val hasInit: Boolean get() = mContext != null && mImmersivePopupWindowConfig != null && mBackground != null
 
     // 是否正在显示
     private var isShow = false
@@ -75,21 +63,30 @@ abstract class ImmersivePopupWindow : PopupWindow {
     private fun initImmersivePopupWindow(context: Context?) {
         if (context == null || mContext != null) return
         mContext = context
-        mWindowManager = mContext?.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
-        mWindow = (mContext as? Activity)?.window
         mImmersivePopupWindowConfig = getImmersivePopupWindowConfig(context)
     }
 
     override fun showAsDropDown(anchor: View, xoff: Int, yoff: Int, gravity: Int) {
-        initBackgroundView(anchor)
+        initBackground(anchor.context)
         super.showAsDropDown(anchor, xoff, yoff, gravity)
         onShow(anchor, yoff)
     }
 
     override fun showAtLocation(parent: View, gravity: Int, x: Int, y: Int) {
-        initBackgroundView(parent)
+        initBackground(parent.context)
         super.showAtLocation(parent, gravity, x, y)
         onShow(parent)
+    }
+
+    private fun initBackground(context: Context) {
+        if (mBackground != null) return
+        mBackground = mImmersivePopupWindowConfig?.let {
+            ImmersivePopupWindowBackground(
+                context,
+                this,
+                it
+            ).init()
+        }
     }
 
     override fun dismiss() {
@@ -98,109 +95,12 @@ abstract class ImmersivePopupWindow : PopupWindow {
     }
 
     /**
-     * 初始化背景
-     */
-    private fun initBackgroundView(anchor: View) {
-        if (mWindow == null) {
-            mWindow = (anchor.context as? Activity)?.window
-        }
-        if (mBackgroundView != null || mImmersivePopupWindowConfig == null) return
-        val config = mImmersivePopupWindowConfig ?: return
-        mBackgroundView = View(mContext).apply {
-            isVisible = false
-            setBackgroundColor(config.backgroundColor)
-            fitsSystemWindows = false
-            if (config.canceledOnTouchOutside) {
-                setOnClickListener {
-                    dismiss()
-                }
-            }
-            if (config.cancelable) {
-                setOnKeyListener { _, keyCode, _ ->
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        dismiss()
-                        return@setOnKeyListener true
-                    }
-                    false
-                }
-            }
-        }
-        mWindowManager?.addView(
-            mBackgroundView,
-            WindowManager.LayoutParams(
-                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
-                PixelFormat.TRANSLUCENT
-            ).apply {
-                token = mWindow!!.decorView.windowToken
-                gravity = Gravity.CENTER
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    layoutInDisplayCutoutMode =
-                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    fitInsetsTypes =
-                        if (config.enableNavigationBar) WindowInsets.Type.navigationBars() else WindowInsets.Type.ime()
-                }
-            }
-        )
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            mBackgroundView?.systemUiVisibility =
-                if (config.enableNavigationBar) View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                else View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        }
-    }
-
-    /**
      * 显示回调
      */
     private fun onShow(anchor: View, yoff: Int = 0) {
         isShow = true
         if (!hasInit) return
-        val config = mImmersivePopupWindowConfig ?: return
-        if (config.enableBackgroundAnimator) {
-            mBackgroundViewAnimator.cancel()
-            mBackgroundView?.alpha = 0f
-            mBackgroundView?.isVisible = true
-            mBackgroundViewAnimator.setFloatValues(0f, 1f)
-            mBackgroundViewAnimator.startDelay = 100
-            mBackgroundViewAnimator.start()
-        } else {
-            mBackgroundView?.isVisible = true
-        }
-        // 设置状态栏和导航栏的前景颜色
-        if (config.isLightStatusBarForegroundColor != null || config.isLightNavigationBarForegroundColor != null) {
-            val controller =
-                WindowInsetsControllerCompat(mWindow!!, mBackgroundView!!)
-            val currentIsLightStatusBarForegroundColor = !controller.isAppearanceLightStatusBars
-            val currentIsLightNavigationBarForegroundColor =
-                !controller.isAppearanceLightNavigationBars
-            if (config.isLightStatusBarForegroundColor != null && config.isLightStatusBarForegroundColor != currentIsLightStatusBarForegroundColor) {
-                mOriginalIsLightStatusBarForegroundColor = currentIsLightStatusBarForegroundColor
-                controller.isAppearanceLightStatusBars = !config.isLightStatusBarForegroundColor!!
-            }
-            if (config.isLightNavigationBarForegroundColor != null && config.isLightNavigationBarForegroundColor != currentIsLightNavigationBarForegroundColor) {
-                mOriginalIsLightNavigationBarForegroundColor =
-                    currentIsLightNavigationBarForegroundColor
-                controller.isAppearanceLightNavigationBars =
-                    !config.isLightNavigationBarForegroundColor!!
-            }
-        }
-        // 是否启用锚点
-        if (config.enableAnchorView) {
-            val location = IntArray(2)
-            anchor.getLocationInWindow(location)
-            val anchorY = location.last()
-            if (mY != anchorY) {
-                mY = anchorY + anchor.measuredHeight + yoff
-                mWindowManager?.updateViewLayout(
-                    mBackgroundView,
-                    (mBackgroundView?.layoutParams as? WindowManager.LayoutParams)?.apply {
-                        this.y = mY
-                        this.height = mWindow!!.decorView.measuredHeight - mY
-                    })
-            }
-        }
+        mBackground?.show(anchor, yoff)
     }
 
     /**
@@ -210,24 +110,203 @@ abstract class ImmersivePopupWindow : PopupWindow {
         if (!isShow) return
         isShow = false
         if (!hasInit) return
-        val config = mImmersivePopupWindowConfig ?: return
-        if (config.enableBackgroundAnimator) {
-            mBackgroundViewAnimator.cancel()
-            mBackgroundViewAnimator.setFloatValues(1f, 0f)
-            mBackgroundViewAnimator.startDelay = 0
-            mBackgroundViewAnimator.start()
+        mBackground?.dismiss()
+    }
+}
+
+/**
+ * 沉浸式PopupWindow背景
+ */
+class ImmersivePopupWindowBackground(
+    val context: Context,
+    val popupWIndow: PopupWindow,
+    val config: ImmersivePopupWindowConfig
+) {
+    private val rootView: View
+    private val backgroundView: View
+    private val navigationBarView: View?
+    private val animator: ObjectAnimator
+    private val windowManager: WindowManager by lazy {
+        context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    }
+    private val currentIsAppearanceLightNavigationBars =
+        config.isLightNavigationBarForegroundColor?.let { !it }
+    private val currentIsLightStatusBarForegroundColor =
+        config.isLightStatusBarForegroundColor?.let { !it }
+    private var currentY = 0
+
+    //
+    private val parentWindow by lazy {
+        findParentWindow()
+    }
+    private val parentWindowController by lazy {
+        parentWindow?.let { WindowInsetsControllerCompat(it, it.decorView) }
+    }
+    private var parentWindowIsAppearanceLightNavigationBars: Boolean? = null
+    private var parentWindowIsAppearanceLightStatusBars: Boolean? = null
+
+    init {
+        if (config.navigationColor == Color.TRANSPARENT) {
+            rootView = View(context)
+            backgroundView = rootView
+            navigationBarView = null
         } else {
-            mBackgroundView?.isVisible = false
+            rootView = LayoutInflater.from(context)
+                .inflate(R.layout.arc_fast_view_immersive_dialog_root, null) as ViewGroup
+            navigationBarView =
+                rootView.findViewById<View>(R.id.arc_fast_view_navigation_bar_bg).apply {
+                    if (config.navigationColor != Color.TRANSPARENT && systemNavigationBarHeight > 0) {
+                        layoutParams.height = systemNavigationBarHeight
+                        setBackgroundColor(config.navigationColor)
+                        isVisible = true
+                    } else isVisible = false
+                }
+            backgroundView = View(context)
+            rootView.addView(
+                backgroundView,
+                0,
+                ConstraintLayout.LayoutParams(0, 0).apply {
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
+                    rightToRight = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                })
         }
-        // 恢复为显示之前的颜色
-        if (mOriginalIsLightStatusBarForegroundColor != null || mOriginalIsLightNavigationBarForegroundColor != null) {
-            val controller =
-                WindowInsetsControllerCompat(mWindow!!, mBackgroundView!!)
-            if (mOriginalIsLightStatusBarForegroundColor != null)
-                controller.isAppearanceLightStatusBars = !mOriginalIsLightStatusBarForegroundColor!!
-            if (mOriginalIsLightNavigationBarForegroundColor != null)
-                controller.isAppearanceLightNavigationBars =
-                    !mOriginalIsLightNavigationBarForegroundColor!!
+        rootView.apply {
+            fitsSystemWindows = false
+//            systemUiVisibility =
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        }
+        backgroundView.apply {
+            isVisible = false
+            setBackgroundColor(config.backgroundColor)
+            if (config.canceledOnTouchOutside) {
+                setOnClickListener {
+                    popupWIndow.dismiss()
+                }
+            }
+        }
+        if (config.cancelable) {
+            popupWIndow.setBackgroundDrawable(BitmapDrawable())
+            popupWIndow.isFocusable = true
+//                rootView?.setOnKeyListener { _, keyCode, _ ->
+//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//                        popupWIndow.dismiss()
+//                        return@setOnKeyListener true
+//                    }
+//                    false
+//                }
+        }
+
+        animator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f)
+            .setDuration(300).apply {
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        if (backgroundView.alpha == 0f) {
+                            windowManager.removeView(
+                                rootView
+                            )
+                        }
+                    }
+                })
+            }
+
+    }
+
+    private fun findParentWindow(): Window? {
+        return (context as? Activity)?.window
+    }
+
+    fun init(): ImmersivePopupWindowBackground {
+        if (parentWindowController != null) {
+            if (parentWindowController?.isAppearanceLightNavigationBars != currentIsAppearanceLightNavigationBars) {
+                parentWindowIsAppearanceLightNavigationBars =
+                    parentWindowController?.isAppearanceLightNavigationBars
+            }
+            if (parentWindowController?.isAppearanceLightStatusBars != currentIsLightStatusBarForegroundColor) {
+                parentWindowIsAppearanceLightStatusBars =
+                    parentWindowController?.isAppearanceLightStatusBars
+            }
+        }
+        windowManager.addView(
+            rootView,
+            WindowManager.LayoutParams(
+                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                token = parentWindow?.decorView?.windowToken
+                gravity = Gravity.CENTER
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    layoutInDisplayCutoutMode =
+                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    fitInsetsTypes = fitInsetsTypes and WindowInsetsCompat.Type.systemBars().inv()
+                }
+            }
+        )
+        return this
+    }
+
+    fun show(anchor: View? = null, yoff: Int = 0) {
+        if (config.enableBackgroundAnimator) {
+            animator.cancel()
+            backgroundView.alpha = 0f
+            backgroundView.isVisible = true
+            animator.setFloatValues(0f, 1f)
+            animator.startDelay = 100
+            animator.start()
+        } else {
+            backgroundView.isVisible = true
+        }
+        // 修改状态栏/导航栏前景色
+        if (parentWindowController != null) {
+            if (currentIsAppearanceLightNavigationBars != null)
+                parentWindowController?.isAppearanceLightNavigationBars =
+                    currentIsAppearanceLightNavigationBars
+            if (currentIsLightStatusBarForegroundColor != null)
+                parentWindowController?.isAppearanceLightStatusBars =
+                    currentIsLightStatusBarForegroundColor
+        }
+        // 是否启用锚点
+        if (config.enableAnchorView && anchor != null) {
+            val location = IntArray(2)
+            anchor.getLocationInWindow(location)
+            val anchorY = location.last()
+            if (currentY != anchorY) {
+                currentY = anchorY + anchor.measuredHeight + yoff
+                windowManager.updateViewLayout(
+                    rootView,
+                    (rootView.layoutParams as? WindowManager.LayoutParams)?.apply {
+                        this.y = currentY
+                        this.height = parentWindow!!.decorView.measuredHeight - currentY
+                    })
+            }
+        }
+    }
+
+    fun dismiss() {
+        if (config.enableBackgroundAnimator) {
+            navigationBarView?.isVisible = false
+            animator.cancel()
+            animator.setFloatValues(1f, 0f)
+            animator.startDelay = 0
+            animator.start()
+        } else {
+            backgroundView.isVisible = false
+            windowManager.removeView(rootView)
+        }
+        // 恢复状态栏/导航栏前景色
+        if (parentWindowController != null) {
+            if (parentWindowIsAppearanceLightNavigationBars != null) {
+                parentWindowController?.isAppearanceLightNavigationBars =
+                    parentWindowIsAppearanceLightNavigationBars!!
+            }
+            if (parentWindowIsAppearanceLightStatusBars != null) {
+                parentWindowController?.isAppearanceLightStatusBars =
+                    parentWindowIsAppearanceLightStatusBars!!
+            }
         }
     }
 }
@@ -237,6 +316,10 @@ class ImmersivePopupWindowConfig(
      * 背景颜色
      */
     var backgroundColor: Int = Color.TRANSPARENT,
+    /**
+     * 导航栏颜色
+     */
+    var navigationColor: Int = Color.TRANSPARENT,
     /**
      * 是否点击背景时关闭
      */
@@ -258,10 +341,6 @@ class ImmersivePopupWindowConfig(
      */
     var enableAnchorView: Boolean = false,
     /**
-     * 是否显示导航栏（启用时背景将不包含导航栏）
-     */
-    var enableNavigationBar: Boolean = false,
-    /**
      * 是否启用背景渐变动画
      */
     var enableBackgroundAnimator: Boolean = true
@@ -278,9 +357,9 @@ class ImmersivePopupWindowConfig(
                 R.color.arc_fast_popup_window_background
             ),
             isLightStatusBarForegroundColor = true,
-            isLightNavigationBarForegroundColor = null,
+            isLightNavigationBarForegroundColor = false,
             enableAnchorView = false,
-            enableNavigationBar = true
+            navigationColor = Color.WHITE
         )
 
         /**
@@ -293,9 +372,8 @@ class ImmersivePopupWindowConfig(
                 R.color.arc_fast_popup_window_background
             ),
             isLightStatusBarForegroundColor = null,
-            isLightNavigationBarForegroundColor = true,
-            enableAnchorView = true,
-            enableNavigationBar = false
+            isLightNavigationBarForegroundColor = null,
+            enableAnchorView = true
         )
 
     }

@@ -3,6 +3,7 @@ package com.arc.fast.sample.dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.isVisible
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.screenHeight
 import com.arc.fast.core.util.ImmersiveDialogConfig
@@ -25,6 +26,10 @@ class TestBottomDialog : ImmersiveBindingDialog<DialogTestBottomBinding>() {
         super.onViewCreated(view, savedInstanceState)
         binding.ivClose.setOnClickListener {
             dismiss()
+        }
+        binding.btnShowCenterDialog.isVisible = false
+        binding.btnShowCenterDialog.setOnClickListener {
+            TestCenterDialog().show(parentFragmentManager, null)
         }
     }
 }

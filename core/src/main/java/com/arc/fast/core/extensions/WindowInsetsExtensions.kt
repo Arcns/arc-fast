@@ -186,10 +186,6 @@ class TranslateDeferringInsetsAnimationCallback(
 
         view.translationX = (diff.left - diff.right).toFloat()
         view.translationY = (diff.top - diff.bottom).toFloat()
-        Log.e(
-            "aaaaaaaaaaaaa",
-            "setWindowInsetsAnimationCallback:" + (diff.top - diff.bottom).toFloat()
-        )
 
         return insets
     }
@@ -236,10 +232,6 @@ class RootViewDeferringInsetsCallback(
 
         val typeInsets = windowInsets.getInsets(types)
         v.setPadding(typeInsets.left, typeInsets.top, typeInsets.right, typeInsets.bottom)
-        Log.e(
-            "RootViewDeferringInsetsCallback",
-            "RootViewDeferringInsetsCallback:" + typeInsets.bottom
-        )
 
         return WindowInsetsCompat.CONSUMED
     }

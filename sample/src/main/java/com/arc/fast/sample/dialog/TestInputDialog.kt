@@ -1,5 +1,6 @@
 package com.arc.fast.sample.dialog
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,6 +32,8 @@ class TestInputDialog : ImmersiveBindingDialog<DialogTestInputBinding>() {
                 backgroundDimEnabled = false
                 backgroundColor = R.color.md_theme_light_primary_transparent_26.color
                 animations = 0
+                navigationColor = Color.WHITE
+                isLightNavigationBarForegroundColor = false
             }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,6 +1,7 @@
 package com.arc.fast.sample.popup
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.arc.fast.core.extensions.color
@@ -19,7 +20,8 @@ class TestBottomPopupWindow(val context: Context) :
 
     override fun getImmersivePopupWindowConfig(context: Context) =
         ImmersivePopupWindowConfig.createBottomPopupWindow(context).apply {
-            enableNavigationBar = true /*显示页面的导航栏*/
+//            navigationColor = Color.TRANSPARENT
+            isLightNavigationBarForegroundColor = null
             backgroundColor = R.color.md_theme_light_primary_transparent_26.color
         }
 

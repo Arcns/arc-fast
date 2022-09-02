@@ -31,6 +31,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTitle" />
 
+        <Button
+            android:id="@+id/btnShowCenterDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Center Dialog"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

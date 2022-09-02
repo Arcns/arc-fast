@@ -2,6 +2,7 @@ package com.arc.fast.core.util
 
 import android.app.Activity
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -10,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
+import com.arc.fast.core.extensions.requestApplyInsetsWhenAttached
 
 /**
  * 设置状态栏和导航栏
@@ -247,26 +249,32 @@ fun Activity.setSystemBarVisible(
 /**
  * 获取系统栏高度
  */
-fun Activity.getSystemBarHeight(handler: (statusBarHeight: Int, navigationBarHeight: Int) -> Unit) {
-    if (realSystemStatusBarHeight != null && realSystemNavigationBarHeight != null) handler.invoke(
+fun Activity.getSystemBarHeight(
+    forceReRequest: Boolean = false, /* 强制重新获取 */
+    handler: (statusBarHeight: Int, navigationBarHeight: Int) -> Unit
+) {
+    if (!forceReRequest && realSystemStatusBarHeight != null && realSystemNavigationBarHeight != null) handler.invoke(
         systemStatusBarHeight,
         systemNavigationBarHeight
-    ) else ViewCompat.setOnApplyWindowInsetsListener(
-        window.decorView
-    ) { _, insets ->
-        val statusBarHeight =
-            insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
-        // 只有当statusBarHeight>0，才证明是正常的回调
-        if (statusBarHeight > 0) {
-            if (realSystemStatusBarHeight == null)
-                realSystemStatusBarHeight = statusBarHeight
-            if (realSystemNavigationBarHeight == null)
-                realSystemNavigationBarHeight =
-                    insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
-            ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
-            handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+    ) else {
+        ViewCompat.setOnApplyWindowInsetsListener(
+            window.decorView
+        ) { _, insets ->
+            val statusBarHeight =
+                insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
+            // 只有当statusBarHeight>0，才证明是正常的回调
+            if (statusBarHeight > 0) {
+                if (realSystemStatusBarHeight == null)
+                    realSystemStatusBarHeight = statusBarHeight
+                if (realSystemNavigationBarHeight == null)
+                    realSystemNavigationBarHeight =
+                        insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
+                ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
+                handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+            }
+            insets
         }
-        insets
+        window.decorView.requestApplyInsetsWhenAttached()
     }
 }
 
