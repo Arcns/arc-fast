@@ -11,8 +11,6 @@ android {
         targetSdk versions.compile_sdk
         versionCode versions.publish_code
         versionName versions.publish_name
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -40,14 +38,38 @@ dependencies {
 }
 
 
-project.afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
+//project.afterEvaluate {
+//    publishing {
+//        publications {
+//            release(MavenPublication) {
+//                from components.release
+////                groupId = 'com.arc.fast'
+////                artifactId = 'core'
+////                version = '0.0.9'
+//            }
+//        }
+//    }
+//}
+
+//publishing {
+//    publications {
+//        release(MavenPublication) {
+//            afterEvaluate {
+//                from components.release
+//            }
+//        }
+//    }
+//}
+
+afterEvaluate {
+    publishing{
+        publications{
+            release(MavenPublication){
                 from components.release
-//                groupId = 'com.arc.fast'
-//                artifactId = 'core'
-//                version = '0.0.9'
+                groupId = 'com.arc.fast'
+                artifactId = 'core'
+
+                version = '0.0.9'
             }
         }
     }
