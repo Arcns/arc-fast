@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.arc.fast.permission'
-    compileSdk 32
+    compileSdk versions.compile_sdk
     defaultConfig {
-        minSdk 21
-        targetSdk 32
-        versionCode 3
-        versionName '0.11.1'
+        minSdk versions.min_sdk
+        targetSdk versions.compile_sdk
+        versionCode versions.publish_code
+        versionName versions.publish_name
     }
     buildTypes {
         release {
@@ -36,14 +36,17 @@ dependencies {
     implementation project(path: ':core')
 }
 
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.arc.fast'
-                artifactId = 'permission'
-                version = '0.11.1'
+                artifact sourceJar
             }
         }
     }

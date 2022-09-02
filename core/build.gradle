@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.arc.fast.core'
-    compileSdk 32
+    compileSdk versions.compile_sdk
     defaultConfig {
-        minSdk 21
-        targetSdk 32
-        versionCode 3
-        versionName '0.11.1'
+        minSdk versions.min_sdk
+        targetSdk versions.compile_sdk
+        versionCode versions.publish_code
+        versionName versions.publish_name
     }
     buildTypes {
         release {
@@ -34,7 +34,12 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     // 仅编译，若项目需要使用到，需要在项目中自行引用
-    compileOnly "com.google.code.gson:gson:2.9.0"
+    compileOnly 'com.google.code.gson:gson:2.9.1'
+}
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
 }
 
 afterEvaluate {
@@ -42,9 +47,10 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                groupId = 'com.arc.fast'
-                artifactId = 'core'
-                version = '0.11.1'
+//                groupId = 'com.arc.fast'
+//                artifactId = 'core'
+//                version = '1.0.0'
+                artifact sourceJar
             }
         }
     }

@@ -82,9 +82,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // key-value
-    implementation 'com.tencent:mmkv:1.2.12'
+    implementation 'com.tencent:mmkv:1.2.14'
     //
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -105,5 +105,6 @@ dependencies {
     // core
     implementation project(path: ':core')
     implementation project(path: ':permission')
-//    implementation "com.gitee.arcns:arc-fast:0.11.1"
+//    implementation "com.gitee.arcns.arc-fast:core:0.11.2"
+//    implementation "com.gitee.arcns.arc-fast:permission:0.11.2"
 }
