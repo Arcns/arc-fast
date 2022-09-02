@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.arc.fast.core'
+    namespace 'com.arc.fast.permission'
     compileSdk 32
     defaultConfig {
         minSdk 21
@@ -33,8 +33,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
-    // 仅编译，若项目需要使用到，需要在项目中自行引用
-    compileOnly "com.google.code.gson:gson:2.9.0"
+    implementation project(path: ':core')
 }
 
 afterEvaluate {
@@ -43,7 +42,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.arc.fast'
-                artifactId = 'core'
+                artifactId = 'permission'
                 version = '0.11.1'
             }
         }

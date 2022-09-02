@@ -1,3 +1,4 @@
 rootProject.name = "arc-fast"
 include ':core'
+include ':permission'
 include ':sample'

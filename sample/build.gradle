@@ -73,8 +73,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    // core
-    implementation project(path: ':core')
     // ViewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
@@ -104,4 +102,8 @@ dependencies {
     implementation "androidx.camera:camera-view:1.1.0"
     // EventBus
     implementation "org.greenrobot:eventbus:3.3.1"
+    // core
+    implementation project(path: ':core')
+    implementation project(path: ':permission')
+//    implementation "com.gitee.arcns:arc-fast:0.11.1"
 }
