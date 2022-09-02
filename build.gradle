@@ -3,9 +3,9 @@ apply from: rootProject.file("dependencies.gradle")
 buildscript {
     apply from: rootProject.file("dependencies.gradle")
     repositories {
+        maven { url "https://jitpack.io" }
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.2.2'
@@ -13,7 +13,6 @@ buildscript {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1"
     }
 }
-
 
 allprojects {
     repositories {
