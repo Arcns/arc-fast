@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
@@ -53,22 +53,21 @@ android {
     }
 
     // 配置打包APK的名称
-    android.applicationVariants.all {
-        variant ->
-            def name = ""
-            if (variant.buildType.name.contains('release')) {
-                name = "release"
-            } else {
-                name = "debug"
-            }
-            variant.outputs.all {
-                outputFileName = "${defaultConfig.applicationId}_${name}_${variant.versionName}(${variant.versionCode}).apk"
-            }
-    }
+//    android.applicationVariants.all {
+//        variant ->
+//            def name = ""
+//            if (variant.buildType.name.contains('release')) {
+//                name = "release"
+//            } else {
+//                name = "debug"
+//            }
+//            variant.outputs.all {
+//                outputFileName = "${defaultConfig.applicationId}_${name}_${variant.versionName}(${variant.versionCode}).apk"
+//            }
+//    }
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
