@@ -3,3 +3,5 @@ before_install:
   - sdk use java 11.0.10-open
 jdk:
   - openjdk11
+install:
+  - ./gradlew build :core:publishToMavenLocal
