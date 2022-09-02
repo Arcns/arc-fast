@@ -4,20 +4,6 @@ plugins {
     id 'maven-publish'
 }
 
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.arc.fast'
-                artifactId = 'core'
-//                version = '0.0.9'
-            }
-        }
-    }
-}
-
 android {
     compileSdk versions.compile_sdk
     defaultConfig {
@@ -51,4 +37,18 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     // 仅编译，若项目需要使用到，需要在项目中自行引用
     compileOnly "com.google.code.gson:gson:2.9.0"
+}
+
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+//                groupId = 'com.arc.fast'
+//                artifactId = 'core'
+//                version = '0.0.9'
+            }
+        }
+    }
 }
