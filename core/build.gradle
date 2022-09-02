@@ -4,13 +4,16 @@ plugins {
     id 'maven-publish'
 }
 
+group = 'com.arc.fast'
+version = '0.11.1'
+
 android {
-    compileSdk versions.compile_sdk
+    compileSdk 32
     defaultConfig {
-        minSdk versions.min_sdk
-        targetSdk versions.compile_sdk
-        versionCode versions.publish_code
-        versionName versions.publish_name
+        minSdk 21
+        targetSdk 32
+        versionCode 3
+        versionName '0.11.1'
     }
     buildTypes {
         release {
@@ -29,7 +32,6 @@ android {
 
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
@@ -37,39 +39,14 @@ dependencies {
     compileOnly "com.google.code.gson:gson:2.9.0"
 }
 
-
-//project.afterEvaluate {
-//    publishing {
-//        publications {
-//            release(MavenPublication) {
-//                from components.release
-////                groupId = 'com.arc.fast'
-////                artifactId = 'core'
-////                version = '0.0.9'
-//            }
-//        }
-//    }
-//}
-
-//publishing {
-//    publications {
-//        release(MavenPublication) {
-//            afterEvaluate {
-//                from components.release
-//            }
-//        }
-//    }
-//}
-
 afterEvaluate {
-    publishing{
-        publications{
-            release(MavenPublication){
+    publishing {
+        publications {
+            release(MavenPublication) {
                 from components.release
                 groupId = 'com.arc.fast'
                 artifactId = 'core'
-
-                version = '0.0.9'
+                version = '0.11.1'
             }
         }
     }
