@@ -1,7 +1,5 @@
-before_install:
-  - sdk install java 11.0.10-open
-  - sdk use java 11.0.10-open
 jdk:
-  - openjdk11
+ - openjdk11
 install:
-  - ./gradlew build :core:publishToMavenLocal
+ - ./gradlew :core:build :core:publishToMavenLocal -x
+ - find . -name "*.aar"
