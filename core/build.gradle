@@ -5,7 +5,7 @@ plugins {
 }
 
 
-project.afterEvaluate {
+afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
