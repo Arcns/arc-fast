@@ -5,14 +5,14 @@ plugins {
 }
 
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'com.arc.fast'
-            artifactId = 'core'
-            version = '0.0.9'
-            afterEvaluate {
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
                 from components.release
+                groupId = 'com.arc.fast'
+                artifactId = 'core'
+//                version = '0.0.9'
             }
         }
     }
