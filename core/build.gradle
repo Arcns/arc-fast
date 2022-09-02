@@ -5,14 +5,14 @@ plugins {
 }
 
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.arc.fast'
+            artifactId = 'core'
+            version = '0.0.9'
+            afterEvaluate {
                 from components.release
-                groupId = 'com.arc.fast'
-                artifactId = 'core'
-                version = '0.0.9'
             }
         }
     }
@@ -20,7 +20,6 @@ afterEvaluate {
 
 android {
     compileSdk versions.compile_sdk
-
     defaultConfig {
         minSdk versions.min_sdk
         targetSdk versions.compile_sdk
@@ -29,7 +28,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
