@@ -37,9 +37,9 @@ dependencies {
     compileOnly 'com.google.code.gson:gson:2.9.1'
 }
 
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
+task androidSourcesJar(type: Jar) {
     classifier "sources"
+    from android.sourceSets.main.java.sourceFiles
 }
 
 afterEvaluate {
@@ -47,10 +47,10 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
+                artifact androidSourcesJar
 //                groupId = 'com.arc.fast'
 //                artifactId = 'core'
 //                version = '1.0.0'
-                artifact sourceJar
             }
         }
     }

@@ -36,9 +36,9 @@ dependencies {
     implementation project(path: ':core')
 }
 
-task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
+task androidSourcesJar(type: Jar) {
     classifier "sources"
+    from android.sourceSets.main.java.sourceFiles
 }
 
 afterEvaluate {
@@ -46,7 +46,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                artifact sourceJar
+                artifact androidSourcesJar
             }
         }
     }
