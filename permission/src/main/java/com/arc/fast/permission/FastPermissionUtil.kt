@@ -1,14 +1,12 @@
-package com.arc.fast.core.util
+package com.arc.fast.permission
 
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
-import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,8 +14,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.arc.fast.core.R
-import com.arc.fast.core.extensions.string
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
@@ -25,7 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  * 注意：根据https://developer.android.com/training/basics/intents/result?hl=zh-cn
  * 使用前您必须在CREATED之前创建该工具
  */
-class PermissionUtil {
+class FastPermissionUtil {
 
     // 当前activity
     private var fragment: Fragment? = null
@@ -83,11 +79,11 @@ class PermissionUtil {
      */
     fun request(
         permission: String, //Manifest.permission.xxx
-        @StringRes rationaleRes: Int? = null,
-        onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+        rationale: String? = null,
+        onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
     ) {
         request(
-            PermissionRequest(permission, rationaleRes),
+            FastPermissionRequest(permission, rationale),
             onResult = onResult
         )
     }
@@ -97,15 +93,15 @@ class PermissionUtil {
      */
     fun request(
         vararg permissions: String, //Manifest.permission.xxx
-        @StringRes overallRationaleRes: Int? = null,
-        onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+        overallRationale: String? = null,
+        onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
     ) {
         request(
             lifecycle = null,
             permissionRequests = permissions.map {
-                PermissionRequest(permission = it)
+                FastPermissionRequest(permission = it)
             }.toTypedArray(),
-            overallRationaleRes = overallRationaleRes,
+            overallRationale = overallRationale,
             onResult = onResult
         )
     }
@@ -114,14 +110,14 @@ class PermissionUtil {
      * 请求权限
      */
     fun request(
-        vararg permissionRequests: PermissionRequest,
-        @StringRes overallRationaleRes: Int? = null,
-        onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit
+        vararg permissionRequests: FastPermissionRequest,
+        overallRationale: String? = null,
+        onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
     ) {
         request(
             lifecycle = null,
             permissionRequests = permissionRequests,
-            overallRationaleRes = overallRationaleRes,
+            overallRationale = overallRationale,
             onResult = onResult
         )
     }
@@ -131,25 +127,25 @@ class PermissionUtil {
      */
     fun request(
         lifecycle: Lifecycle? = null,
-        vararg permissionRequests: PermissionRequest,
-        @StringRes overallRationaleRes: Int? = null,
-        onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit
+        vararg permissionRequests: FastPermissionRequest,
+        overallRationale: String? = null,
+        onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
     ) {
         if (launcher == null) return
         val requireActivity = activity ?: return
         // 需要请求的权限
         val deniedPermissions = ArrayList<String>()
         // 权限结果
-        val permissionResult = HashMap<String, PermissionResult>()
+        val permissionResult = HashMap<String, FastPermissionResult>()
         // 权限提示
-        val permissionRationales = HashMap<String, Int>()
+        val permissionRationales = HashMap<String, String>()
         // 先查询当前的权限结果
         var beforeRationale: String? = null
         var beforeRationalePermissions = ArrayList<String>()
         permissionRequests.forEach {
             val permission = it.permission
-            if (it.rationaleRes != null) {
-                permissionRationales[permission] = it.rationaleRes
+            if (it.rationale != null) {
+                permissionRationales[permission] = it.rationale
             }
             if (ContextCompat.checkSelfPermission(
                     requireActivity,
@@ -157,10 +153,10 @@ class PermissionUtil {
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 // 已有权限
-                permissionResult[permission] = PermissionResult.Granted
+                permissionResult[permission] = FastPermissionResult.Granted
             } else {
                 // 无权限
-                permissionResult[permission] = PermissionResult.Denied
+                permissionResult[permission] = FastPermissionResult.Denied
                 deniedPermissions.add(permission)
                 // 是否需要先显示理由
                 if (ActivityCompat.shouldShowRequestPermissionRationale(
@@ -169,17 +165,14 @@ class PermissionUtil {
                     )
                 ) {
                     if (beforeRationale.isNullOrBlank()) {
-                        beforeRationale =
-                            overallRationaleRes?.let { overallRationale ->
-                                requireActivity.getString(overallRationale)
-                            }
+                        beforeRationale = overallRationale
                         beforeRationalePermissions.add(permission)
                     }
-                    if (it.rationaleRes != null) {
+                    if (!it.rationale.isNullOrBlank()) {
                         if (beforeRationale.isNullOrBlank()) {
-                            beforeRationale = requireActivity.getString(it.rationaleRes)
+                            beforeRationale = it.rationale
                         } else {
-                            beforeRationale += "\n${requireActivity.getString(it.rationaleRes)}"
+                            beforeRationale += "\n${it.rationale}"
                         }
                         beforeRationalePermissions.add(permission)
                     }
@@ -197,7 +190,7 @@ class PermissionUtil {
                 launcherResult,
                 permissionResult,
                 permissionRationales,
-                overallRationaleRes,
+                overallRationale,
                 onResult
             )
         }
@@ -218,13 +211,13 @@ class PermissionUtil {
             showAlertDialog(
                 requireActivity,
                 beforeRationale!!,
-                R.string.arc_fast_ok.string,
+                R.string.arc_fast_permission_ok,
                 {
                     // 确认
                     currentRequestHasShownRationalePermissions = beforeRationalePermissions
                     launcher?.launch(deniedPermissions.toTypedArray())
                 },
-                R.string.arc_fast_cancel.string,
+                R.string.arc_fast_permission_cancel,
                 {
                     // 取消
                     onLauncherResultCallback = null
@@ -236,17 +229,17 @@ class PermissionUtil {
 
     private fun onLaunchResult(
         launcherResult: Map<String, Boolean>,
-        permissionResult: HashMap<String, PermissionResult>,
-        permissionRationales: HashMap<String, Int>,
-        @StringRes overallRationaleRes: Int? = null,
-        onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit
+        permissionResult: HashMap<String, FastPermissionResult>,
+        permissionRationales: HashMap<String, String>,
+        overallRationale: String? = null,
+        onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
     ) {
         val requireActivity = activity ?: return
         var donTAskAgainRationale: String? = null
         launcherResult.forEach {
             permissionResult[it.key] = if (it.value) {
                 // 同意授予权限
-                PermissionResult.Granted
+                FastPermissionResult.Granted
             } else if (!ActivityCompat.shouldShowRequestPermissionRationale(
                     requireActivity,
                     it.key
@@ -254,26 +247,23 @@ class PermissionUtil {
             ) {
                 if (currentRequestHasShownRationalePermissions?.contains(it.key) != true) {
                     if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale =
-                        overallRationaleRes?.let { overallRationale ->
-                            requireActivity.getString(overallRationale)
-                        }
-                    val rationaleRes = permissionRationales[it.key]
-                    if (rationaleRes != null) {
-                        if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale =
-                            requireActivity.getString(rationaleRes)
-                        else donTAskAgainRationale += "\n${requireActivity.getString(rationaleRes)}"
+                        overallRationale
+                    val rationale = permissionRationales[it.key]
+                    if (rationale != null) {
+                        if (donTAskAgainRationale.isNullOrBlank()) donTAskAgainRationale = rationale
+                        else donTAskAgainRationale += "\n$rationale"
                     }
                 }
                 // 拒绝授予权限，且不允许再询问
-                PermissionResult.DeniedAndDonTAskAgain
+                FastPermissionResult.DeniedAndDonTAskAgain
             } else {
                 // 拒绝授予权限
-                PermissionResult.Denied
+                FastPermissionResult.Denied
             }
         }
         // 回调
         onResult.invoke(
-            permissionResult.values.firstOrNull { it != PermissionResult.Granted } == null,
+            permissionResult.values.firstOrNull { it != FastPermissionResult.Granted } == null,
             permissionResult
         )
         if (!donTAskAgainRationale.isNullOrBlank()) {
@@ -281,14 +271,14 @@ class PermissionUtil {
             showAlertDialog(
                 requireActivity,
                 donTAskAgainRationale!!,
-                R.string.arc_fast_setting.string,
+                R.string.arc_fast_permission_setting,
                 {
                     // 确认
                     requireActivity.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                         data = Uri.fromParts("package", requireActivity.packageName, null)
                     })
                 },
-                R.string.arc_fast_cancel.string,
+                R.string.arc_fast_permission_cancel,
                 {}
             )
         }
@@ -314,13 +304,17 @@ class PermissionUtil {
 
     companion object {
 
-        // 弹窗
+        /**
+         * 弹窗
+         * 可以通过重新设置它来实现自定义的弹窗
+         */
+        @JvmStatic
         var showAlertDialog: (
             activity: FragmentActivity,
             message: String,
-            positiveButton: String,
+            positiveButton: Int,
             onPositiveButton: () -> Unit,
-            negativeButton: String,
+            negativeButton: Int,
             onNegativeButton: () -> Unit
         ) -> Unit =
             { activity, message, positiveButton, onPositiveButton, negativeButton, onNegativeButton ->
@@ -333,7 +327,7 @@ class PermissionUtil {
 
         // 通过快捷方式创建的实例
         private val fastInstances by lazy {
-            HashMap<Int, PermissionUtil>()
+            HashMap<Int, FastPermissionUtil>()
         }
 
         /**
@@ -343,16 +337,16 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             fragment: Fragment,
             permission: String, //Manifest.permission.xxx
-            @StringRes rationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+            rationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
         ) {
-            fastRequest(
+            request(
                 activity = fragment.requireActivity(),
                 requestLifecycle = fragment.lifecycle,
-                PermissionRequest(permission, rationaleRes),
+                FastPermissionRequest(permission, rationale),
                 onResult = onResult
             )
         }
@@ -364,19 +358,19 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             fragment: Fragment,
             vararg permissions: String, //Manifest.permission.xxx
-            @StringRes overallRationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+            overallRationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
         ) {
-            fastRequest(
+            request(
                 activity = fragment.requireActivity(),
                 requestLifecycle = fragment.lifecycle,
                 permissionRequests = permissions.map {
-                    PermissionRequest(permission = it)
+                    FastPermissionRequest(permission = it)
                 }.toTypedArray(),
-                overallRationaleRes = overallRationaleRes,
+                overallRationale = overallRationale,
                 onResult = onResult
             )
         }
@@ -388,18 +382,18 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             fragment: Fragment,
             requestLifecycle: Lifecycle?, //本次请求的生命周期
-            vararg permissionRequests: PermissionRequest,
-            @StringRes overallRationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit
+            vararg permissionRequests: FastPermissionRequest,
+            overallRationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
         ) {
-            fastRequest(
+            request(
                 activity = fragment.requireActivity(),
                 requestLifecycle = requestLifecycle,
                 permissionRequests = permissionRequests,
-                overallRationaleRes = overallRationaleRes,
+                overallRationale = overallRationale,
                 onResult = onResult
             )
         }
@@ -412,16 +406,16 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             activity: FragmentActivity,
             permission: String, //Manifest.permission.xxx
-            @StringRes rationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+            rationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
         ) {
-            fastRequest(
+            request(
                 activity = activity,
                 requestLifecycle = null,
-                PermissionRequest(permission, rationaleRes),
+                FastPermissionRequest(permission, rationale),
                 onResult = onResult
             )
         }
@@ -433,19 +427,19 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             activity: FragmentActivity,
             vararg permissions: String, //Manifest.permission.xxx
-            @StringRes overallRationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit //allGranted,results
+            overallRationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit //allGranted,results
         ) {
-            fastRequest(
+            request(
                 activity = activity,
                 requestLifecycle = null,
                 permissionRequests = permissions.map {
-                    PermissionRequest(permission = it)
+                    FastPermissionRequest(permission = it)
                 }.toTypedArray(),
-                overallRationaleRes = overallRationaleRes,
+                overallRationale = overallRationale,
                 onResult = onResult
             )
         }
@@ -457,22 +451,22 @@ class PermissionUtil {
          * 如果您不想要创建空fragment，您应该考虑自己创建PermissionUtil实例
          */
         @JvmStatic
-        fun fastRequest(
+        fun request(
             activity: FragmentActivity,
             requestLifecycle: Lifecycle?, //本次请求的生命周期
-            vararg permissionRequests: PermissionRequest,
-            @StringRes overallRationaleRes: Int? = null,
-            onResult: (allGranted: Boolean, result: Map<String, PermissionResult>) -> Unit
+            vararg permissionRequests: FastPermissionRequest,
+            overallRationale: String? = null,
+            onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
         ) {
             // 先判断当前是否已经拥有权限，有的话不需要判断实例
-            val checkResult = HashMap<String, PermissionResult>()
+            val checkResult = HashMap<String, FastPermissionResult>()
             if (permissionRequests.firstOrNull { request ->
                     ContextCompat.checkSelfPermission(
                         activity,
                         request.permission
                     ).let {
                         if (it == PackageManager.PERMISSION_GRANTED) {
-                            checkResult[request.permission] = PermissionResult.Granted
+                            checkResult[request.permission] = FastPermissionResult.Granted
                             false
                         } else true
                     }
@@ -498,7 +492,7 @@ class PermissionUtil {
                         permissionUtil.request(
                             lifecycle = requestLifecycle,
                             permissionRequests = permissionRequests,
-                            overallRationaleRes = overallRationaleRes,
+                            overallRationale = overallRationale,
                             onResult = onResult
                         )
                         // 注册生命周期自动清理缓存
@@ -515,12 +509,15 @@ class PermissionUtil {
                 instance.request(
                     lifecycle = requestLifecycle,
                     permissionRequests = permissionRequests,
-                    overallRationaleRes = overallRationaleRes,
+                    overallRationale = overallRationale,
                     onResult = onResult
                 )
             }
         }
 
+        /**
+         * 检查是否拥有某个权限
+         */
         @JvmStatic
         fun check(
             context: Context,
@@ -534,47 +531,3 @@ class PermissionUtil {
     }
 }
 
-class FastPermissionFragment(val onFast: ((Fragment, PermissionUtil) -> Unit)?) :
-    Fragment() {
-    constructor() : this(null)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        onFast?.invoke(this, PermissionUtil(this))
-    }
-}
-
-/**
- * 权限请求结果
- */
-enum class PermissionResult {
-    /**
-     * 同意授予权限
-     */
-    Granted,
-
-    /**
-     * 拒绝授予权限
-     */
-    Denied,
-
-    /**
-     * 拒绝授予权限，且不允许再询问
-     */
-    DeniedAndDonTAskAgain
-}
-
-/**
- * 权限请求
- */
-data class PermissionRequest(
-    /**
-     * 权限
-     * Manifest.permission.xxx
-     */
-    val permission: String,
-    /**
-     * 权限理由说明
-     */
-    @StringRes val rationaleRes: Int? = null
-)

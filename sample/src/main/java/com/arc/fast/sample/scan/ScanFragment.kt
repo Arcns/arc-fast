@@ -13,7 +13,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
-import com.arc.fast.core.util.PermissionUtil
+import com.arc.fast.permission.FastPermissionUtil
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.data.entity.Dialog
 import com.arc.fast.sample.databinding.FragmentScanBinding
@@ -42,9 +42,10 @@ class ScanFragment : BaseFragment<FragmentScanBinding>() {
         binding.ivClose.setOnClickListener {
             findNavController().navigateUp()
         }
-        PermissionUtil.fastRequest(
+        FastPermissionUtil.request(
             this,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            overallRationale = "需要相机权限进行扫描",
         ) { allGranted, _ ->
             if (allGranted) {
                 // 初始化相机
