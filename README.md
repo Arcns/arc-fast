@@ -1,9 +1,24 @@
-# arc-fast
+# Arc Fast
 
 #### 一、介绍
 本项目包含一系列开箱即用的便携工具，能够让你快速、优雅的享受安卓便捷开发～
 
-#### 二、FastPermission
+#### 二、Fast Core
+`一行代码实现基于Activity Result API的动态权限获取`
+1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:core:0.11.7'
+```
+
+#### 三、Fast Permission
 `一行代码实现基于Activity Result API的动态权限获取`
 1.集成方式：
 ```
