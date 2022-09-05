@@ -2,6 +2,7 @@ package com.arc.fast.sample.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arc.fast.core.extensions.string
 import com.arc.fast.sample.*
 import com.arc.fast.sample.data.DataSource
 import com.arc.fast.sample.data.entity.ApiResult
@@ -36,11 +37,8 @@ class MainViewModel : ViewModel() {
                     "success", null, null, null, null, arrayListOf(
                         Menu("webview", "http://www.baidu.com", 0),
                         Menu("scan", ACTION_SCAN, 1),
-                        Menu("bottom dialog", ACTION_BOTTOM_DIALOG, 1),
-                        Menu("center dialog", ACTION_CENTER_DIALOG, 1),
-                        Menu("input dialog", ACTION_INPUT_DIALOG, 1),
-                        Menu("bottom popup", ACTION_BOTTOM_POPUP, 1),
-                        Menu("top popup", ACTION_TOP_POPUP, 1),
+                        Menu(R.string.immersive_dialog.string, ACTION_DIALOG, 1),
+                        Menu(R.string.immersive_popup.string, ACTION_POPUP, 1),
                         Menu("test", ACTION_TEST, 0)
                     )
                 )

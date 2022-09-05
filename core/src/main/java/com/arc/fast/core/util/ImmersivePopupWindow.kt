@@ -24,7 +24,6 @@ import com.arc.fast.core.R
  * 沉浸式PopupWindow
  */
 abstract class ImmersivePopupWindow : PopupWindow {
-    private var mY = 0
     private var mContext: Context? = null
     private var mImmersivePopupWindowConfig: ImmersivePopupWindowConfig? = null
     private var mBackground: ImmersivePopupWindowBackground? = null
@@ -67,13 +66,13 @@ abstract class ImmersivePopupWindow : PopupWindow {
     }
 
     override fun showAsDropDown(anchor: View, xoff: Int, yoff: Int, gravity: Int) {
-        initBackground(anchor.context)
+        initBackground(mContext ?: anchor.context)
         super.showAsDropDown(anchor, xoff, yoff, gravity)
         onShow(anchor, yoff)
     }
 
     override fun showAtLocation(parent: View, gravity: Int, x: Int, y: Int) {
-        initBackground(parent.context)
+        initBackground(mContext ?: parent.context)
         super.showAtLocation(parent, gravity, x, y)
         onShow(parent)
     }
@@ -133,7 +132,7 @@ class ImmersivePopupWindowBackground(
         config.isLightNavigationBarForegroundColor?.let { !it }
     private val currentIsLightStatusBarForegroundColor =
         config.isLightStatusBarForegroundColor?.let { !it }
-    private var currentY = 0
+    private var currentY = -1
 
     //
     private val parentWindow by lazy {
@@ -187,15 +186,15 @@ class ImmersivePopupWindowBackground(
             }
         }
         if (config.cancelable) {
-            popupWIndow.setBackgroundDrawable(BitmapDrawable())
-            popupWIndow.isFocusable = true
-//                rootView?.setOnKeyListener { _, keyCode, _ ->
-//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                        popupWIndow.dismiss()
-//                        return@setOnKeyListener true
-//                    }
-//                    false
-//                }
+//            popupWIndow.setBackgroundDrawable(BitmapDrawable())
+//            popupWIndow.isFocusable = true
+            rootView.setOnKeyListener { _, keyCode, _ ->
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    popupWIndow.dismiss()
+                    return@setOnKeyListener true
+                }
+                false
+            }
         }
 
         animator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f)
@@ -232,9 +231,13 @@ class ImmersivePopupWindowBackground(
             rootView,
             WindowManager.LayoutParams(
                 WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                        or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+                        or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL /*背景外可透传*/
+                        or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT
             ).apply {
+                flags = flags and (WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE).inv()
                 token = parentWindow?.decorView?.windowToken
                 gravity = Gravity.CENTER
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -270,17 +273,33 @@ class ImmersivePopupWindowBackground(
                     currentIsLightStatusBarForegroundColor
         }
         // 是否启用锚点
-        if (config.enableAnchorView && anchor != null) {
+        if (anchor != null && config.backgroundConstraint != ImmersivePopupWindowBackgroundConstraint.UnConstraint) {
             val location = IntArray(2)
             anchor.getLocationInWindow(location)
-            val anchorY = location.last()
+            val anchorY: Int
+            val height: Int
+            val gravity: Int
+            when (config.backgroundConstraint) {
+                ImmersivePopupWindowBackgroundConstraint.TopToAnchorBottom -> {
+                    anchorY = location.last() + anchor.measuredHeight + yoff
+                    height = parentWindow!!.decorView.measuredHeight - anchorY
+                    gravity = Gravity.TOP
+                }
+                ImmersivePopupWindowBackgroundConstraint.BottomToAnchorTop -> {
+                    anchorY = 0
+                    height = location.last() - yoff
+                    gravity = Gravity.TOP
+                }
+                else -> return
+            }
             if (currentY != anchorY) {
-                currentY = anchorY + anchor.measuredHeight + yoff
+                currentY = anchorY
                 windowManager.updateViewLayout(
                     rootView,
                     (rootView.layoutParams as? WindowManager.LayoutParams)?.apply {
                         this.y = currentY
-                        this.height = parentWindow!!.decorView.measuredHeight - currentY
+                        this.gravity = gravity
+                        this.height = height
                     })
             }
         }
@@ -337,9 +356,9 @@ class ImmersivePopupWindowConfig(
      */
     var isLightNavigationBarForegroundColor: Boolean? = null,
     /**
-     * 背景是否启用锚视图（背景显示在锚视图之下）
+     * 背景布局约束
      */
-    var enableAnchorView: Boolean = false,
+    var backgroundConstraint: ImmersivePopupWindowBackgroundConstraint = ImmersivePopupWindowBackgroundConstraint.UnConstraint,
     /**
      * 是否启用背景渐变动画
      */
@@ -358,23 +377,56 @@ class ImmersivePopupWindowConfig(
             ),
             isLightStatusBarForegroundColor = true,
             isLightNavigationBarForegroundColor = false,
-            enableAnchorView = false,
             navigationColor = Color.WHITE
         )
 
         /**
-         * 顶部PopupWindows
+         * 顶部锚点PopupWindows
          */
         @JvmStatic
-        fun createTopPopupWindow(context: Context) = ImmersivePopupWindowConfig(
+        fun createTopToAnchorBottomPopupWindow(context: Context) = ImmersivePopupWindowConfig(
             backgroundColor = ContextCompat.getColor(
                 context,
                 R.color.arc_fast_popup_window_background
             ),
             isLightStatusBarForegroundColor = null,
             isLightNavigationBarForegroundColor = null,
-            enableAnchorView = true
+            backgroundConstraint = ImmersivePopupWindowBackgroundConstraint.TopToAnchorBottom,
+        )
+
+        /**
+         * 底部锚点PopupWindows
+         */
+        @JvmStatic
+        fun createBottomToAnchorTopPopupWindow(context: Context) = ImmersivePopupWindowConfig(
+            backgroundColor = ContextCompat.getColor(
+                context,
+                R.color.arc_fast_popup_window_background
+            ),
+            isLightStatusBarForegroundColor = null,
+            isLightNavigationBarForegroundColor = null,
+            backgroundConstraint = ImmersivePopupWindowBackgroundConstraint.BottomToAnchorTop,
         )
 
     }
+}
+
+/**
+ * 沉浸式PopupWindow背景布局约束
+ */
+enum class ImmersivePopupWindowBackgroundConstraint {
+    /**
+     * 无约束，即全屏
+     */
+    UnConstraint,
+
+    /**
+     * 显示在Anchor下方
+     */
+    TopToAnchorBottom,
+
+    /**
+     * 显示在Anchor上方
+     */
+    BottomToAnchorTop
 }

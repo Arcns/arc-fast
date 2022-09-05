@@ -1,7 +1,6 @@
 package com.arc.fast.sample.main
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +15,7 @@ import com.arc.fast.sample.*
 import com.arc.fast.sample.data.LocalData
 import com.arc.fast.sample.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
-import com.arc.fast.sample.dialog.TestBottomDialog
-import com.arc.fast.sample.dialog.TestCenterDialog
-import com.arc.fast.sample.dialog.TestInputDialog
 import com.arc.fast.sample.extension.titleTextView
-import com.arc.fast.sample.popup.TestBottomPopupWindow
-import com.arc.fast.sample.popup.TestTopPopupWindow
 import com.arc.fast.sample.utils.NavTransitionOptions
 import com.arc.fast.sample.utils.SHARED_ELEMENT_APP_NAME
 import kotlinx.coroutines.delay
@@ -135,21 +129,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToScanFragment()
             )
-        } else if (menu.url == ACTION_BOTTOM_DIALOG) {
-            TestBottomDialog().show(parentFragmentManager, null)
-        } else if (menu.url == ACTION_CENTER_DIALOG) {
-            TestCenterDialog().show(parentFragmentManager, null)
-        } else if (menu.url == ACTION_INPUT_DIALOG) {
-            TestInputDialog().show(parentFragmentManager, null)
-        } else if (menu.url == ACTION_BOTTOM_POPUP) {
-            TestBottomPopupWindow(requireContext()).showAtLocation(
-                binding.root,
-                Gravity.BOTTOM,
-                0,
-                0
+        } else if (menu.url == ACTION_DIALOG) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToDialogFragment()
             )
-        } else if (menu.url == ACTION_TOP_POPUP) {
-            TestTopPopupWindow(requireContext()).showAsDropDown(binding.toolbar)
+        } else if (menu.url == ACTION_POPUP) {
+
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToPopupFragment()
+            )
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }

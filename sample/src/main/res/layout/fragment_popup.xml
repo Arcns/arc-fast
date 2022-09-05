@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        paddingBottomSystemWindowInsets="@{true}"
+        paddingTopSystemWindowInsets="@{true}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/immersive_popup"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/styleToolbarTitle" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <Button
+                android:id="@+id/btnBottomPopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="bottom popup" />
+
+            <Button
+                android:id="@+id/btnTopToAnchorBottomPopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="top to anchor bottom popup" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnBottomToAnchorTopPopup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bottom to anchor top popup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

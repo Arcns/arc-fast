@@ -1,7 +1,6 @@
 package com.arc.fast.sample.popup
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.arc.fast.core.extensions.color
@@ -11,19 +10,15 @@ import com.arc.fast.core.util.ImmersivePopupWindowConfig
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.PopupTestTopBinding
 
-class TestTopPopupWindow(val context: Context) :
-    ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, 56.dp) {
+class TestBottomToAnchorTopPopupWindow(val context: Context) :
+    ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT,  56.dp) {
 
     val binding: PopupTestTopBinding by lazy {
         PopupTestTopBinding.inflate(LayoutInflater.from(context))
     }
 
     override fun getImmersivePopupWindowConfig(context: Context) =
-        ImmersivePopupWindowConfig.createTopPopupWindow(context).apply {
-//            navigationColor = Color.BLACK /*显示页面的导航栏*/
-            isLightNavigationBarForegroundColor = true
-//            navigationColor = Color.TRANSPARENT
-//            isLightNavigationBarForegroundColor = null
+        ImmersivePopupWindowConfig.createBottomToAnchorTopPopupWindow(context).apply {
             backgroundColor = R.color.md_theme_light_primary_transparent_26.color
         }
 
