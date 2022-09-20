@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     // 仅编译，若项目需要使用到，需要在项目中自行引用
     compileOnly 'com.google.code.gson:gson:2.9.1'
-    compileOnly project(path: ':immersive')
+    implementation project(path: ':immersive')
 }
 
 //生成文档注释
@@ -61,10 +61,10 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-                artifacts {
-                    archives androidSourcesJar
-                    archives androidJavadocsJar
-                }
+//                artifacts {
+//                    archives androidSourcesJar
+//                    archives androidJavadocsJar
+//                }
 //                groupId = 'com.arc.fast'
 //                artifactId = 'core'
 //                version = '1.0.0'
