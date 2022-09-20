@@ -200,9 +200,7 @@ class ImmersivePopupWindowBackground(
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         if (backgroundView.alpha == 0f) {
-                            windowManager.removeView(
-                                rootView
-                            )
+                            dismissBackground()
                         }
                     }
                 })
@@ -303,6 +301,15 @@ class ImmersivePopupWindowBackground(
         }
     }
 
+    private fun dismissBackground() {
+        if ((context as? Activity)?.let { it.isFinishing || it.isDestroyed } == true) return
+        try {
+            windowManager.removeView(rootView)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun dismiss() {
         if (config.enableBackgroundAnimator) {
             navigationBarView?.isVisible = false
@@ -311,8 +318,7 @@ class ImmersivePopupWindowBackground(
             animator.startDelay = 0
             animator.start()
         } else {
-            backgroundView.isVisible = false
-            windowManager.removeView(rootView)
+            dismissBackground()
         }
         // 恢复状态栏/导航栏前景色
         if (parentWindowController != null) {
