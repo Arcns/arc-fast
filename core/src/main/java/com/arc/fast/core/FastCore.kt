@@ -1,15 +1,13 @@
 package com.arc.fast.core
 
-import android.app.Activity
 import android.app.Application
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Bundle
-import com.arc.fast.core.util.getSystemBarHeight
-import com.arc.fast.core.util.systemStatusBarHeight
+import com.arc.fast.core.util.tryInvoke
+import com.arc.fast.immersive.setAutoInitSystemBarHeight
 
 class FastCore {
     private lateinit var mApplicationContext: Context
@@ -20,6 +18,13 @@ class FastCore {
             return mApplicationContext
         }
 
+    // 沉浸式模块是否可用
+    val immersiveIsAvailable: Boolean by lazy {
+        tryInvoke {
+            Class.forName("com.arc.fast.immersive.SystemBarConfig")
+        }
+    }
+
     private fun init(applicationContext: Context?) {
         if (applicationContext == null || mInitializationCompleted) return
         setApplicationContext(applicationContext)
@@ -28,37 +33,11 @@ class FastCore {
     fun setApplicationContext(applicationContext: Context) {
         mApplicationContext = applicationContext
         if (!mInitializationCompleted) {
-            (mApplicationContext.applicationContext as Application).registerActivityLifecycleCallbacks(
-                object : Application.ActivityLifecycleCallbacks {
-                    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
-                        initSystemBarHeight(activity)
-                    }
-
-                    override fun onActivityStarted(activity: Activity) {
-                    }
-
-                    override fun onActivityResumed(activity: Activity) {
-                    }
-
-                    override fun onActivityPaused(activity: Activity) {
-                    }
-
-                    override fun onActivityStopped(activity: Activity) {
-                    }
-
-                    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
-                    }
-
-                    override fun onActivityDestroyed(activity: Activity) {
-                    }
-                })
             mInitializationCompleted = true
+            if (immersiveIsAvailable) {
+                (mApplicationContext.applicationContext as Application).setAutoInitSystemBarHeight()
+            }
         }
-    }
-
-    private fun initSystemBarHeight(activity: Activity) {
-        if (systemStatusBarHeight > 0) return
-        activity.getSystemBarHeight { _, _ -> }
     }
 
     companion object {

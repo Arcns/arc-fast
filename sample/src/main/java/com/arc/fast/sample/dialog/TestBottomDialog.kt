@@ -6,7 +6,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.screenHeight
-import com.arc.fast.core.util.ImmersiveDialogConfig
+import com.arc.fast.immersive.ImmersiveDialogConfig
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.DialogTestBottomBinding
 

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.extensions.dp
-import com.arc.fast.core.util.ImmersiveDialogConfig
+import com.arc.fast.immersive.ImmersiveDialogConfig
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.DialogTestCenterBinding
 

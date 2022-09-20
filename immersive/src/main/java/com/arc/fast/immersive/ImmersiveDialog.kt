@@ -1,4 +1,4 @@
-package com.arc.fast.core.util
+package com.arc.fast.immersive
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -19,7 +19,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.arc.fast.core.R
 
 
 /**
@@ -287,7 +286,7 @@ class ImmersiveDialogBackground(
         animator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f)
             .setDuration(300).apply {
                 addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         if (backgroundView.alpha == 0f) {
                             windowManager.removeView(
                                 rootView

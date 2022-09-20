@@ -4,6 +4,6 @@ plugins {
     id 'maven-publish'
 }
 ext.library = [
-        namespace: "com.arc.fast.core"
+        namespace: "com.arc.fast.immersive"
 ]
 apply from: rootProject.file("library_config.gradle")

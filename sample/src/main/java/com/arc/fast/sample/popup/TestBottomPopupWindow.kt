@@ -1,13 +1,12 @@
 package com.arc.fast.sample.popup
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.screenHeight
-import com.arc.fast.core.util.ImmersivePopupWindow
-import com.arc.fast.core.util.ImmersivePopupWindowConfig
+import com.arc.fast.immersive.ImmersivePopupWindow
+import com.arc.fast.immersive.ImmersivePopupWindowConfig
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.DialogTestBottomBinding
 
@@ -26,7 +25,7 @@ class TestBottomPopupWindow(val context: Context) :
         }
 
     init {
-        animationStyle = com.arc.fast.core.R.style.StyleArcFastAnimDialogDownEnterExit
+        animationStyle = com.arc.fast.immersive.R.style.StyleArcFastAnimDialogDownEnterExit
         contentView = binding.root
         binding.ivClose.setOnClickListener {
             dismiss()

@@ -10,8 +10,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.arc.fast.core.extensions.applySystemWindowsInsetsMargin
-import com.arc.fast.core.extensions.applySystemWindowsInsetsPadding
+import com.arc.fast.immersive.applySystemWindowsInsetsMargin
+import com.arc.fast.immersive.applySystemWindowsInsetsPadding
 import com.arc.fast.core.extensions.string
 import com.arc.fast.sample.R
 import com.arc.fast.sample.data.ApiStatus

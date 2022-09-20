@@ -2,6 +2,7 @@ package com.arc.fast.sample
 
 import android.app.Application
 import android.content.pm.PackageInfo
+import com.arc.fast.core.FastCore
 import com.arc.fast.sample.data.LocalData
 
 class SampleApp : Application() {

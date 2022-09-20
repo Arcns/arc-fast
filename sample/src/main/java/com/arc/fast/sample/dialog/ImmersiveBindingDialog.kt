@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.arc.fast.core.util.ImmersiveDialog
+import com.arc.fast.immersive.ImmersiveDialog
 
 abstract class ImmersiveBindingDialog<Binding : ViewBinding> : ImmersiveDialog() {
     protected lateinit var binding: Binding

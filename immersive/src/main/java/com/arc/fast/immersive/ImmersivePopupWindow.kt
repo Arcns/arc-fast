@@ -1,4 +1,4 @@
-package com.arc.fast.core.util
+package com.arc.fast.immersive
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -7,7 +7,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.AttributeSet
 import android.view.*
@@ -17,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
-import com.arc.fast.core.R
 
 
 /**
@@ -200,7 +198,7 @@ class ImmersivePopupWindowBackground(
         animator = ObjectAnimator.ofFloat(backgroundView, "alpha", 0f, 1f)
             .setDuration(300).apply {
                 addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         if (backgroundView.alpha == 0f) {
                             windowManager.removeView(
                                 rootView

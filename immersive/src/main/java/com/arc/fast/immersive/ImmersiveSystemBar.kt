@@ -1,8 +1,9 @@
-package com.arc.fast.core.util
+package com.arc.fast.immersive
 
 import android.app.Activity
+import android.app.Application
 import android.graphics.Color
-import android.util.Log
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -11,7 +12,37 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
-import com.arc.fast.core.extensions.requestApplyInsetsWhenAttached
+
+/**
+ * 设置自动初始化状态栏和导航栏高度
+ */
+fun Application.setAutoInitSystemBarHeight() {
+    registerActivityLifecycleCallbacks(
+        object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                if (systemStatusBarHeight > 0) return
+                activity.getSystemBarHeight { _, _ -> }
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+            }
+        })
+}
 
 /**
  * 设置状态栏和导航栏

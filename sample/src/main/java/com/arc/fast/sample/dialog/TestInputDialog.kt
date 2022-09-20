@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.WindowInsetsAnimationCompat
-import com.arc.fast.core.extensions.applyWindowInsetIMEAnimation
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.extensions.showSoftInput
-import com.arc.fast.core.util.ImmersiveDialogConfig
+import com.arc.fast.immersive.ImmersiveDialogConfig
+import com.arc.fast.immersive.applyWindowInsetIMEAnimation
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.DialogTestInputBinding
 

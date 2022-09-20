@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk versions.compile_sdk
 
     defaultConfig {
         applicationId "com.arc.fast.sample"
-        minSdk 21
-        targetSdk 32
-        versionCode 2
-        versionName "1.0.2"
+        minSdk versions.min_sdk
+        targetSdk versions.compile_sdk
+        versionCode versions.publish_code
+        versionName versions.publish_name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,8 +68,8 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
@@ -78,8 +78,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     // navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // key-value
     implementation 'com.tencent:mmkv:1.2.14'
@@ -105,6 +105,8 @@ dependencies {
     // core
     implementation project(path: ':core')
     implementation project(path: ':permission')
-//    implementation "com.gitee.arcns.arc-fast:core:0.11.4"
-//    implementation "com.gitee.arcns.arc-fast:permission:0.11.4"
+    implementation project(path: ':immersive')
+//    implementation "com.gitee.arcns.arc-fast:core:0.11.8"
+//    implementation "com.gitee.arcns.arc-fast:permission:0.11.8"
+//    implementation "com.gitee.arcns.arc-fast:immersive:0.11.8"
 }

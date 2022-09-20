@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.extensions.dp
-import com.arc.fast.core.util.ImmersivePopupWindow
-import com.arc.fast.core.util.ImmersivePopupWindowConfig
+import com.arc.fast.immersive.ImmersivePopupWindow
+import com.arc.fast.immersive.ImmersivePopupWindowConfig
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.PopupTestTopBinding
 
