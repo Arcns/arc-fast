@@ -1,13 +1,13 @@
 package com.arc.fast.core
 
+import android.app.Activity
 import android.app.Application
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import com.arc.fast.core.util.tryInvoke
-import com.arc.fast.immersive.setAutoInitSystemBarHeight
+import android.os.Bundle
 
 class FastCore {
     private lateinit var mApplicationContext: Context
@@ -18,13 +18,6 @@ class FastCore {
             return mApplicationContext
         }
 
-    // 沉浸式模块是否可用
-    val immersiveIsAvailable: Boolean by lazy {
-        tryInvoke {
-            Class.forName("com.arc.fast.immersive.SystemBarConfig")
-        }
-    }
-
     private fun init(applicationContext: Context?) {
         if (applicationContext == null || mInitializationCompleted) return
         setApplicationContext(applicationContext)
@@ -34,9 +27,11 @@ class FastCore {
         mApplicationContext = applicationContext
         if (!mInitializationCompleted) {
             mInitializationCompleted = true
-            if (immersiveIsAvailable) {
-                (mApplicationContext.applicationContext as Application).setAutoInitSystemBarHeight()
-            }
+            (mApplicationContext.applicationContext as Application).registerActivityLifecycleCallbacks(
+                object : FastActivityLifecycleCallbacks() {
+                    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                    }
+                })
         }
     }
 
@@ -86,4 +81,27 @@ class FastCoreInitProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ): Int = 0
+}
+
+abstract class FastActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+    }
+
+    override fun onActivityStarted(activity: Activity) {
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+    }
+
+    override fun onActivityPaused(activity: Activity) {
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+    }
+
+    override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+    }
+
+    override fun onActivityDestroyed(activity: Activity) {
+    }
 }
