@@ -61,10 +61,10 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
-//                artifacts {
-//                    archives androidSourcesJar
-//                    archives androidJavadocsJar
-//                }
+                artifacts {
+                    archives androidSourcesJar
+                    archives androidJavadocsJar
+                }
 //                groupId = 'com.arc.fast'
 //                artifactId = 'core'
 //                version = '1.0.0'
