@@ -103,10 +103,10 @@ dependencies {
     // EventBus
     implementation "org.greenrobot:eventbus:3.3.1"
     // core
-//    implementation project(path: ':core')
-//    implementation project(path: ':permission')
-//    implementation project(path: ':immersive')
-    implementation "com.gitee.arcns.arc-fast:core:0.11.8"
-    implementation "com.gitee.arcns.arc-fast:permission:0.11.8"
-    implementation "com.gitee.arcns.arc-fast:immersive:0.11.8"
+    implementation project(path: ':core')
+    implementation project(path: ':permission')
+    implementation project(path: ':immersive')
+//    implementation "com.gitee.arcns.arc-fast:core:0.11.8"
+//    implementation "com.gitee.arcns.arc-fast:permission:0.11.8"
+//    implementation "com.gitee.arcns.arc-fast:immersive:0.11.8"
 }
