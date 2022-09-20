@@ -47,19 +47,19 @@ task androidSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-//                artifacts {
-//                    archives androidSourcesJar
-//                    archives androidJavadocsJar
-//                }
-//                groupId = 'com.arc.fast'
-//                artifactId = 'core'
-//                version = '1.0.0'
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            release(MavenPublication) {
+//                from components.release
+////                artifacts {
+////                    archives androidSourcesJar
+////                    archives androidJavadocsJar
+////                }
+////                groupId = 'com.arc.fast'
+////                artifactId = 'core'
+////                version = '1.0.0'
+//            }
+//        }
+//    }
+//}
