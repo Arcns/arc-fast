@@ -4,32 +4,33 @@ plugins {
     id 'maven-publish'
 }
 ext.library = [
-        namespace     : 'com.arc.fast.core'
+        namespace: 'com.arc.fast.core'
 ]
+android {
+    namespace 'com.arc.fast.core'
+    compileSdk versions.compile_sdk
+    defaultConfig {
+        minSdk versions.min_sdk
+        targetSdk versions.compile_sdk
+        versionCode versions.publish_code
+        versionName versions.publish_name
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
 apply from: rootProject.file("library_config.gradle")
-//android {
-//    namespace 'com.arc.fast.core'
-//    compileSdk versions.compile_sdk
-//    defaultConfig {
-//        minSdk versions.min_sdk
-//        targetSdk versions.compile_sdk
-//        versionCode versions.publish_code
-//        versionName versions.publish_name
-//    }
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_11
-//        targetCompatibility JavaVersion.VERSION_11
-//    }
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
-//}
 //
 //
 //dependencies {
@@ -58,19 +59,19 @@ apply from: rootProject.file("library_config.gradle")
 //    from android.sourceSets.main.java.srcDirs
 //}
 //
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-//                artifacts {
-//                    archives androidSourcesJar
-//                    archives androidJavadocsJar
-//                }
-//                groupId = 'com.arc.fast'
-//                artifactId = 'core'
-//                version = '1.0.0'
-            }
-        }
-    }
-}
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            release(MavenPublication) {
+//                from components.release
+////                artifacts {
+////                    archives androidSourcesJar
+////                    archives androidJavadocsJar
+////                }
+////                groupId = 'com.arc.fast'
+////                artifactId = 'core'
+////                version = '1.0.0'
+//            }
+//        }
+//    }
+//}
