@@ -5,20 +5,16 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
 }
-
 android {
     compileSdk versions.compile_sdk
-
     defaultConfig {
         applicationId "com.arc.fast.sample"
         minSdk versions.min_sdk
         targetSdk versions.compile_sdk
         versionCode versions.publish_code
         versionName versions.publish_name
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
 //    signingConfigs {
 //        release {
 //            keyAlias 'sample'
@@ -27,7 +23,6 @@ android {
 //            storePassword 'sample'
 //        }
 //    }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -41,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_11
     }
     // dataBinding
     buildFeatures {
@@ -66,7 +61,6 @@ android {
 //            }
 //    }
 }
-
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
