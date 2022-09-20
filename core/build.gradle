@@ -3,9 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'maven-publish'
 }
-ext.library = [
-        namespace: 'com.arc.fast.core'
-]
 android {
     namespace 'com.arc.fast.core'
     compileSdk versions.compile_sdk
@@ -29,49 +26,19 @@ android {
         jvmTarget = '1.8'
     }
 }
-
-apply from: rootProject.file("library_config.gradle")
-//
-//
-//dependencies {
-//    implementation 'androidx.core:core-ktx:1.9.0'
-//    implementation 'androidx.appcompat:appcompat:1.5.1'
-//    implementation 'com.google.android.material:material:1.6.1'
-//    // 仅编译，若项目需要使用到，需要在项目中自行引用
-//    compileOnly 'com.google.code.gson:gson:2.9.1'
-//}
-//
-////生成文档注释
-//task androidJavadocs(type: Javadoc) {
-//    failOnError = false
-//    source = android.sourceSets.main.java.srcDirs
-//    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-//    classpath += files(ext.androidJar)
-//}
-////将文档打包成jar
-//task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-//    classifier 'javadoc'
-//    from androidJavadocs.destinationDir
-//}
-////将源码打包
-//task androidSourcesJar(type: Jar) {
-//    classifier 'sources'
-//    from android.sourceSets.main.java.srcDirs
-//}
-//
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            release(MavenPublication) {
-//                from components.release
-////                artifacts {
-////                    archives androidSourcesJar
-////                    archives androidJavadocsJar
-////                }
-////                groupId = 'com.arc.fast'
-////                artifactId = 'core'
-////                version = '1.0.0'
-//            }
-//        }
-//    }
-//}
+dependencies {
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    // 仅编译，若项目需要使用到，需要在项目中自行引用
+    compileOnly 'com.google.code.gson:gson:2.9.1'
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}
