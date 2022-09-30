@@ -249,16 +249,6 @@ class ImmersivePopupWindowBackground(
     }
 
     fun show(anchor: View? = null, yoff: Int = 0) {
-        if (config.enableBackgroundAnimator) {
-            animator.cancel()
-            backgroundView.alpha = 0f
-            backgroundView.isVisible = true
-            animator.setFloatValues(0f, 1f)
-            animator.startDelay = 100
-            animator.start()
-        } else {
-            backgroundView.isVisible = true
-        }
         // 修改状态栏/导航栏前景色
         if (parentWindowController != null) {
             if (currentIsAppearanceLightNavigationBars != null)
@@ -270,34 +260,55 @@ class ImmersivePopupWindowBackground(
         }
         // 是否启用锚点
         if (anchor != null && config.backgroundConstraint != ImmersivePopupWindowBackgroundConstraint.UnConstraint) {
-            val location = IntArray(2)
-            anchor.getLocationInWindow(location)
-            val anchorY: Int
-            val height: Int
-            val gravity: Int
-            when (config.backgroundConstraint) {
-                ImmersivePopupWindowBackgroundConstraint.TopToAnchorBottom -> {
-                    anchorY = location.last() + anchor.measuredHeight + yoff
-                    height = parentWindow!!.decorView.measuredHeight - anchorY
-                    gravity = Gravity.TOP
+            anchor.post {
+                val location = IntArray(2)
+                anchor.getLocationInWindow(location)
+                val anchorY: Int
+                val height: Int
+                val gravity: Int
+                when (config.backgroundConstraint) {
+                    ImmersivePopupWindowBackgroundConstraint.TopToAnchorBottom -> {
+                        anchorY = location.last() + anchor.measuredHeight + yoff
+                        height = parentWindow!!.decorView.measuredHeight - anchorY
+                        gravity = Gravity.TOP
+                    }
+                    ImmersivePopupWindowBackgroundConstraint.BottomToAnchorTop -> {
+                        anchorY = 0
+                        height = location.last() - yoff
+                        gravity = Gravity.TOP
+                    }
+                    else -> {
+                        showBackground()
+                        return@post
+                    }
                 }
-                ImmersivePopupWindowBackgroundConstraint.BottomToAnchorTop -> {
-                    anchorY = 0
-                    height = location.last() - yoff
-                    gravity = Gravity.TOP
+                if (currentY != anchorY) {
+                    currentY = anchorY
+                    windowManager.updateViewLayout(
+                        rootView,
+                        (rootView.layoutParams as? WindowManager.LayoutParams)?.apply {
+                            this.y = currentY
+                            this.gravity = gravity
+                            this.height = height
+                        })
                 }
-                else -> return
+                showBackground()
             }
-            if (currentY != anchorY) {
-                currentY = anchorY
-                windowManager.updateViewLayout(
-                    rootView,
-                    (rootView.layoutParams as? WindowManager.LayoutParams)?.apply {
-                        this.y = currentY
-                        this.gravity = gravity
-                        this.height = height
-                    })
-            }
+        } else {
+            showBackground()
+        }
+    }
+
+    private fun showBackground() {
+        if (config.enableBackgroundAnimator) {
+            animator.cancel()
+            backgroundView.alpha = 0f
+            backgroundView.isVisible = true
+            animator.setFloatValues(0f, 1f)
+            animator.startDelay = 100
+            animator.start()
+        } else {
+            backgroundView.isVisible = true
         }
     }
 
