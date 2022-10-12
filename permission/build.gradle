@@ -9,8 +9,6 @@ android {
     defaultConfig {
         minSdk versions.min_sdk
         targetSdk versions.compile_sdk
-        versionCode versions.publish_code
-        versionName versions.publish_name
     }
     buildTypes {
         release {

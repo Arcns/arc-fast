@@ -408,7 +408,8 @@ class ImmersiveDialogConfig(
     // 启用根视图包裹
     var enableWrapDialogContentView: Boolean = true,
     // 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。
-    // 注意启用后，内容无法扩展到全屏，沉浸式背景颜色仅支持backgroundDimAmount
+    // 注意启用后，内容无法扩展到全屏，沉浸式背景颜色仅支持backgroundDimAmount，
+    // 通常R版本以下需要设置该项为true，否则键盘打开后无法重置布局
     var enableSoftInputAdjustResize: Boolean = false,
     // 更新dialog更多自定义配置
     var updateCustomDialogConfig: ((dialog: Dialog, window: Window) -> Unit)? = null

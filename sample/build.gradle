@@ -46,6 +46,7 @@ android {
     buildFeatures {
         dataBinding true
     }
+    namespace 'com.arc.fast.sample'
 
     // 配置打包APK的名称
 //    android.applicationVariants.all {

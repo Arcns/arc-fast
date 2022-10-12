@@ -45,7 +45,7 @@ class ScanFragment : BaseFragment<FragmentScanBinding>() {
         FastPermissionUtil.request(
             this,
             Manifest.permission.CAMERA,
-            overallRationale = "需要相机权限进行扫描",
+            overallRationale = "应用需要相机权限用于扫描"
         ) { allGranted, _ ->
             if (allGranted) {
                 // 初始化相机

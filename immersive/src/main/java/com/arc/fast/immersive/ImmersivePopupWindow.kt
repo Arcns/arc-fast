@@ -76,7 +76,7 @@ abstract class ImmersivePopupWindow : PopupWindow {
     }
 
     private fun initBackground(context: Context) {
-        if (mBackground != null) return
+        if (mBackground?.isDestroy == false) return
         mBackground = mImmersivePopupWindowConfig?.let {
             ImmersivePopupWindowBackground(
                 context,
@@ -131,6 +131,8 @@ class ImmersivePopupWindowBackground(
     private val currentIsLightStatusBarForegroundColor =
         config.isLightStatusBarForegroundColor?.let { !it }
     private var currentY = -1
+    var isDestroy = false
+        private set
 
     //
     private val parentWindow by lazy {
@@ -342,6 +344,7 @@ class ImmersivePopupWindowBackground(
                     parentWindowIsAppearanceLightStatusBars!!
             }
         }
+        isDestroy = true
     }
 }
 

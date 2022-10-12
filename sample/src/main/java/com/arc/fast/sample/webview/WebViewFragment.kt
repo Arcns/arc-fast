@@ -1,9 +1,11 @@
 package com.arc.fast.sample.webview
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -44,6 +46,24 @@ class WebViewFragment : BaseFragment<FragmentWebViewBinding>() {
                 if (!args.menu.isFullScreen)
                     binding.appbar.isLifted = !it
             })
+    }
+
+    private val onGlobalLayoutListener by lazy {
+        ViewTreeObserver.OnGlobalLayoutListener {
+            val r = Rect()
+            requireActivity().window.decorView.getWindowVisibleDisplayFrame(r)
+            val height = binding.root.measuredHeight
+            val diff = height - r.bottom
+            if (diff != 0) {
+                if (binding.root.paddingBottom !== diff) {
+                    binding.root.setPadding(0, 0, 0, diff)
+                }
+            } else {
+                if (binding.root.paddingBottom !== 0) {
+                    binding.root.setPadding(0, 0, 0, 0)
+                }
+            }
+        }
     }
 
     override fun onCreateTransition(): NavTransitionOptions {
@@ -99,10 +119,15 @@ class WebViewFragment : BaseFragment<FragmentWebViewBinding>() {
         appViewModel.eventScanResult.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
             webView.onScanResult(it)
         }.launchIn(lifecycleScope)
+        requireActivity().window.decorView.viewTreeObserver.addOnGlobalLayoutListener(
+            onGlobalLayoutListener
+        )
     }
 
-
     override fun onDestroyView() {
+        requireActivity().window.decorView.viewTreeObserver.removeOnGlobalLayoutListener(
+            onGlobalLayoutListener
+        )
         (webView.parent as? ViewGroup)?.removeView(webView)
         super.onDestroyView()
     }

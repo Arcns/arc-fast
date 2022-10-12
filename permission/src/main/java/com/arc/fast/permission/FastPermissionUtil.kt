@@ -346,8 +346,8 @@ class FastPermissionUtil {
         ) {
             request(
                 activity = fragment.requireActivity(),
-                requestLifecycle = fragment.lifecycle,
                 FastPermissionRequest(permission, rationale),
+                requestLifecycle = fragment.lifecycle,
                 onResult = onResult
             )
         }
@@ -367,11 +367,11 @@ class FastPermissionUtil {
         ) {
             request(
                 activity = fragment.requireActivity(),
-                requestLifecycle = fragment.lifecycle,
                 permissionRequests = permissions.map {
                     FastPermissionRequest(permission = it)
                 }.toTypedArray(),
                 overallRationale = overallRationale,
+                requestLifecycle = fragment.lifecycle,
                 onResult = onResult
             )
         }
@@ -385,16 +385,16 @@ class FastPermissionUtil {
         @JvmStatic
         fun request(
             fragment: Fragment,
-            requestLifecycle: Lifecycle?, //本次请求的生命周期
             vararg permissionRequests: FastPermissionRequest,
             overallRationale: String? = null,
+            requestLifecycle: Lifecycle? = fragment.lifecycle, //本次请求的生命周期
             onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
         ) {
             request(
                 activity = fragment.requireActivity(),
-                requestLifecycle = requestLifecycle,
                 permissionRequests = permissionRequests,
                 overallRationale = overallRationale,
+                requestLifecycle = requestLifecycle,
                 onResult = onResult
             )
         }
@@ -415,8 +415,8 @@ class FastPermissionUtil {
         ) {
             request(
                 activity = activity,
-                requestLifecycle = null,
                 FastPermissionRequest(permission, rationale),
+                requestLifecycle = activity.lifecycle,
                 onResult = onResult
             )
         }
@@ -436,11 +436,11 @@ class FastPermissionUtil {
         ) {
             request(
                 activity = activity,
-                requestLifecycle = null,
                 permissionRequests = permissions.map {
                     FastPermissionRequest(permission = it)
                 }.toTypedArray(),
                 overallRationale = overallRationale,
+                requestLifecycle = activity.lifecycle,
                 onResult = onResult
             )
         }
@@ -454,9 +454,9 @@ class FastPermissionUtil {
         @JvmStatic
         fun request(
             activity: FragmentActivity,
-            requestLifecycle: Lifecycle?, //本次请求的生命周期
             vararg permissionRequests: FastPermissionRequest,
             overallRationale: String? = null,
+            requestLifecycle: Lifecycle? = activity.lifecycle, //本次请求的生命周期
             onResult: (allGranted: Boolean, result: Map<String, FastPermissionResult>) -> Unit
         ) {
             // 先判断当前是否已经拥有权限，有的话不需要判断实例
