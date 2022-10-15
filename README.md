@@ -16,7 +16,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:core:0.11.7'
+ implementation 'com.gitee.arcns.arc-fast:core:latest.release'
 ```
 
 ## 三、Fast Permission
@@ -31,7 +31,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:permission:0.11.7'
+ implementation 'com.gitee.arcns.arc-fast:permission:latest.release'
 ```
 #### 2.使用方式：
 - 简单获取权限
@@ -85,7 +85,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:immersive:0.11.18'
+ implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
 ```
 #### 2.使用方式
 >第一步：Dialog改为继承ImmersiveDialog
