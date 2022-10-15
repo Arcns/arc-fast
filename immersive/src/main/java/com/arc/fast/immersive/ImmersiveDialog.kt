@@ -405,16 +405,18 @@ class ImmersiveDialogConfig(
     var cancelable: Boolean,
     var isLightStatusBarForegroundColor: Boolean,
     var isLightNavigationBarForegroundColor: Boolean,
-    // 启用根视图包裹
+    // 启用弹窗内容根视图包裹。注意如果不启用，则由背景实现视图包裹功能（navigationColor由背景包裹控制，而且除非禁用backgroundDimEnabled否则navigationColor无效）
     var enableWrapDialogContentView: Boolean = true,
-    // 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。
-    // 注意启用后，内容无法扩展到全屏，沉浸式背景颜色仅支持backgroundDimAmount，
-    // 通常R版本以下需要设置该项为true，否则键盘打开后无法重置布局
+    // 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。注意启用后，内容无法扩展到全屏，通常R版本以下带输入框同时需要弹出键盘时自动更改布局的弹窗需设置该项为true，否则键盘打开后无法重置布局
     var enableSoftInputAdjustResize: Boolean = false,
     // 更新dialog更多自定义配置
     var updateCustomDialogConfig: ((dialog: Dialog, window: Window) -> Unit)? = null
 ) {
     companion object {
+
+        /**
+         * 全屏弹窗配置
+         */
         @JvmStatic
         fun createFullScreenDialogConfig(): ImmersiveDialogConfig {
             return ImmersiveDialogConfig(
@@ -433,6 +435,9 @@ class ImmersiveDialogConfig(
             )
         }
 
+        /**
+         * 底部弹窗配置
+         */
         @JvmStatic
         fun createBottomDialogConfig(): ImmersiveDialogConfig {
             return ImmersiveDialogConfig(
@@ -451,24 +456,21 @@ class ImmersiveDialogConfig(
             )
         }
 
+        /**
+         * 带输入框同时需要弹出键盘时自动更改布局的弹窗配置
+         * 注意：
+         * 1、该配置需要与applyWindowInsetIMEAnimation配合使用
+         * 2、除非禁用backgroundDimEnabled否则navigationColor无效
+         * 3、在R版本以下使用时，该配置下弹窗内容无法扩展到全屏
+         */
         @JvmStatic
         fun createSoftInputAdjustResizeDialogConfig(): ImmersiveDialogConfig {
-            return ImmersiveDialogConfig(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                Gravity.BOTTOM,
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-                true,
-                -1f,
-                R.style.StyleArcFastAnimDialogDownEnterExit,
-                true,
-                true,
-                true,
-                true,
-                enableSoftInputAdjustResize = true,
+            return createBottomDialogConfig().apply {
                 enableWrapDialogContentView = false
-            )
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                    enableSoftInputAdjustResize = true
+                }
+            }
         }
     }
 }

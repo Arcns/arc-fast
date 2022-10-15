@@ -52,8 +52,8 @@ class DataSource {
             }
         }).apply {
             level = LimitHttpLoggingInterceptor.Level.BODY
-        }).connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS).build()
+        }).connectTimeout(1, TimeUnit.SECONDS)
+            .readTimeout(1, TimeUnit.SECONDS).build()
         val retrofit = Retrofit.Builder()
             .baseUrl(LocalData.currentEnvironmentValue)
             .client(httpClient)

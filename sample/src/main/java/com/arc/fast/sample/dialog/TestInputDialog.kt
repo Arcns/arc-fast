@@ -19,22 +19,12 @@ class TestInputDialog : ImmersiveBindingDialog<DialogTestInputBinding>() {
         DialogTestInputBinding.inflate(inflater)
 
     override val immersiveDialogConfig
-        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-        // R版本及以上可直接使用BottomDialogConfig实现完美的IME跟踪效果
-            ImmersiveDialogConfig.createBottomDialogConfig().apply {
-                backgroundDimEnabled = false
-                backgroundColor = R.color.md_theme_light_primary_transparent_26.color
-                animations = 0
-                enableWrapDialogContentView = false
-            }
-        else
-            ImmersiveDialogConfig.createSoftInputAdjustResizeDialogConfig().apply {
-                backgroundDimEnabled = false
-                backgroundColor = R.color.md_theme_light_primary_transparent_26.color
-                animations = 0
-                navigationColor = Color.WHITE
-                isLightNavigationBarForegroundColor = false
-            }
+        get() = ImmersiveDialogConfig.createSoftInputAdjustResizeDialogConfig().apply {
+            // 除非禁用backgroundDimEnabled否则navigationColor无效
+            backgroundDimEnabled = false
+            backgroundColor = R.color.md_theme_light_primary_transparent_26.color
+            animations = 0
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
