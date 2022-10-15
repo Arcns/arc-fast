@@ -73,3 +73,109 @@ allprojects {
 }
 ```
 
+## 三、Immersive Dialog
+- 一行代码简单实现Android沉浸式Dialog
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:immersive:0.11.18'
+```
+#### 2.使用方式
+>第一步：Dialog改为继承ImmersiveDialog
+第二步：实现layoutId（Dialog的布局文件）和immersiveDialogConfig（沉浸式配置）
+第三步：在onViewCreated实现您自己的业务逻辑
+```
+/**
+ * 第一步：Dialog改为继承ImmersiveDialog
+ */
+class TestDialog : ImmersiveDialog() {
+
+    /**
+     * 第二步：实现layoutId（Dialog的布局文件）
+     * 注意：您不需要再自行实现onCreateView方法
+     */
+    override val layoutId: Int get() = R.layout.dialog_test
+
+    /**
+     * 第二步：实现immersiveDialogConfig（沉浸式配置），为简化配置，我们内置了三种常用配置：
+     * 1. createFullScreenDialogConfig 全屏弹窗配置
+     * 2. createBottomDialogConfig 底部弹窗配置
+     * 3. createSoftInputAdjustResizeDialogConfig 带输入框的弹窗配置
+     * 如果您有更多自定义需求，您可以自行创建自己的ImmersiveDialogConfig
+     * 注意：您不需要再自行配置Dialog和Window，通过ImmersiveDialogConfig即可简单完成配置
+     */
+    override val immersiveDialogConfig: ImmersiveDialogConfig
+        get() = ImmersiveDialogConfig.createFullScreenDialogConfig()
+
+    /**
+     * 第三步：在onViewCreated实现您自己的业务逻辑
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ... ...
+    }
+}
+```
+常用案例一：全屏弹窗
+```
+override val immersiveDialogConfig
+        get() = ImmersiveDialogConfig.createFullScreenDialogConfig().apply {
+            height = 500 // 可选：设置弹窗宽度
+            width = 500 // 可选：设置弹窗高度
+            backgroundDimEnabled = false // 可选：禁用默认弹窗背景
+            backgroundColor = 0x99000000.toInt() // 可选：设置弹窗背景的颜色
+        }
+```
+常用案例二：底部弹窗
+```
+override val immersiveDialogConfig
+        get() = ImmersiveDialogConfig.createFullScreenDialogConfig().apply {
+            height = 500 // 可选：设置弹窗高度
+            navigationColor = Color.BLACK  //可选：设置底部导航栏背景为黑色
+            isLightNavigationBarForegroundColor = true //可选：设置设置底部导航栏上的图标为白色
+        }
+```
+常用案例三：带输入框同时需要弹出键盘时自动更改布局的弹窗
+```
+override val immersiveDialogConfig
+        get() = ImmersiveDialogConfig.createSoftInputAdjustResizeDialogConfig().apply {
+            backgroundDimEnabled = false // 可选：该配置下除非禁用backgroundDimEnabled否则navigationColor会无效
+            backgroundColor = 0x99000000.toInt() // 可选：设置弹窗背景的颜色
+            animations = 0
+        }
+
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // SoftInputAdjustResizeDialogConfig需要与applyWindowInsetIMEAnimation配合使用
+        binding.clContent.applyWindowInsetIMEAnimation(
+            dispatchMode = WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE,
+            rootView = view
+        )
+    }
+```
+#### 3.ImmersiveDialogConfig支持的配置参数
+
+| 配置参数 | 类型 | 说明 |
+| ------ | ------ | ------ |
+| width | Int| Dialog的宽度，支持MATCH_PARENT、WRAP_CONTENT或具体数值 |
+| height | Int | Dialog的高度，支持MATCH_PARENT、WRAP_CONTENT或具体数值 |
+| gravity | Int | 弹窗的位置，支持Gravity.CENTER、Gravity.BOTTOM等位置 |
+| backgroundDimEnabled | Boolean | 启用系统自带的弹窗半透明黑色背景 |
+| backgroundDimAmount | Float | 系统自带背景的透明值，范围为0[完全透明]-1[不透明] |
+| backgroundColor | Int | 自定义的弹窗背景颜色，只有backgroundDimEnabled为false时才有效果 |
+| navigationColor | Int | 弹窗系统导航栏处/底部小白条的颜色 |
+| animations | Int | 弹窗动画的资源文件，为0时表示无动画 |
+| canceledOnTouchOutside | Boolean | 触摸弹窗之外的地方是否关闭弹窗 |
+| cancelable | Boolean | 点击返回按键是否关闭弹窗 |
+| isLightStatusBarForegroundColor | Boolean | 系统状态栏上的图标与文字是否显示为白色 |
+| isLightNavigationBarForegroundColor | Boolean | 系统导航栏上的图标是否显示为白色  |
+| enableWrapDialogContentView | Boolean | 启用弹窗内容根视图包裹。注意如果不启用，则由背景实现视图包裹功能（navigationColor由背景包裹控制，而且除非禁用backgroundDimEnabled否则navigationColor无效） |
+| enableSoftInputAdjustResize | Boolean | 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。注意启用后，内容无法扩展到全屏，通常R版本以下带输入框同时需要弹出键盘时自动更改布局的弹窗需设置该项为true，否则键盘打开后无法重置布局|
+| updateCustomDialogConfig | (dialog, window) -> Unit | 更新dialog更多自定义配置 |
