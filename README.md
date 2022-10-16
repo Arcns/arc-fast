@@ -179,3 +179,53 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 | enableWrapDialogContentView | Boolean | 启用弹窗内容根视图包裹。注意如果不启用，则由背景实现视图包裹功能（navigationColor由背景包裹控制，而且除非禁用backgroundDimEnabled否则navigationColor无效） |
 | enableSoftInputAdjustResize | Boolean | 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。注意启用后，内容无法扩展到全屏，通常R版本以下带输入框同时需要弹出键盘时自动更改布局的弹窗需设置该项为true，否则键盘打开后无法重置布局|
 | updateCustomDialogConfig | (dialog, window) -> Unit | 更新dialog更多自定义配置 |
+
+## 四、Immersive PopupWindow
+- 行代码简单实现Android沉浸式PopupWindow
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
+```
+
+#### 2、使用方式
+>第一步：PopupWindow改为继承ImmersivePopupWindow
+第二步：实现getImmersivePopupWindowConfig
+
+```
+/**
+ * 第一步：PopupWindow改为继承ImmersivePopupWindow
+ */
+class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT, 500)  {
+
+    /**
+     * 第二步：实现getImmersivePopupWindowConfig（沉浸式配置），为简化配置，我们内置了三种常用配置：
+     * 1. createBottomPopupWindow 底部PopupWindows
+     * 2. createTopToAnchorBottomPopupWindow 顶部锚点PopupWindows（例如顶部下拉菜单）
+     * 3. createBottomToAnchorTopPopupWindow 底部锚点PopupWindows（例如底部上拉菜单）
+     * 如果您有更多自定义需求，您可以自行创建自己的ImmersivePopupWindowConfig
+     */
+   override fun getImmersivePopupWindowConfig(context: Context) =
+        ImmersivePopupWindowConfig.createBottomPopupWindow(context)
+}
+```
+
+#### 3、ImmersivePopupWindowConfig支持的配置参数
+
+| 配置参数 | 类型 | 说明 |
+| ------ | ------ | ------ |
+| backgroundColor | Int | 背景颜色 |
+| navigationColor | Int | 系统导航栏处/底部小白条的颜色 |
+| canceledOnTouchOutside | Boolean | 触摸PopupWindow之外的地方是否关闭PopupWindow |
+| cancelable | Boolean | 点击返回按键是否关闭PopupWindow |
+| isLightStatusBarForegroundColor | Boolean | 系统状态栏上的图标与文字是否显示为白色 |
+| isLightNavigationBarForegroundColor | Boolean | 系统导航栏上的图标是否显示为白色  |
+| backgroundConstraint | ImmersivePopupWindowBackgroundConstraint | 相对于锚点的背景布局约束 |
+| enableBackgroundAnimator | Boolean | 是否启用背景渐变动画 |
