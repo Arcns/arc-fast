@@ -19,8 +19,7 @@ import com.arc.fast.sample.data.entity.ApiResult
 import com.arc.fast.sample.data.entity.Menu
 import com.arc.fast.sample.databinding.ItemMenuBinding
 import com.arc.fast.sample.main.MainViewModel
-import com.arc.fast.sample.view.NewMenuWrapSpan
-import com.arc.fast.sample.view.append
+import com.arc.fast.span.appendFastSpan
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -75,10 +74,7 @@ fun ImageView.setBindingUrl(value: String?) {
 
 @BindingAdapter("menu")
 fun TextView.setBindingMenu(menu: Menu) {
-    if (menu.is_new == 1) {
-        text = SpannableStringBuilder()
-            .append(menu.title).append(R.string.new_menu.string, NewMenuWrapSpan())
-    } else text = menu.title
+    text = menu.title
 }
 
 @BindingAdapter(

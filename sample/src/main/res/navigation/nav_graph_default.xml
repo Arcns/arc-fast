@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_mainFragment_to_popupFragment"
             app:destination="@id/popupFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_spanFragment"
+            app:destination="@id/spanFragment" />
     </fragment>
 
     <fragment
@@ -69,7 +72,10 @@
     <fragment
         android:id="@+id/testFragment"
         android:name="com.arc.fast.sample.test.TestFragment"
-        android:label="TestFragment" /><action android:id="@+id/action_global_testFragment" app:destination="@id/testFragment"/>
+        android:label="TestFragment" />
+    <action
+        android:id="@+id/action_global_testFragment"
+        app:destination="@id/testFragment" />
     <fragment
         android:id="@+id/dialogFragment"
         android:name="com.arc.fast.sample.dialog.DialogFragment"
@@ -78,4 +84,8 @@
         android:id="@+id/popupFragment"
         android:name="com.arc.fast.sample.popup.PopupFragment"
         android:label="PopupFragment" />
+    <fragment
+        android:id="@+id/spanFragment"
+        android:name="com.arc.fast.sample.span.SpanFragment"
+        android:label="SpanFragment" />
 </navigation>

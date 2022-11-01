@@ -53,6 +53,7 @@ class MainViewModel : ViewModel() {
                 Menu("scan", ACTION_SCAN, 1),
                 Menu(R.string.immersive_dialog.string, ACTION_DIALOG, 1),
                 Menu(R.string.immersive_popup.string, ACTION_POPUP, 1),
+                Menu(R.string.span.string, ACTION_SPAN, 1),
                 Menu("test", ACTION_TEST, 0)
             )
         )

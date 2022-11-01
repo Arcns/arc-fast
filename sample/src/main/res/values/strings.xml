@@ -25,4 +25,5 @@
     <string name="app_update_downloaded_tip">The app update has been downloaded, click \"Install\" to update</string>
     <string name="immersive_dialog">immersive dialog</string>
     <string name="immersive_popup">immersive popup</string>
+    <string name="span">span</string>
 </resources>

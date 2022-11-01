@@ -134,9 +134,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 MainFragmentDirections.actionMainFragmentToDialogFragment()
             )
         } else if (menu.url == ACTION_POPUP) {
-
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToPopupFragment()
+            )
+        } else if (menu.url == ACTION_SPAN) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToSpanFragment()
             )
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
