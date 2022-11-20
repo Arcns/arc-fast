@@ -181,7 +181,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 | updateCustomDialogConfig | (dialog, window) -> Unit | 更新dialog更多自定义配置 |
 
 ## 四、Immersive PopupWindow
-- 行代码简单实现Android沉浸式PopupWindow
+- 一行代码简单实现Android沉浸式PopupWindow
 #### 1.集成方式：
 ```
 allprojects {
@@ -229,3 +229,62 @@ class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT
 | isLightNavigationBarForegroundColor | Boolean | 系统导航栏上的图标是否显示为白色  |
 | backgroundConstraint | ImmersivePopupWindowBackgroundConstraint | 相对于锚点的背景布局约束 |
 | enableBackgroundAnimator | Boolean | 是否启用背景渐变动画 |
+
+## 五、Fast Span
+- 一行代码简单实现Android TextView常用样式Spa
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:span:latest.release'
+```
+
+#### 2、使用方式
+```
+ val spannableStringBuilder = SpannableStringBuilder()
+// 添加图片使用appendFastImage与FastImageSpan
+spannableStringBuilder.appendFastImage(
+    FastImageSpan(
+        context,
+        R.mipmap.ic_launcher_round, // 图片资源
+        width = 60.dp, // 图片宽度
+        height = 60.dp, // 图片高度
+        leftMargin = 8.dp, // 图片的左间距
+        rightMargin = 8.dp // 图片的右间距
+    )
+)
+// 添加带圆角边框的文字使用appendFastSpan与FastTextWrapSpan
+spannableStringBuilder.appendFastSpan(
+    "满99元减10元", 
+    FastTextWrapSpan(
+        radius = 4f.dp, // 边框的圆角
+        borderSize = 1f.dp, // 边框的大小
+        borderColor = R.color.main.color,// 边框的颜色
+        textSize = 12f.sp, // 文字的大小
+        textColor = R.color.main.color, // 文字的颜色
+        textRightMargin = 6f.dp, // 文字的右外边距
+        topPadding = 2f.dp, // 文字的上内边距
+        bottomPadding = 2f.dp,// 文字的下内边距
+        leftPadding = 6f.dp,// 文字的左内边距
+        rightPadding = 6f.dp// 文字的右内边距
+    )
+)
+spannableStringBuilder.append(
+    "华为平板MatePad 11 平板电脑120Hz高刷全面屏 鸿蒙HarmonyOS 6G+128GB WIFI 曜石灰 WIFI海岛蓝"
+)
+// 添加文字之间的间距使用appendFastSpacing
+spannableStringBuilder.appendFastSpacing(6.dp)
+// 添加文字的颜色、大小、加粗等常用样式使用appendFastTextStyle
+spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预计在2日内发货") {
+    textColor = 0xFF999999.toInt() // 文字颜色
+    textSize = 14.sp // 文字大小
+    textStyle = Typeface.BOLD // 文字加粗
+}
+binding.tvTitle.text = spannableStringBuilder
+```
