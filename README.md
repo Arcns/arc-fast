@@ -195,7 +195,7 @@ allprojects {
  implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
 ```
 
-#### 2、使用方式
+#### 2.使用方式
 >第一步：PopupWindow改为继承ImmersivePopupWindow
 第二步：实现getImmersivePopupWindowConfig
 
@@ -217,7 +217,7 @@ class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT
 }
 ```
 
-#### 3、ImmersivePopupWindowConfig支持的配置参数
+#### 3.ImmersivePopupWindowConfig支持的配置参数
 
 | 配置参数 | 类型 | 说明 |
 | ------ | ------ | ------ |
@@ -245,7 +245,7 @@ allprojects {
  implementation 'com.gitee.arcns.arc-fast:span:latest.release'
 ```
 
-#### 2、使用方式
+#### 2.使用方式
 ```
  val spannableStringBuilder = SpannableStringBuilder()
 // 添加图片使用appendFastImage与FastImageSpan
