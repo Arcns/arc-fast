@@ -231,7 +231,7 @@ class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT
 | enableBackgroundAnimator | Boolean | 是否启用背景渐变动画 |
 
 ## 五、Fast Span
-- 一行代码简单实现Android TextView常用样式Spa
+- 一行代码简单实现Android TextView常用样式Span
 #### 1.集成方式：
 ```
 allprojects {
