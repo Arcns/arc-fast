@@ -10,8 +10,6 @@ import com.arc.fast.sample.data.entity.Menu
 import com.arc.fast.sample.data.entity.Response
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -50,10 +48,11 @@ class MainViewModel : ViewModel() {
         val response = Response<List<Menu>?>(
             "success", null, null, null, null, arrayListOf(
                 Menu("webview", "http://www.baidu.com", 0),
-                Menu("scan", ACTION_SCAN, 1),
-                Menu(R.string.immersive_dialog.string, ACTION_DIALOG, 1),
-                Menu(R.string.immersive_popup.string, ACTION_POPUP, 1),
-                Menu(R.string.span.string, ACTION_SPAN, 1),
+                Menu("scan", ACTION_SCAN, 0),
+                Menu(R.string.immersive_dialog.string, ACTION_DIALOG, 0),
+                Menu(R.string.immersive_popup.string, ACTION_POPUP, 0),
+                Menu(R.string.span.string, ACTION_SPAN, 0),
+                Menu(R.string.mask.string, ACTION_MASK, 1),
                 Menu("test", ACTION_TEST, 0)
             )
         )

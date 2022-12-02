@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 遮罩镂空视图 -->
+    <declare-styleable name="MaskHollowView">
+        <attr name="maskHollowView_hollow_width_ratio" format="float" />
+        <attr name="maskHollowView_hollow_height_ratio" format="float" />
+        <attr name="maskHollowView_hollow_width" format="dimension" />
+        <attr name="maskHollowView_hollow_height" format="dimension" />
+        <attr name="maskHollowView_hollow_dimension_ratio" format="string" /> <!--例 w,1:1-->
+        <attr name="maskHollowView_hollow_margin_top" format="dimension" />
+        <attr name="maskHollowView_hollow_margin_bottom" format="dimension" />
+        <attr name="maskHollowView_hollow_margin_left" format="dimension" />
+        <attr name="maskHollowView_hollow_margin_right" format="dimension" />
+        <attr name="maskHollowView_hollow_radius" format="dimension" />
+        <attr name="maskHollowView_hollow_border_size" format="dimension" />
+        <attr name="maskHollowView_hollow_border_color" format="color" />
+        <attr name="maskHollowView_hollow_border_rect" format="dimension" />
+        <attr name="maskHollowView_mask_background" format="color" />
+        <attr name="android:gravity" />
+    </declare-styleable>
+</resources>

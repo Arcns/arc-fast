@@ -26,4 +26,5 @@
     <string name="immersive_dialog">immersive dialog</string>
     <string name="immersive_popup">immersive popup</string>
     <string name="span">span</string>
+    <string name="mask">mask</string>
 </resources>

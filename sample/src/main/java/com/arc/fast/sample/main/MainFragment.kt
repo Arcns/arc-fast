@@ -141,6 +141,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToSpanFragment()
             )
+        } else if (menu.url == ACTION_MASK) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToMaskFragment()
+            )
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }

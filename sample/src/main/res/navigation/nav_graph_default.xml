@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_mainFragment_to_spanFragment"
             app:destination="@id/spanFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_maskFragment"
+            app:destination="@id/maskFragment" />
     </fragment>
 
     <fragment
@@ -88,4 +91,8 @@
         android:id="@+id/spanFragment"
         android:name="com.arc.fast.sample.span.SpanFragment"
         android:label="SpanFragment" />
+    <fragment
+        android:id="@+id/maskFragment"
+        android:name="com.arc.fast.sample.mask.MaskFragment"
+        android:label="MaskFragment" />
 </navigation>
