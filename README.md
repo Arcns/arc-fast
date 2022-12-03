@@ -289,7 +289,7 @@ spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预�
 binding.tvTitle.text = spannableStringBuilder
 ```
 
-## 五、Fast Mask
+## 六、Fast Mask
 - 一行代码简单实现Android遮罩镂空视图
 #### 1.集成方式：
 ```
