@@ -288,3 +288,51 @@ spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预�
 }
 binding.tvTitle.text = spannableStringBuilder
 ```
+
+## 五、Fast Mask
+- 一行代码简单实现Android遮罩镂空视图
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:mask:latest.release'
+```
+
+#### 2.使用方式
+```
+<com.arc.fast.mask.MaskHollowView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            app:maskHollowView_hollow_border_color="#FFFFFF"
+            app:maskHollowView_hollow_border_size="4dp"
+            app:maskHollowView_hollow_height="80dp"
+            app:maskHollowView_hollow_margin_top="40dp"
+            app:maskHollowView_hollow_radius="16dp"
+            app:maskHollowView_hollow_width="80dp"
+            app:maskHollowView_mask_background="#66000000" />
+```
+-MaskHollowView支持的参数
+| 参数 | 说明 | 类型 | 默认值 |
+| ------ | ------ | ------ | ------ |
+| maskHollowView_hollow_width | 镂空区域的宽度，优先级最高 | dimension，例如100dp | 控件宽度的一半 |
+| maskHollowView_hollow_height | 镂空区域的高度，优先级最高 | dimension，例如100dp | 控件与宽度一致 |
+| maskHollowView_hollow_width_ratio | 镂空区域的宽度相对与控件宽度的比例 | float，例如0.5 | 空 |
+| maskHollowView_hollow_height_ratio | 镂空区域的高度相对与控件高度的比例 | float，例如0.5 | 空 |
+| maskHollowView_hollow_dimension_ratio | 镂空区域的宽高比例 | string，例如w,1:1 | 空 |
+| maskHollowView_hollow_margin_top | 镂空区域的上间距 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_bottom | 镂空区域的下间距 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_left | 镂空区域的左间距 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_right | 镂空区域的右间距 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_radius | 镂空区域的圆角 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_border_size | 镂空区域的边框大小 | dimension，例如10dp | 0 |
+| maskHollowView_hollow_margin_border_color | 镂空区域的边框颜色 | color，例如#FFFFFF | 空 |
+| maskHollowView_hollow_border_rect | 镂空区域的边框矩形边长，如果该值大于0，则只会在镂空区域四个角的边框矩形内显示边框 | dimension，例如10dp | 0 |
+| maskHollowView_mask_background | 遮罩区域的背景颜色 | color，例如#66000000 | #66000000 |
+| android:gravity | 镂空区域相对于遮罩区域的位置 | gravity，例如top | center |
