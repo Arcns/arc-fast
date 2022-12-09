@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -122,6 +124,12 @@ class WebViewFragment : BaseFragment<FragmentWebViewBinding>() {
         requireActivity().window.decorView.viewTreeObserver.addOnGlobalLayoutListener(
             onGlobalLayoutListener
         )
+//        ViewCompat.setOnApplyWindowInsetsListener(requireActivity().window.decorView) { v, insets ->
+//            val ime =
+//                insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.ime())
+//            val imeHeight = ime.bottom
+//            insets
+//        }
     }
 
     override fun onDestroyView() {
