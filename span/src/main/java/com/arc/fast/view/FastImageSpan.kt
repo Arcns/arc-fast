@@ -1,4 +1,4 @@
-package com.arc.fast.span
+package com.arc.fast.view
 
 import android.content.Context
 import android.content.res.Resources

@@ -103,6 +103,7 @@ dependencies {
     implementation project(path: ':immersive')
     implementation project(path: ':span')
     implementation project(path: ':mask')
+    implementation project(path: ':view')
 //    implementation "com.gitee.arcns.arc-fast:core:1.11.18"
 //    implementation "com.gitee.arcns.arc-fast:permission:1.11.18"
 //    implementation "com.gitee.arcns.arc-fast:immersive:1.11.18"

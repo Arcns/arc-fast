@@ -1,5 +1,6 @@
-package com.arc.fast.core.extensions
+package com.arc.fast.view.extensions
 
+import android.graphics.Paint
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -50,3 +51,18 @@ fun CharSequence.handleUrlClicks(onClicked: ((String) -> Unit)? = null): CharSeq
         }
     }
 
+
+/**
+ * 设置文本字体为中粗
+ */
+fun TextView.setTextMediumBold() = this.setTextMediumBold(1f)
+fun TextView.setTextMediumBold(mediumWeight: Float) {
+    paint.style = Paint.Style.FILL_AND_STROKE
+    paint.strokeWidth = mediumWeight
+    invalidate()
+}
+
+/**
+ * 禁用文本字体中粗
+ */
+fun TextView.disableTextMediumBold() = setTextMediumBold(0f)

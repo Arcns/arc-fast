@@ -1,6 +1,5 @@
 package com.arc.fast.sample.extension
 
-import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -12,14 +11,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.arc.fast.immersive.applySystemWindowsInsetsMargin
 import com.arc.fast.immersive.applySystemWindowsInsetsPadding
-import com.arc.fast.core.extensions.string
 import com.arc.fast.sample.R
 import com.arc.fast.sample.data.ApiStatus
 import com.arc.fast.sample.data.entity.ApiResult
 import com.arc.fast.sample.data.entity.Menu
 import com.arc.fast.sample.databinding.ItemMenuBinding
 import com.arc.fast.sample.main.MainViewModel
-import com.arc.fast.span.appendFastSpan
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder

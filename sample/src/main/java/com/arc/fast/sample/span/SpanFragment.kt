@@ -6,7 +6,6 @@ import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.toColorLong
 import androidx.navigation.fragment.findNavController
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.extensions.dp
@@ -14,7 +13,7 @@ import com.arc.fast.core.extensions.sp
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.FragmentSpanBinding
-import com.arc.fast.span.*
+import com.arc.fast.view.*
 
 class SpanFragment : BaseFragment<FragmentSpanBinding>() {
 

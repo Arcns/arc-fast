@@ -1,7 +1,6 @@
-package com.arc.fast.span
+package com.arc.fast.view
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.style.*
 import android.view.View

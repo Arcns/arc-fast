@@ -2,6 +2,7 @@ package com.arc.fast.sample.extension
 
 import android.app.Activity
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Build
 import android.view.WindowManager
 import android.widget.TextView
@@ -37,3 +38,18 @@ val Toolbar.titleTextView: TextView?
         }
         return null
     }
+
+/**
+ * 设置文本字体为中粗
+ */
+fun TextView.setTextMediumBold() = this.setTextMediumBold(1f)
+fun TextView.setTextMediumBold(mediumWeight: Float) {
+    paint.style = Paint.Style.FILL_AND_STROKE
+    paint.strokeWidth = mediumWeight
+    invalidate()
+}
+
+/**
+ * 禁用文本字体中粗
+ */
+fun TextView.disableTextMediumBold() = setTextMediumBold(0f)

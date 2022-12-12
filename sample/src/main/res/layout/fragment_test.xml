@@ -7,14 +7,48 @@
         <import type="android.view.View" />
     </data>
 
-
-    <com.arc.fast.sample.view.nested.ParentRecyclerView
-        android:id="@+id/rvData"
+    <androidx.constraintlayout.widget.ConstraintLayout
         marginBottomSystemWindowInsets="@{true}"
         marginTopSystemWindowInsets="@{true}"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_2"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    <!--    android:fitsSystemWindows="true"-->
+        android:layout_height="match_parent">
+
+        <com.arc.fast.view.FastTextView
+            android:id="@+id/tvTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:drawableLeft="@mipmap/ic_launcher_round"
+            android:drawableTop="@mipmap/ic_launcher_round"
+            android:drawableRight="@mipmap/ic_launcher_round"
+            android:drawableBottom="@mipmap/ic_launcher_round"
+            android:gravity="center_vertical"
+            android:text="TEST"
+            android:textColor="@color/main"
+            android:textSize="26sp"
+            app:fastTextView_bottomImageHeight="20dp"
+            app:fastTextView_bottomImagePadding="20dp"
+            app:fastTextView_bottomImageWidth="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:fastTextView_leftImageHeight="20dp"
+            app:fastTextView_leftImagePadding="10dp"
+            app:fastTextView_leftImageWidth="20dp"
+            app:fastTextView_rightImageHeight="20dp"
+            app:fastTextView_rightImagePadding="20dp"
+            app:fastTextView_rightImageWidth="20dp"
+            app:fastTextView_topImageHeight="20dp"
+            app:fastTextView_topImagePadding="10dp"
+            app:fastTextView_topImageWidth="20dp" />
+
+        <com.arc.fast.sample.view.nested.ParentRecyclerView
+            android:id="@+id/rvData"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/bg_2"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTest" />
+        <!--    android:fitsSystemWindows="true"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
