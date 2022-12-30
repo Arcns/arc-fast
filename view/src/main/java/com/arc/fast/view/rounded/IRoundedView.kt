@@ -226,7 +226,7 @@ interface IRoundedView {
                 roundedView!!.width.toFloat() - offset,
                 roundedView!!.height.toFloat() - offset
             ),
-            drawConfig.getRadii(),
+            drawConfig.getRadii(-offset),
             Path.Direction.CCW
         )
         canvas.drawPath(

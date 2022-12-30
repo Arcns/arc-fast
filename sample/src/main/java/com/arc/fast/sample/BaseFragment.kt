@@ -15,8 +15,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import com.arc.fast.sample.utils.NavTransitionOptions
-import com.arc.fast.sample.utils.NavTransitionPresenter
+import com.arc.fast.sample.common.utils.NavTransitionOptions
+import com.arc.fast.sample.common.utils.NavTransitionPresenter
 
 abstract class BaseFragment<Binding : ViewDataBinding> :
     Fragment() {

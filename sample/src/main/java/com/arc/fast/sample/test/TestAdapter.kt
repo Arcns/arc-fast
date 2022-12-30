@@ -10,8 +10,8 @@ import com.arc.fast.core.extensions.bindToViewPager2
 import com.arc.fast.core.extensions.dp
 import com.arc.fast.sample.DATA
 import com.arc.fast.sample.R
-import com.arc.fast.sample.data.entity.TestListItem
-import com.arc.fast.sample.data.entity.TestListItemType
+import com.arc.fast.sample.common.data.entity.TestListItem
+import com.arc.fast.sample.common.data.entity.TestListItemType
 import com.arc.fast.sample.databinding.ItemTestCardBinding
 import com.arc.fast.sample.databinding.ItemTestPagerBinding
 import com.chad.library.adapter.base.BaseProviderMultiAdapter

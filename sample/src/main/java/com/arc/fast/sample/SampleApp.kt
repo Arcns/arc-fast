@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.arc.fast.immersive.setAutoInitSystemBarHeight
-import com.arc.fast.sample.data.LocalData
+import com.arc.fast.sample.common.data.LocalData
 
 class SampleApp : Application() {
 

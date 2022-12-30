@@ -8,16 +8,16 @@ open class RoundedViewConfig(
     var borderColor: Int? = null,
     var borderSize: Float? = null
 ) {
-    fun getRadii(): FloatArray {
+    fun getRadii(offset: Float = 0f): FloatArray {
         return floatArrayOf(
-            radius.roundedRadiusTopLeft,
-            radius.roundedRadiusTopLeft,
-            radius.roundedRadiusTopRight,
-            radius.roundedRadiusTopRight,
-            radius.roundedRadiusBottomRight,
-            radius.roundedRadiusBottomRight,
-            radius.roundedRadiusBottomLeft,
-            radius.roundedRadiusBottomLeft
+            radius.roundedRadiusTopLeft + offset,
+            radius.roundedRadiusTopLeft + offset,
+            radius.roundedRadiusTopRight + offset,
+            radius.roundedRadiusTopRight + offset,
+            radius.roundedRadiusBottomRight + offset,
+            radius.roundedRadiusBottomRight + offset,
+            radius.roundedRadiusBottomLeft + offset,
+            radius.roundedRadiusBottomLeft + offset
         )
     }
 

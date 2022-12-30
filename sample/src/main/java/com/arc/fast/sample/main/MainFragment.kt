@@ -12,12 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.arc.fast.core.extensions.isInternetResources
 import com.arc.fast.sample.*
-import com.arc.fast.sample.data.LocalData
-import com.arc.fast.sample.data.entity.Menu
+import com.arc.fast.sample.common.data.LocalData
+import com.arc.fast.sample.common.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
-import com.arc.fast.sample.extension.titleTextView
-import com.arc.fast.sample.utils.NavTransitionOptions
-import com.arc.fast.sample.utils.SHARED_ELEMENT_APP_NAME
+import com.arc.fast.sample.common.extension.titleTextView
+import com.arc.fast.sample.common.utils.NavTransitionOptions
+import com.arc.fast.sample.common.utils.SHARED_ELEMENT_APP_NAME
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -129,6 +129,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToScanFragment()
             )
+        } else if (menu.url == ACTION_PERMISSION) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToPermissionFragment()
+            )
         } else if (menu.url == ACTION_DIALOG) {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToDialogFragment()
@@ -144,6 +148,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         } else if (menu.url == ACTION_MASK) {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToMaskFragment()
+            )
+        } else if (menu.url == ACTION_VIEW) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToViewFragment()
             )
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())

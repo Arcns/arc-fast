@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.arc.fast.core.extensions.dp
 import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.data.entity.TestListItem
-import com.arc.fast.sample.data.entity.TestListItemType
-import com.arc.fast.sample.data.entity.TestPagerItem
+import com.arc.fast.sample.common.data.entity.TestListItem
+import com.arc.fast.sample.common.data.entity.TestListItemType
+import com.arc.fast.sample.common.data.entity.TestPagerItem
 import com.arc.fast.sample.databinding.FragmentTestBinding
 
 class TestFragment : BaseFragment<FragmentTestBinding>() {

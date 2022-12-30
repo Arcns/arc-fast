@@ -13,7 +13,7 @@ import com.arc.fast.core.extensions.dp
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.DATA
 import com.arc.fast.sample.R
-import com.arc.fast.sample.data.entity.TestPagerItem
+import com.arc.fast.sample.common.data.entity.TestPagerItem
 import com.arc.fast.sample.databinding.FragmentTestPagerItemBinding
 import com.arc.fast.sample.databinding.ItemTestCardBinding
 import com.chad.library.adapter.base.BaseQuickAdapter

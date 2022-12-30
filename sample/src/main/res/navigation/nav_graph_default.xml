@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.arc.fast.sample.login.LoginFragment">
+        android:name="com.arc.fast.sample.test.login.LoginFragment">
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -44,6 +44,9 @@
             android:id="@+id/action_mainFragment_to_scanFragment"
             app:destination="@id/scanFragment" />
         <action
+            android:id="@+id/action_mainFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_dialogFragment"
             app:destination="@id/dialogFragment" />
         <action
@@ -55,15 +58,18 @@
         <action
             android:id="@+id/action_mainFragment_to_maskFragment"
             app:destination="@id/maskFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_viewFragment"
+            app:destination="@id/viewFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/webViewFragment"
-        android:name="com.arc.fast.sample.webview.WebViewFragment">
+        android:name="com.arc.fast.sample.test.webview.WebViewFragment">
 
         <argument
             android:name="menu"
-            app:argType="com.arc.fast.sample.data.entity.Menu" />
+            app:argType="com.arc.fast.sample.common.data.entity.Menu" />
         <action
             android:id="@+id/action_webViewFragment_to_scanFragment"
             app:destination="@id/scanFragment" />
@@ -95,4 +101,12 @@
         android:id="@+id/maskFragment"
         android:name="com.arc.fast.sample.mask.MaskFragment"
         android:label="MaskFragment" />
+    <fragment
+        android:id="@+id/viewFragment"
+        android:name="com.arc.fast.sample.view.ViewFragment"
+        android:label="ViewFragment" />
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.arc.fast.sample.permission.PermissionFragment"
+        android:label="PermissionFragment" />
 </navigation>

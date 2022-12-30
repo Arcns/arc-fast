@@ -6,7 +6,7 @@
 
         <variable
             name="menu"
-            type="com.arc.fast.sample.data.entity.Menu" />
+            type="com.arc.fast.sample.common.data.entity.Menu" />
 
         <import type="android.view.View" />
     </data>

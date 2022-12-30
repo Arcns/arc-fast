@@ -6,7 +6,7 @@
 
         <variable
             name="item"
-            type="com.arc.fast.sample.data.entity.Menu" />
+            type="com.arc.fast.sample.common.data.entity.Menu" />
 
 
         <variable

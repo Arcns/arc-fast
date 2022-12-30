@@ -7,7 +7,7 @@
         <import type="android.view.View" />
     </data>
 
-    <com.arc.fast.sample.view.nested.ChildRecyclerView
+    <com.arc.fast.sample.common.view.nested.ChildRecyclerView
         android:id="@+id/rvData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

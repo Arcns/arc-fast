@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.arc.fast.sample.login.LoginViewModel" />
+            type="com.arc.fast.sample.test.login.LoginViewModel" />
 
         <import type="android.view.View" />
 

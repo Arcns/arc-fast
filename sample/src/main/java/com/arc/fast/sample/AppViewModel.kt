@@ -3,9 +3,9 @@ package com.arc.fast.sample
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arc.fast.sample.data.DataSource
-import com.arc.fast.sample.data.entity.AppUpdate
-import com.arc.fast.sample.data.entity.Dialog
+import com.arc.fast.sample.common.data.DataSource
+import com.arc.fast.sample.common.data.entity.AppUpdate
+import com.arc.fast.sample.common.data.entity.Dialog
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow

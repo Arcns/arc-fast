@@ -15,10 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.arc.fast.permission.FastPermissionUtil
 import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.data.entity.Dialog
+import com.arc.fast.sample.common.data.entity.Dialog
 import com.arc.fast.sample.databinding.FragmentScanBinding
-import com.arc.fast.sample.extension.setLightSystemBar
-import com.arc.fast.sample.utils.NavTransitionOptions
+import com.arc.fast.sample.common.extension.setLightSystemBar
+import com.arc.fast.sample.common.utils.NavTransitionOptions
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.common.Barcode
 import java.util.concurrent.Executors

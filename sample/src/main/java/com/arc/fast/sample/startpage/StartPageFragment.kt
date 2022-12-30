@@ -9,10 +9,10 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.R
-import com.arc.fast.sample.data.LocalData
+import com.arc.fast.sample.common.data.LocalData
 import com.arc.fast.sample.databinding.FragmentStartPageBinding
-import com.arc.fast.sample.utils.NavTransitionOptions
-import com.arc.fast.sample.utils.SHARED_ELEMENT_APP_NAME
+import com.arc.fast.sample.common.utils.NavTransitionOptions
+import com.arc.fast.sample.common.utils.SHARED_ELEMENT_APP_NAME
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
