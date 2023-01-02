@@ -1,8 +1,11 @@
-package com.arc.fast.view
+package com.arc.fast.span
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.*
+import androidx.annotation.DrawableRes
 
 /**
  * 快速设置Span
@@ -56,9 +59,33 @@ fun SpannableStringBuilder.appendFastTextStyle(
 fun SpannableStringBuilder.appendFastSpacing(size: Int): SpannableStringBuilder =
     appendFastSpan(text = " ", span = FastSpacingSpan(size))
 
+/**
+ * 快速设置图片Span
+ */
+fun SpannableStringBuilder.appendFastImageStyle(
+    context: Context,
+    @DrawableRes drawableRes: Int,
+    flags: Int = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+    onApplyFastImageStyle: (FastImageSpanStyle.() -> Unit)
+): SpannableStringBuilder = appendFastSpan(
+    text = " ",
+    spans = FastImageSpanStyle(context, drawableRes).apply {
+        onApplyFastImageStyle.invoke(this)
+    }.spans,
+    flags = flags
+)
 
 /**
  * 快速设置图片Span
  */
-fun SpannableStringBuilder.appendFastImage(fastImageSpan: FastImageSpan): SpannableStringBuilder =
-    appendFastSpan(text = " ", span = fastImageSpan)
+fun SpannableStringBuilder.appendFastImageStyle(
+    drawable: Drawable,
+    flags: Int = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+    onApplyFastImageStyle: (FastImageSpanStyle.() -> Unit)
+): SpannableStringBuilder = appendFastSpan(
+    text = " ",
+    spans = FastImageSpanStyle(drawable).apply {
+        onApplyFastImageStyle.invoke(this)
+    }.spans,
+    flags = flags
+)

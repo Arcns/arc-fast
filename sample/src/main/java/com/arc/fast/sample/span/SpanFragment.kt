@@ -13,6 +13,7 @@ import com.arc.fast.core.extensions.sp
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.FragmentSpanBinding
+import com.arc.fast.span.*
 import com.arc.fast.view.*
 
 class SpanFragment : BaseFragment<FragmentSpanBinding>() {
@@ -32,15 +33,14 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
             }
         }
         val spannableStringBuilder = SpannableStringBuilder()
-        spannableStringBuilder.appendFastImage(
-            FastImageSpan(
-                requireContext(),
-                R.mipmap.ic_launcher_round,
-                width = 60.dp,
-                height = 60.dp,
-                rightMargin = 8.dp
-            )
-        )
+        spannableStringBuilder.appendFastImageStyle(
+            context = requireContext(),
+            drawableRes = R.mipmap.ic_launcher_round
+        ) {
+            width = 60.dp
+            height = 60.dp
+            paddingRight = 8.dp
+        }
         spannableStringBuilder.appendFastSpan(
             "满99元减10元", FastTextWrapSpan(
                 radius = 4f.dp,

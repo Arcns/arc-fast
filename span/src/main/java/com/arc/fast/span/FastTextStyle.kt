@@ -1,9 +1,11 @@
-package com.arc.fast.view
+package com.arc.fast.span
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.text.TextPaint
 import android.text.style.*
 import android.view.View
+import android.widget.TextView
 
 /**
  * 快速设置文本样式
@@ -18,8 +20,17 @@ open class FastTextStyle(
     // 文字点击事件
     var onClick: ((View) -> Unit)? = null,
     // 文字下划线
-    var underlineColor: Int? = null
+    var underlineColor: Int? = null,
+    // 文字中粗体
+    var textMediumBold: Float? = null
 ) {
+    fun setTextMediumBold() = setTextMediumBold(1f)
+    fun setTextMediumBold(mediumWeight: Float) {
+        this.textMediumBold = textMediumBold
+    }
+
+    fun disableTextMediumBold() = setTextMediumBold(0f)
+
     val spans: List<CharacterStyle>
         get() = arrayListOf<CharacterStyle>().apply {
             if (textColor != null) add(ForegroundColorSpan(textColor!!))
@@ -31,9 +42,9 @@ open class FastTextStyle(
                 }
 
                 override fun updateDrawState(ds: TextPaint) {
-                    if (underlineColor == null) {
-                        super.updateDrawState(ds)
-                    } else {
+                    var hasUpdate = false
+                    if (underlineColor != null) {
+                        hasUpdate = true
                         if (underlineColor == Color.TRANSPARENT) {
                             ds.color = ds.linkColor
                             ds.isUnderlineText = false
@@ -42,6 +53,11 @@ open class FastTextStyle(
                             ds.isUnderlineText = true
                         }
                     }
+                    if (textMediumBold != null) {
+                        ds.style = Paint.Style.FILL_AND_STROKE
+                        ds.strokeWidth = textMediumBold!!
+                    }
+                    if (!hasUpdate) super.updateDrawState(ds)
                 }
             })
         }

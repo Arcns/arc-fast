@@ -1,4 +1,4 @@
-package com.arc.fast.view
+package com.arc.fast.span
 
 import android.graphics.*
 import android.text.style.ReplacementSpan
