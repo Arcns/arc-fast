@@ -25,7 +25,7 @@ open class FastTextStyle(
     var textMediumBold: Float? = null
 ) {
     fun setTextMediumBold() = setTextMediumBold(1f)
-    fun setTextMediumBold(mediumWeight: Float) {
+    fun setTextMediumBold(textMediumBold: Float) {
         this.textMediumBold = textMediumBold
     }
 
@@ -54,6 +54,7 @@ open class FastTextStyle(
                         }
                     }
                     if (textMediumBold != null) {
+                        hasUpdate = true
                         ds.style = Paint.Style.FILL_AND_STROKE
                         ds.strokeWidth = textMediumBold!!
                     }

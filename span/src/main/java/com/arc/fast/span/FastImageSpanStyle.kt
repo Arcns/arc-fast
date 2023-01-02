@@ -6,6 +6,7 @@ import android.graphics.drawable.InsetDrawable
 import android.text.TextPaint
 import android.text.style.CharacterStyle
 import android.text.style.ClickableSpan
+import android.text.style.ImageSpan
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
@@ -34,6 +35,9 @@ data class FastImageSpanStyle(
 
     // 高度
     var height: Int? = null
+
+    // 启用垂直居中图片
+    var enableVerticalCenterImage: Boolean? = null
 
     // 点击事件
     var onClick: ((View) -> Unit)? = null
@@ -65,7 +69,10 @@ data class FastImageSpanStyle(
                     }
                 }
             }
-            add(FastVerticalCenterImageSpan(image))
+            add(
+                if (enableVerticalCenterImage != false) FastVerticalCenterImageSpan(image)
+                else ImageSpan(image)
+            )
             if (onClick != null) add(object : ClickableSpan() {
                 override fun onClick(widget: View) {
                     onClick!!.invoke(widget)

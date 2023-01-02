@@ -1,11 +1,13 @@
 package com.arc.fast.sample.span
 
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.arc.fast.core.extensions.color
 import com.arc.fast.core.extensions.dp
@@ -37,9 +39,13 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
             context = requireContext(),
             drawableRes = R.mipmap.ic_launcher_round
         ) {
-            width = 60.dp
-            height = 60.dp
+            width = 20.dp
+            height = 20.dp
             paddingRight = 8.dp
+            onClick = {
+                Toast.makeText(requireContext(), "图标", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
         spannableStringBuilder.appendFastSpan(
             "满99元减10元", FastTextWrapSpan(
@@ -60,8 +66,15 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
         spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预计在2日内发货") {
             textColor = 0xFF999999.toInt()
             textSize = 14.sp
-            textStyle = Typeface.BOLD
+//            textStyle = Typeface.BOLD
+            underlineColor = Color.TRANSPARENT
+            setTextMediumBold()
+            onClick = {
+                Toast.makeText(requireContext(), "10月31日-11月3日的订单，预计在2日内发货", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
         binding.tvTitle.text = spannableStringBuilder
+        binding.tvTitle.enableClickableSpan()
     }
 }

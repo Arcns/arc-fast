@@ -1,11 +1,23 @@
 package com.arc.fast.span
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.method.MovementMethod
 import android.text.style.*
+import android.widget.TextView
 import androidx.annotation.DrawableRes
+
+/**
+ * 启用ClickableSpan
+ */
+fun TextView.enableClickableSpan() {
+    highlightColor = Color.TRANSPARENT
+    movementMethod = LinkMovementMethod.getInstance()
+}
 
 /**
  * 快速设置Span
