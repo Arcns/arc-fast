@@ -12,7 +12,7 @@
 
 
 ## 一、介绍
-本项目包含一系列开箱即用的便携工具，能够让你快速、优雅的享受安卓便捷开发～
+本项目包含一系列开箱即用的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～
 
 ## 二、Fast Core
 - 核心类库
