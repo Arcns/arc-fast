@@ -32,6 +32,8 @@ allprojects {
 
 ## 三、Fast Permission
 - 一行代码实现基于Activity Result API的动态权限获取`
+> 众所周知，在Android中如果我们想要实现动态权限获取，只需要调用`ActivityCompat.requestPermissions(activity/fragment,permissions,requestCode)`，然后在`activity/fragment`中重写`onRequestPermissionsResult`来响应请求结果即可，当然我们也可以通过`RxPermissions`、`easypermissions`等第三方库实现，简单而便捷。可如今却有一个小问题，就是在新的API中，`onRequestPermissionsResult`已被弃用，取而代之的是`Activity Result API`，但大多数第三方库仍然使用旧的解决方案。因此，假设你想要不使用已被弃用的`onRequestPermissionsResult`，大概率就只能自己通过`Activity Result API`实现了，经过实践，我发现如果项目中全部使用`Activity Result API`代替原有方法，会存在大量样板代码，于是便做了一个开源Library项目，方便大家集成后，一行代码实现基于Activity Result API的动态权限获取。
+
 #### 1.集成方式：
 ```
 allprojects {
@@ -86,6 +88,9 @@ allprojects {
 
 ## 四、Immersive Dialog
 - 一行代码简单实现Android沉浸式Dialog
+> 随着全面屏时代的来临，沉浸式的体验对于APP变得越来越重要，Dialog作为APP一种重要的交互方式，如果不实现沉浸式的话，那么Dialog显示时便会在`状态栏/系统导航栏/小白条`上会出现丑陋的黑边，或出现上下一边有黑边一边没有黑边的情况，影响体验。但是，想要在Android中实现理想的沉浸式Dialog，并不是一件容易的事情，不仅Android不同版本的系统实现方式不同，而且Android提供的设置API也并不友好，大多数情况下，若我们想要达到理想的沉浸式Dialog，往往需要花费大量的时间。
+由于每个项目都会或多或少遇到这个问题，解决起来也较为繁琐，存在着大量样板代码，所以我做了一个开源Library项目，不仅能够方便大家快速实现Android沉浸式Dialog，也能够大大简化Dialog的配置，让大家聚焦于业务功能代码。
+
 #### 1.集成方式：
 ```
 allprojects {
@@ -193,6 +198,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## 五、Immersive PopupWindow
 - 一行代码简单实现Android沉浸式PopupWindow
+> 随着全面屏时代的来临，沉浸式的体验对于APP变得越来越重要，PopupWindow作为APP一种重要的交互方式，如果不实现沉浸式的话，那么PopupWindow显示时便会在`状态栏/系统导航栏/小白条`上会出现丑陋的黑边，或出现上下一边有黑边一边没有黑边的情况，影响体验。但是，想要在Android中实现理想的沉浸式PopupWindow，并不是一件容易的事情，不仅Android不同版本的系统实现方式不同，而且Android提供的设置API也并不友好，大多数情况下，若我们想要达到理想的沉浸式PopupWindow，往往需要花费大量的时间。
+由于每个项目都会或多或少遇到这个问题，解决起来也较为繁琐，存在着大量样板代码，所以我做了一个开源Library项目，不仅能够方便大家快速实现Android沉浸式PopupWindow，让大家聚焦于业务功能代码。
+
 #### 1.集成方式：
 ```
 allprojects {
@@ -243,6 +251,8 @@ class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT
 
 ## 六、Fast Span
 - 一行代码简单实现Android TextView常用样式Span
+> 在日常开发中，我们经常需要使用到TextView Span的各种常用样式，但Android提供的设置API也并不友好，无法快速使用，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现Android TextView常用样式Span。
+
 #### 1.集成方式：
 ```
 allprojects {
@@ -307,6 +317,8 @@ binding.tvTitle.enableClickableSpan() // 启用点击事件
 
 ## 七、Fast Mask
 - 一行代码简单实现Android遮罩镂空视图
+> 在日常开发中，我们经常需要实现遮罩镂空的功能，例如扫码、引导页、遮挡层等等。通常我们会在每个需要的地方自定义一个View来实现，但如果项目有多个地方存在类似需求，就会产生大量样板代码，于是我做了一个开源Library项目，方便大家集成后，一行代码实现Android遮罩镂空视图。
+
 #### 1.集成方式：
 ```
 allprojects {
@@ -356,6 +368,8 @@ allprojects {
 
 ## 八、Fast View
 - 一行代码简单实现Android常用View的圆角边框
+> 在日常开发中，我们经常需要为各种View实现圆角边框，例如圆角边框的ImageView、圆角边框的TextView、圆角边框的ConstraintLayout等等。通常情况下我们会使用shape drawable或自定义View去实现，使用shape drawable会造成项目中存在大量的drawable文件，使用自定义View会造成相同代码的冗余，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现Android常用View的圆角边框。
+
 #### 1.集成方式：
 ```
 allprojects {
