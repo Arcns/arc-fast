@@ -1,7 +1,7 @@
 # Arc Fast
 [![](https://jitpack.io/v/com.gitee.arcns/arc-fast.svg)](https://jitpack.io/#com.gitee.arcns/arc-fast)
 
-[TOC]
+@[toc](目录)
 
 ## 一、介绍
 本项目包含一系列开箱即用的便携工具，能够让你快速、优雅的享受安卓便捷开发～
