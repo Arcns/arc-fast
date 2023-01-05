@@ -9,6 +9,7 @@
 - [五、Immersive PopupWindow:一行代码简单实现Android沉浸式PopupWindow](#五immersive-popupWindow)
 - [六、Fast Span:一行代码简单实现Android TextView常用样式Span](#六fast-span)
 - [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
+- [八、Fast View:一行代码简单实现Android常用View的圆角边框](#七fast-view)
 
 
 ## 一、介绍
@@ -351,3 +352,85 @@ allprojects {
 | maskHollowView_hollow_border_rect | 镂空区域的边框矩形边长，如果该值大于0，则只会在镂空区域四个角的边框矩形内显示边框 | dimension，例如10dp | 0 |
 | maskHollowView_mask_background | 遮罩区域的背景颜色 | color，例如#66000000 | #66000000 |
 | android:gravity | 镂空区域相对于遮罩区域的位置 | gravity，例如top | center |
+
+
+## 八、Fast View
+- 一行代码简单实现Android常用View的圆角边框
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+```
+
+#### 2.使用方式
+##### 方式一：通过Library内置的View实现圆角边框
+为方便使用，Library中内置了RoundedView、RoundedImageView、RoundedConstraintLayout、FastTextView四款支持圆角边框的View，适应绝大多数的使用场景。以RoundedView为例（其他View的使用方式相同），使用方式如下：
+```
+<com.arc.fast.view.rounded.RoundedView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:rounded_background_color="@android:color/holo_red_light" //背景颜色
+            app:rounded_border_color="@android:color/holo_blue_light" //边框颜色
+            app:rounded_border_size="2dp"//边框大小
+            app:rounded_radius="16dp" />//圆角大小
+```
+-支持的圆角边框参数
+| 参数 | 说明 | 类型 | 默认值 |
+| ------ | ------ | ------ | ------ |
+| rounded_radius | 圆角的大小，优先度最低 | dimension，例如100dp | 0 |
+| rounded_radius_top_left | 左上的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_top_right | 右上的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_bottom_left | 左下的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_bottom_right | 右下的圆角大小 | dimension，例如100dp | 0 |
+| rounded_background_color | 背景颜色 | color，例如#FFFFFF | 空 |
+| rounded_border_color | 边框颜色 | color，例如#FFFFFF | 空 |
+| rounded_border_size | 边框大小 | dimension，例如10dp | 0 |
+##### 方式二：通过IRoundedView实现任意的圆角边框控件
+如果Library中内置的View无法满足项目的使用需求，那么你也可以通过IRoundedView实现任意的圆角边框控件。
+>要让控件支持圆角边框只需4个步骤：
+第一步:在控件中实现IRoundedView
+第二步:实现IRoundedView的参数
+第三步:在init中调用initRoundedRadius(context, attrs)获取xml中配置的参数
+第四步:在draw中调用onDrawBefore和onDrawAfter
+
+具体实现方式如下：
+```
+class CustomView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr), IRoundedView { //第一步:在控件中实现IRoundedView
+
+   // 第二步:实现IRoundedView的参数
+    override var _config = RoundedViewConfig()
+    override var _temporarilyConfig: RoundedViewConfig? = null
+
+    init {
+        // 第三步:在init中调用initRoundedRadius(context, attrs)获取xml中配置的参数
+        if (attrs != null) initRoundedRadius(context, attrs)
+    }
+
+  // 第四步:在draw中调用onDrawBefore和onDrawAfter
+    override fun draw(canvas: Canvas) {
+        onDrawBefore(canvas)
+        super.draw(canvas)
+        onDrawAfter(canvas)
+    }
+}
+
+// 使用方式与Library内置的View相同
+<yourpackage.CustomView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:rounded_background_color="@android:color/holo_red_light" //背景颜色
+            app:rounded_border_color="@android:color/holo_blue_light" //边框颜色
+            app:rounded_border_size="2dp"//边框大小
+            app:rounded_radius="16dp" />//圆角大小
+```
