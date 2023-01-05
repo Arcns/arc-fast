@@ -10,6 +10,7 @@
 - [六、Fast Span:一行代码简单实现Android TextView常用样式Span](#六fast-span)
 - [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
 - [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
+- [九、Fast TextView:一行代码实现TextView四个方向drawable的不同Padding和宽高](#八fast-textview)
 
 
 ## 一、介绍
@@ -448,3 +449,65 @@ class CustomView @JvmOverloads constructor(
             app:rounded_border_size="2dp"//边框大小
             app:rounded_radius="16dp" />//圆角大小
 ```
+
+
+## 九、Fast TextView
+- 一行代码实现TextView四个方向drawable的不同Padding和宽高
+> 在日常开发中，我们经常需要为TextView实现不同方向的drawable，但是原生的TextView drawable功能却无法帮我们实现一些常用的功能，例如：设置TextView drawable的宽高、分别设置TextView不同方向drawable的padding，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现TextView四个方向drawable的不同Padding和宽高。
+
+#### 1.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+```
+
+#### 2.使用方式
+```
+<com.arc.fast.view.FastTextView
+            android:id="@+id/tvTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="TEST"
+            android:textColor="@color/main"
+            android:textSize="16sp"
+            android:drawableLeft="@mipmap/ic_left" //左边方向drawable
+            app:fastTextView_leftImageWidth="20dp" //左边方向drawable宽度
+            app:fastTextView_leftImageHeight="20dp" //左边方向drawable高度
+            app:fastTextView_leftImagePadding="10dp" //左边方向drawable padding
+            android:drawableRight="@mipmap/ic_right"//右边边方向drawable
+            app:fastTextView_rightImageWidth="20dp" //右边方向drawable宽度
+            app:fastTextView_rightImageHeight="20dp"//右边方向drawable高度
+            app:fastTextView_rightImagePadding="20dp">//右边方向drawable padding
+```
+-FastTextView不仅支持支持四个方向drawable的不同Padding和宽高，也支持设置中粗和圆角边框，所有支持的参数如下：
+| 参数 | 说明 | 类型 | 默认值 |
+| ------ | ------ | ------ | ------ |
+| fastTextView_textMediumBold | 设置中粗 | boolean，例如true | false |
+| fastTextView_leftImageHeight | 左边方向drawable高度 | dimension，例如10dp | 0 |
+| fastTextView_leftImageWidth | 左边方向drawable宽度 | dimension，例如10dp | 0 |
+| fastTextView_leftImagePadding | 左边方向drawable padding | dimension，例如10dp | 0 |
+| fastTextView_rightImageHeight | 右边方向drawable高度 | dimension，例如10dp | 0 |
+| fastTextView_rightImageWidth | 右边方向drawable宽度 | dimension，例如10dp | 0 |
+| fastTextView_rightImagePadding | 右边方向drawable padding | dimension，例如10dp | 0 |
+| fastTextView_topImageHeight | 上边方向drawable高度 | dimension，例如10dp | 0 |
+| fastTextView_topImageWidth | 上边方向drawable宽度 | dimension，例如10dp | 0 |
+| fastTextView_topImagePadding | 上边方向drawable padding | dimension，例如10dp | 0 |
+| fastTextView_bottomImageHeight | 下边方向drawable高度 | dimension，例如10dp | 0 |
+| fastTextView_bottomImageWidth | 下边方向drawable宽度 | dimension，例如10dp | 0 |
+| fastTextView_bottomImagePadding | 下边方向drawable padding | dimension，例如10dp | 0 |
+| rounded_radius | 圆角的大小，优先度最低 | dimension，例如100dp | 0 |
+| rounded_radius_top_left | 左上的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_top_right | 右上的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_bottom_left | 左下的圆角大小 | dimension，例如100dp | 0 |
+| rounded_radius_bottom_right | 右下的圆角大小 | dimension，例如100dp | 0 |
+| rounded_background_color | 背景颜色 | color，例如#FFFFFF | 空 |
+| rounded_border_color | 边框颜色 | color，例如#FFFFFF | 空 |
+| rounded_border_size | 边框大小 | dimension，例如10dp | 0 |
