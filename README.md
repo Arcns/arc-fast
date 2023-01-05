@@ -3,6 +3,12 @@
 
 #### 目录
 [一、介绍](#一介绍)
+[二、Fast Core](#二Fast Core)
+[三、Fast Permission](#三Fast Permission)
+[四、Immersive Dialog](#四Immersive Dialog)
+[五、Immersive PopupWindow](#五Immersive PopupWindow)
+[六、Fast Span](#六Fast Span)
+[七、Fast Mask](#七Fast Mask)
 
 ## 一、介绍
 本项目包含一系列开箱即用的便携工具，能够让你快速、优雅的享受安卓便捷开发～
@@ -76,7 +82,7 @@ allprojects {
 }
 ```
 
-## 三、Immersive Dialog
+## 四、Immersive Dialog
 - 一行代码简单实现Android沉浸式Dialog
 #### 1.集成方式：
 ```
@@ -183,7 +189,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 | enableSoftInputAdjustResize | Boolean | 启用打开键盘时自动重置弹窗布局大小，避免布局被键盘遮挡。注意启用后，内容无法扩展到全屏，通常R版本以下带输入框同时需要弹出键盘时自动更改布局的弹窗需设置该项为true，否则键盘打开后无法重置布局|
 | updateCustomDialogConfig | (dialog, window) -> Unit | 更新dialog更多自定义配置 |
 
-## 四、Immersive PopupWindow
+## 五、Immersive PopupWindow
 - 一行代码简单实现Android沉浸式PopupWindow
 #### 1.集成方式：
 ```
@@ -233,7 +239,7 @@ class TestPopupWindow : ImmersivePopupWindow(ViewGroup.LayoutParams.MATCH_PARENT
 | backgroundConstraint | ImmersivePopupWindowBackgroundConstraint | 相对于锚点的背景布局约束 |
 | enableBackgroundAnimator | Boolean | 是否启用背景渐变动画 |
 
-## 五、Fast Span
+## 六、Fast Span
 - 一行代码简单实现Android TextView常用样式Span
 #### 1.集成方式：
 ```
@@ -292,7 +298,7 @@ spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预�
 binding.tvTitle.text = spannableStringBuilder
 ```
 
-## 六、Fast Mask
+## 七、Fast Mask
 - 一行代码简单实现Android遮罩镂空视图
 #### 1.集成方式：
 ```
