@@ -4,11 +4,11 @@
 #### 目录
 - [一、介绍](#一介绍)
 - [二、Fast Core](#二fast-core)
-- [三、Fast Permission](#三fast-permission)
-- [四、Immersive Dialog](#四immersive-dialog)
-- [五、Immersive PopupWindow](#五immersive-popupWindow)
-- [六、Fast Span](#六fast-span)
-- [七、Fast Mask](#七fast-mask)
+- [三、Fast Permission:一行代码实现基于Activity Result API的动态权限获取](#三fast-permission)
+- [四、Immersive Dialog:一行代码简单实现Android沉浸式Dialog](#四immersive-dialog)
+- [五、Immersive PopupWindow:一行代码简单实现Android沉浸式PopupWindow](#五immersive-popupWindow)
+- [六、Fast Span:一行代码简单实现Android TextView常用样式Span](#六fast-span)
+- [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
 
 
 ## 一、介绍
@@ -258,17 +258,18 @@ allprojects {
 #### 2.使用方式
 ```
  val spannableStringBuilder = SpannableStringBuilder()
-// 添加图片使用appendFastImage与FastImageSpan
-spannableStringBuilder.appendFastImage(
-    FastImageSpan(
-        context,
-        R.mipmap.ic_launcher_round, // 图片资源
-        width = 60.dp, // 图片宽度
-        height = 60.dp, // 图片高度
-        leftMargin = 8.dp, // 图片的左间距
-        rightMargin = 8.dp // 图片的右间距
-    )
-)
+// 添加图片的宽高、间距、点击事件等常用样式使用appendFastImageStyle
+spannableStringBuilder.appendFastImageStyle(
+            context = requireContext(),
+            drawableRes = R.mipmap.ic_launcher_round
+        ) {
+            width = 20.dp //图片宽度
+            height = 20.dp //图片高度
+            padding = 8.dp //图片间距
+            onClick = {
+                // 点击图片回调
+            }
+        }
 // 添加带圆角边框的文字使用appendFastSpan与FastTextWrapSpan
 spannableStringBuilder.appendFastSpan(
     "满99元减10元", 
@@ -290,13 +291,17 @@ spannableStringBuilder.append(
 )
 // 添加文字之间的间距使用appendFastSpacing
 spannableStringBuilder.appendFastSpacing(6.dp)
-// 添加文字的颜色、大小、加粗等常用样式使用appendFastTextStyle
+// 添加文字的颜色、大小、加粗、点击事件等常用样式使用appendFastTextStyle
 spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预计在2日内发货") {
     textColor = 0xFF999999.toInt() // 文字颜色
     textSize = 14.sp // 文字大小
     textStyle = Typeface.BOLD // 文字加粗
+     onClick = {
+                // 点击文字回调
+      }
 }
 binding.tvTitle.text = spannableStringBuilder
+binding.tvTitle.enableClickableSpan() // 启用点击事件
 ```
 
 ## 七、Fast Mask
