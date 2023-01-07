@@ -30,4 +30,5 @@
     <string name="span">Fast Span</string>
     <string name="mask">Fast Mask</string>
     <string name="view">Fast View</string>
+    <string name="fast_text_view">FastTextView</string>
 </resources>

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 拖拽退出视图 -->
+    <declare-styleable name="DragExitLayout">
+        <attr name="dragExitLayout_enableLeftDragExit" format="boolean" />
+        <attr name="dragExitLayout_enableRightDragExit" format="boolean" />
+        <attr name="dragExitLayout_enableTopDragExit" format="boolean" />
+        <attr name="dragExitLayout_enableBottomDragExit" format="boolean" />
+    </declare-styleable>
     <!-- 文本视图 -->
     <declare-styleable name="FastTextView">
         <attr name="fastTextView_leftImageHeight" format="dimension" />

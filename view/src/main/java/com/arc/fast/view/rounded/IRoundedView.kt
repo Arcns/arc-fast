@@ -43,7 +43,7 @@ interface IRoundedView {
     /**
      * 初始化读取参数
      */
-    fun initRoundedRadius(context: Context, attrs: AttributeSet) {
+    fun initRoundedRadius(context: Context, attrs: AttributeSet?) {
         if (roundedView?.isInEditMode == true) return
         roundedView?.setWillNotDraw(false)
         // TypeArray中含有我们需要使用的参数

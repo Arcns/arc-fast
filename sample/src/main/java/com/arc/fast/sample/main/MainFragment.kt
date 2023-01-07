@@ -153,6 +153,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToViewFragment()
             )
+        } else if (menu.url == ACTION_FAST_TEXT_VIEW) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToFastTextViewFragment()
+            )
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }

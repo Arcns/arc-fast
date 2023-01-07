@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        paddingBottomSystemWindowInsets="@{true}"
+        paddingTopSystemWindowInsets="@{true}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/fast_text_view"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/styleToolbarTitle" />
+
+        <com.arc.fast.view.FastTextView
+            android:id="@+id/ftv"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:drawableLeft="@mipmap/ic_launcher_round"
+            android:drawableRight="@mipmap/ic_arrow"
+            android:gravity="center"
+            android:padding="10dp"
+            android:src="@mipmap/ic_launcher"
+            android:text="FastTextView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:fastTextView_leftImageHeight="40dp"
+            app:fastTextView_leftImagePadding="40dp"
+            app:fastTextView_leftImageWidth="40dp"
+            app:fastTextView_rightImageHeight="20dp"
+            app:fastTextView_rightImagePadding="20dp"
+            app:fastTextView_rightImageWidth="20dp"
+            app:fastTextView_textMediumBold="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
