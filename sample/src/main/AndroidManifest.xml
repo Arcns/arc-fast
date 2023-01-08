@@ -26,6 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.DragExitActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TransitionTheme" />
+
         <service android:name=".common.utils.SimpleDownloadService" />
     </application>
 

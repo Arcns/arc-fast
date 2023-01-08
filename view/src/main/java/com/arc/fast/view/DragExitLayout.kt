@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import androidx.core.view.updateLayoutParams
@@ -125,7 +126,7 @@ class DragExitLayout @JvmOverloads constructor(
     fun getDragExitCurrentScale(): Float = currentScale
 
     fun enableDragExit(
-        bindExitActivity: Activity,
+        bindExitActivity: Activity? = null,
         onDragCallback: ((isDrag: Boolean) -> Unit)? = null,
         onExitWaitCallback: ((currentScale: Float, continueExit: () -> Unit) -> Unit)? = null,
         onExitCallback: ((currentScale: Float) -> Unit)? = null
@@ -166,61 +167,66 @@ class DragExitLayout @JvmOverloads constructor(
                 if (!enableInterceptCheck) {
                     return super.onInterceptTouchEvent(event)
                 }
-                val x = event.rawX
-                val y = event.rawY
-                // 获取手指移动的距离
-                val dx = x - startInterceptTouchX
-                val dy = y - startInterceptTouchY
-                if (abs(dx) > scaledTouchSlop || abs(dy) > scaledTouchSlop) {
-                    var isUserIntended = true
-                    // 不是用户意图的滑动
-                    if ((!enableRightDragExit && dx < 0) ||
-                        (!enableLeftDragExit && dx > 0) ||
-                        (!enableTopDragExit && dy > 0) ||
-                        (!enableBottomDragExit && dy < 0)
-                    ) {
-                        isUserIntended = false
-                    }
-                    if (isUserIntended && !enableTopDragExit && !enableBottomDragExit) {
-                        val compareDy = abs(dy)
-                        val compareDx = if (enableLeftDragExit && enableRightDragExit) abs(dx)
-                        else if (enableLeftDragExit) dx
-                        else -dx
-                        if (compareDy > compareDx) {
-                            isUserIntended = false
-                        }
-                    }
-                    if (isUserIntended && !enableLeftDragExit && !enableRightDragExit) {
-                        val compareDx = abs(dx)
-                        val compareDy = if (enableTopDragExit && enableBottomDragExit) abs(dy)
-                        else if (enableTopDragExit) -dy
-                        else dy
-                        if (compareDx > compareDy) {
-                            isUserIntended = false
-                        }
-                    }
-                    if (!isUserIntended) {
-                        enableInterceptCheck = false
-                        return super.onInterceptTouchEvent(event)
-                    }
-                    if (isExceedScaledTouchSlop) {
-//                        if (System.currentTimeMillis() - startInterceptTouchTime > 150) {
-                        currentTouchX = startInterceptTouchX
-                        currentTouchY = startInterceptTouchY
-                        enableTouch = true
-                        onDragCallback?.invoke(true)
-                        return true
-//                        }
-                    } else {
-                        isExceedScaledTouchSlop = true
-                    }
-                }
+                return if (onInterceptCheck(event) == InterceptCheckResult.Intercept) true
+                else super.onInterceptTouchEvent(event)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {}
         }
         return super.onInterceptTouchEvent(event)
     }
 
+    private fun onInterceptCheck(event: MotionEvent): InterceptCheckResult {
+        val x = event.rawX
+        val y = event.rawY
+        // 获取手指移动的距离
+        val dx = x - startInterceptTouchX
+        val dy = y - startInterceptTouchY
+        if (abs(dx) > scaledTouchSlop || abs(dy) > scaledTouchSlop) {
+            var isUserIntended = true
+            // 不是用户意图的滑动
+            if ((!enableRightDragExit && dx < 0 && abs(dx) > abs(dy)) ||
+                (!enableLeftDragExit && dx > 0 && abs(dx) > abs(dy)) ||
+                (!enableTopDragExit && dy > 0 && abs(dy) > abs(dx)) ||
+                (!enableBottomDragExit && dy < 0 && abs(dy) > abs(dx))
+            ) {
+                isUserIntended = false
+            }
+            if (isUserIntended && !enableTopDragExit && !enableBottomDragExit) {
+                val compareDy = abs(dy)
+                val compareDx = if (enableLeftDragExit && enableRightDragExit) abs(dx)
+                else if (enableLeftDragExit) dx
+                else -dx
+                if (compareDy > compareDx) {
+                    isUserIntended = false
+                }
+            }
+            if (isUserIntended && !enableLeftDragExit && !enableRightDragExit) {
+                val compareDx = abs(dx)
+                val compareDy = if (enableTopDragExit && enableBottomDragExit) abs(dy)
+                else if (enableTopDragExit) -dy
+                else dy
+                if (compareDx > compareDy) {
+                    isUserIntended = false
+                }
+            }
+            if (!isUserIntended) {
+                enableInterceptCheck = false
+                return InterceptCheckResult.NotIntercept
+            }
+            if (isExceedScaledTouchSlop) {
+//                        if (System.currentTimeMillis() - startInterceptTouchTime > 150) {
+                currentTouchX = startInterceptTouchX
+                currentTouchY = startInterceptTouchY
+                enableTouch = true
+                onDragCallback?.invoke(true)
+                return InterceptCheckResult.Intercept
+//                        }
+            } else {
+                isExceedScaledTouchSlop = true
+            }
+        }
+        return InterceptCheckResult.Wait
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -228,8 +234,16 @@ class DragExitLayout @JvmOverloads constructor(
             return super.onTouchEvent(event)
         }
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> {}
+            MotionEvent.ACTION_DOWN -> {
+                if (enableInterceptCheck) return true
+            }
             MotionEvent.ACTION_MOVE -> {
+                if (!enableTouch && enableInterceptCheck) {
+                    val result = onInterceptCheck(event)
+                    if (result == InterceptCheckResult.Wait) return true
+                    else if (result == InterceptCheckResult.NotIntercept)
+                        return super.onTouchEvent(event)
+                }
                 if (enableTouch) {
                     val x = event.rawX
                     val y = event.rawY
@@ -290,4 +304,8 @@ class DragExitLayout @JvmOverloads constructor(
         bindExitActivity?.finishAfterTransition()
         bindExitActivity = null
     }
+}
+
+enum class InterceptCheckResult {
+    NotIntercept, Intercept, Wait
 }

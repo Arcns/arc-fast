@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_mainFragment_to_fastTextViewFragment"
             app:destination="@id/fastTextViewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_dragExitFragment"
+            app:destination="@id/dragExitFragment" />
     </fragment>
 
     <fragment
@@ -116,4 +119,8 @@
         android:id="@+id/permissionFragment"
         android:name="com.arc.fast.sample.permission.PermissionFragment"
         android:label="PermissionFragment" />
+    <fragment
+        android:id="@+id/dragExitFragment"
+        android:name="com.arc.fast.sample.view.DragExitFragment"
+        android:label="DragExitFragment" />
 </navigation>

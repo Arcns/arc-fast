@@ -1,5 +1,6 @@
 package com.arc.fast.sample.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.arc.fast.sample.databinding.FragmentMainBinding
 import com.arc.fast.sample.common.extension.titleTextView
 import com.arc.fast.sample.common.utils.NavTransitionOptions
 import com.arc.fast.sample.common.utils.SHARED_ELEMENT_APP_NAME
+import com.arc.fast.sample.view.DragExitActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -157,6 +159,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToFastTextViewFragment()
             )
+        } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToDragExitFragment()
+            )
+        } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT_ACTIVITY) {
+            startActivity(Intent(requireContext(), DragExitActivity::class.java))
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }

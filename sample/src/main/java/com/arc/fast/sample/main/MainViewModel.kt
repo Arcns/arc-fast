@@ -55,6 +55,12 @@ class MainViewModel : ViewModel() {
                 Menu(R.string.mask.string, ACTION_MASK, 0),
                 Menu(R.string.view.string, ACTION_VIEW, 1),
                 Menu(R.string.fast_text_view.string, ACTION_FAST_TEXT_VIEW, 1),
+                Menu(R.string.drag_exit_layout.string, ACTION_DRAG_EXIT_LAYOUT, 1),
+                Menu(
+                    R.string.drag_exit_layout_activity.string,
+                    ACTION_DRAG_EXIT_LAYOUT_ACTIVITY,
+                    1
+                ),
                 Menu("test", ACTION_TEST, 0),
                 Menu("test_webview", "http://www.baidu.com", 0),
                 Menu("test_scan", ACTION_SCAN, 0),

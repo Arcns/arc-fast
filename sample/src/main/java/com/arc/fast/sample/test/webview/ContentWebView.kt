@@ -60,10 +60,10 @@ class ContentWebView(
     }
 
     private fun handlerOverrideUrlLoading(url: String): Boolean {
-        if ("m://konvy.com/back".equals(url, true)) {
+        if ("m://arc.com/back".equals(url, true)) {
             onGoBack()
             return true
-        } else if ("m://konvy.com/scan".equals(url, true)) {
+        } else if ("m://arc.com/scan".equals(url, true)) {
             onGoScan()
             return true
         }

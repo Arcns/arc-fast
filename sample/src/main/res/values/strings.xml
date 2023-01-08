@@ -31,4 +31,6 @@
     <string name="mask">Fast Mask</string>
     <string name="view">Fast View</string>
     <string name="fast_text_view">FastTextView</string>
+    <string name="drag_exit_layout">DragExitLayout</string>
+    <string name="drag_exit_layout_activity">DragExitLayout(Activity)</string>
 </resources>

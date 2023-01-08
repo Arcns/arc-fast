@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="TransitionTheme" parent="@style/AppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
     <!-- 圆形图片 -->
     <style name="styleCircleImageView">
         <item name="cornerFamily">rounded</item>

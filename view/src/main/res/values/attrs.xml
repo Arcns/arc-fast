@@ -34,4 +34,12 @@
         <attr name="rounded_border_color" format="color" />
         <attr name="rounded_border_size" format="dimension" />
     </declare-styleable>
+    <!-- 嵌套滑动兼容器 -->
+    <declare-styleable name="FastNestedScrollableHost">
+        <attr name="fastNestedScrollableHost_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="all" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>
