@@ -36,24 +36,25 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv"
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/rv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:visibility="gone"-->
+<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:overScrollMode="never">
 
-            <!--            <ScrollView-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:overScrollMode="never">-->
-
-            <!--                <TextView-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:gravity="center"-->
-            <!--                    android:text="123456789"-->
-            <!--                    android:textSize="400sp" />-->
-            <!--            </ScrollView>-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="123456789"
+                    android:textSize="400sp" />
+            </androidx.core.widget.NestedScrollView>
         </com.arc.fast.view.FastNestedScrollCompat>
 
     </com.arc.fast.view.DragExitLayout>

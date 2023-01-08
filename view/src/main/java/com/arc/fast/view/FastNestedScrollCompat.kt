@@ -61,11 +61,11 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         }
     }
 
-    private fun canChildScroll(orientation: Int, delta: Float): Boolean {
+    private fun canChildScroll(orientation: Orientation, delta: Float): Boolean {
         val direction = -delta.sign.toInt()
         return when (orientation) {
-            0 -> child?.canScrollHorizontally(direction) ?: false
-            1 -> child?.canScrollVertically(direction) ?: false
+            Orientation.Horizontal -> child?.canScrollHorizontally(direction) ?: false
+            Orientation.Vertical -> child?.canScrollVertically(direction) ?: false
             else -> throw IllegalArgumentException()
         }
     }
@@ -86,11 +86,10 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
     }
 
     private fun handleInterceptTouchEvent(e: MotionEvent) {
-        Log.e("aaaaaa", "handleInterceptTouchEvent")
         // 如果Child不能向与Parent相同的方向滚动，则不需要下一步判断
         if (compatibleOrientation != Orientation.All &&
-            !canChildScroll(compatibleOrientation.value, -1f) &&
-            !canChildScroll(compatibleOrientation.value, 1f)
+            !canChildScroll(compatibleOrientation, -1f) &&
+            !canChildScroll(compatibleOrientation, 1f)
         ) return
 
         if (e.action == MotionEvent.ACTION_DOWN) {
@@ -118,11 +117,11 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
                 // 检查Child是否可以向Parent方向滚动
                 val isCanChildScroll = if (compatibleOrientation != Orientation.All)
                     canChildScroll(
-                        compatibleOrientation.value,
+                        compatibleOrientation,
                         if (compatibleOrientation == Orientation.Horizontal) dx else dy
                     )
-                else canChildScroll(Orientation.Horizontal.value, dx) ||
-                        canChildScroll(Orientation.Vertical.value, dy)
+                else canChildScroll(Orientation.Horizontal, dx) ||
+                        canChildScroll(Orientation.Vertical, dy)
                 if (isCanChildScroll) {
                     // Child可以滚动时，不允许所有Parent拦截
                     parent.requestDisallowInterceptTouchEvent(true)
@@ -132,6 +131,10 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+        parent.requestDisallowInterceptTouchEvent(disallowIntercept)
     }
 
     enum class Orientation(val value: Int) {
