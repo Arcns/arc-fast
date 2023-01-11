@@ -2,12 +2,18 @@ package com.arc.fast.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
+import android.widget.ScrollView
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -22,7 +28,13 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
     /**
      * 需要兼容的滚动方向
      */
-    var compatibleOrientation = Orientation.Horizontal
+    var compatibleOrientation = Orientation.Auto
+        set(value) {
+            field = value
+            actualCompatibleOrientation = value
+        }
+    private var actualCompatibleOrientation = Orientation.Auto
+        get() = checkActualCompatibleOrientation(field)
 
     //
     private val scaledTouchSlop by lazy {
@@ -47,18 +59,37 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
             try {
                 compatibleOrientation = typedArray.getInt(
                     R.styleable.FastNestedScrollableHost_fastNestedScrollableHost_orientation,
-                    Orientation.Horizontal.value
+                    Orientation.Auto.value
                 ).let {
                     when (it) {
                         Orientation.Horizontal.value -> Orientation.Horizontal
                         Orientation.Vertical.value -> Orientation.Vertical
-                        else -> Orientation.All
+                        else -> Orientation.Auto
                     }
                 }
             } finally {
                 typedArray.recycle()
             }
         }
+    }
+
+    protected open fun checkActualCompatibleOrientation(orientation: Orientation): Orientation {
+        if (orientation != Orientation.Auto) return orientation
+        val child = child ?: return Orientation.Vertical
+        if (child is ScrollView || child is NestedScrollView) {
+            return Orientation.Vertical
+        } else if (child is HorizontalScrollView) {
+            return Orientation.Horizontal
+        } else if (child is RecyclerView) {
+            when (val layoutManager = child.layoutManager) {
+                is LinearLayoutManager -> layoutManager.orientation.toOrientation
+                is StaggeredGridLayoutManager -> layoutManager.orientation.toOrientation
+                else -> Orientation.Vertical
+            }
+        } else if (child is ViewPager2) {
+            return child.orientation.toOrientation
+        }
+        return Orientation.Vertical
     }
 
     private fun canChildScroll(orientation: Orientation, delta: Float): Boolean {
@@ -75,21 +106,12 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         return super.onInterceptTouchEvent(e)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        return super.onTouchEvent(event)
-        Log.e("aaaaaa", "onTouchEvent")
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        return super.dispatchTouchEvent(ev)
-        Log.e("aaaaaa", "dispatchTouchEvent")
-    }
-
     private fun handleInterceptTouchEvent(e: MotionEvent) {
         // 如果Child不能向与Parent相同的方向滚动，则不需要下一步判断
-        if (compatibleOrientation != Orientation.All &&
-            !canChildScroll(compatibleOrientation, -1f) &&
-            !canChildScroll(compatibleOrientation, 1f)
+        val orientation = actualCompatibleOrientation
+        if (orientation == Orientation.Auto) return
+        if (!canChildScroll(orientation, -1f) &&
+            !canChildScroll(orientation, 1f)
         ) return
 
         if (e.action == MotionEvent.ACTION_DOWN) {
@@ -107,21 +129,18 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
                 dy.absoluteValue// * if (compatibleOrientation == Orientation.Vertical) 0.5f else 1f
 
             if (scaledDx > scaledTouchSlop || scaledDy > scaledTouchSlop) {
-                if ((compatibleOrientation == Orientation.Horizontal && scaledDy > scaledDx) ||
-                    (compatibleOrientation == Orientation.Vertical && scaledDy < scaledDx)
+                if ((orientation == Orientation.Horizontal && scaledDy > scaledDx) ||
+                    (orientation == Orientation.Vertical && scaledDy < scaledDx)
                 ) {
                     // 滚动方向与Parent方向不一致时，允许所有Parent拦截
                     parent.requestDisallowInterceptTouchEvent(false)
                     return
                 }
                 // 检查Child是否可以向Parent方向滚动
-                val isCanChildScroll = if (compatibleOrientation != Orientation.All)
-                    canChildScroll(
-                        compatibleOrientation,
-                        if (compatibleOrientation == Orientation.Horizontal) dx else dy
-                    )
-                else canChildScroll(Orientation.Horizontal, dx) ||
-                        canChildScroll(Orientation.Vertical, dy)
+                val isCanChildScroll = canChildScroll(
+                    orientation,
+                    if (orientation == Orientation.Horizontal) dx else dy
+                )
                 if (isCanChildScroll) {
                     // Child可以滚动时，不允许所有Parent拦截
                     parent.requestDisallowInterceptTouchEvent(true)
@@ -137,7 +156,11 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         parent.requestDisallowInterceptTouchEvent(disallowIntercept)
     }
 
+    protected val Int.toOrientation: Orientation
+        get() = if (this == LinearLayout.HORIZONTAL) Orientation.Horizontal else Orientation.Vertical
+
     enum class Orientation(val value: Int) {
-        Horizontal(LinearLayout.HORIZONTAL), Vertical(LinearLayout.VERTICAL), All(LinearLayout.HORIZONTAL + LinearLayout.VERTICAL)
+        Horizontal(LinearLayout.HORIZONTAL), Vertical(LinearLayout.VERTICAL), Auto(LinearLayout.HORIZONTAL + LinearLayout.VERTICAL)
+
     }
 }

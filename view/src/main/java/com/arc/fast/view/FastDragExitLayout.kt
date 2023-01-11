@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import androidx.core.view.updateLayoutParams
@@ -14,7 +13,7 @@ import kotlin.math.abs
 /**
  * 拖拽退出视图
  */
-class DragExitLayout @JvmOverloads constructor(
+class FastDragExitLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : RoundedConstraintLayout(context, attrs, defStyleAttr) {
 
@@ -96,19 +95,19 @@ class DragExitLayout @JvmOverloads constructor(
         if (!isInEditMode) {
             setWillNotDraw(false)
             val typedArray =
-                context.theme.obtainStyledAttributes(attrs, R.styleable.DragExitLayout, 0, 0)
+                context.theme.obtainStyledAttributes(attrs, R.styleable.FastDragExitLayout, 0, 0)
             try {
                 enableLeftDragExit = typedArray.getBoolean(
-                    R.styleable.DragExitLayout_dragExitLayout_enableLeftDragExit, true
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableLeftDragExit, true
                 )
                 enableRightDragExit = typedArray.getBoolean(
-                    R.styleable.DragExitLayout_dragExitLayout_enableRightDragExit, true
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableRightDragExit, true
                 )
                 enableTopDragExit = typedArray.getBoolean(
-                    R.styleable.DragExitLayout_dragExitLayout_enableTopDragExit, true
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableTopDragExit, true
                 )
                 enableBottomDragExit = typedArray.getBoolean(
-                    R.styleable.DragExitLayout_dragExitLayout_enableBottomDragExit, true
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableBottomDragExit, true
                 )
             } finally {
                 typedArray.recycle()

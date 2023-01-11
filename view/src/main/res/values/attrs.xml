@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 拖拽退出视图 -->
-    <declare-styleable name="DragExitLayout">
-        <attr name="dragExitLayout_enableLeftDragExit" format="boolean" />
-        <attr name="dragExitLayout_enableRightDragExit" format="boolean" />
-        <attr name="dragExitLayout_enableTopDragExit" format="boolean" />
-        <attr name="dragExitLayout_enableBottomDragExit" format="boolean" />
+    <declare-styleable name="FastDragExitLayout">
+        <attr name="fastDragExitLayout_enableLeftDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableRightDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableTopDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableBottomDragExit" format="boolean" />
     </declare-styleable>
     <!-- 文本视图 -->
     <declare-styleable name="FastTextView">
@@ -39,7 +39,7 @@
         <attr name="fastNestedScrollableHost_orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
-            <enum name="all" value="2" />
+            <enum name="auto" value="2" />
         </attr>
     </declare-styleable>
 </resources>

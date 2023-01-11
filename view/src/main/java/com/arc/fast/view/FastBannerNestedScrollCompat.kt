@@ -13,6 +13,7 @@ open class FastBannerNestedScrollCompat @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FastNestedScrollCompat(context, attrs, defStyleAttr) {
 
+
     override val child: View?
         get() = if (childCount > 0) getChildAt(0).let {
             if (it is Banner<*, *>) {
@@ -20,4 +21,13 @@ open class FastBannerNestedScrollCompat @JvmOverloads constructor(
                 it.viewPager2
             } else it
         } else null
+
+
+    override fun checkActualCompatibleOrientation(orientation: Orientation): Orientation {
+        val child = child
+        if (child is Banner<*, *>) {
+            return child.viewPager2.orientation.toOrientation
+        }
+        return super.checkActualCompatibleOrientation(orientation)
+    }
 }

@@ -32,30 +32,9 @@ class DragExitFragment : BaseFragment<FragmentDragExitBinding>() {
                 findNavController().navigateUp()
             }
         }
+        // 启用拖拽退出
         binding.dragExitLayout.enableDragExit {
             findNavController().navigateUp()
         }
-        val data = arrayListOf<String>()
-        for (i in 0..100) {
-            data.add(i.toString())
-        }
-//        binding.rv.adapter =
-//            object : BaseQuickAdapter<String, BaseViewHolder>(
-//                R.layout.item_test_card,
-//                data
-//            ) {
-//
-//                override fun createBaseViewHolder(view: View): BaseViewHolder {
-//                    ItemTestCardBinding.bind(view)
-//                    return super.createBaseViewHolder(view)
-//                }
-//
-//                override fun convert(holder: BaseViewHolder, item: String) {
-//                    DataBindingUtil.getBinding<ItemTestCardBinding>(holder.itemView)?.apply {
-//                        root.updateLayoutParams { height = LayoutParams.WRAP_CONTENT }
-//                        title = item
-//                    }
-//                }
-//            }
     }
 }

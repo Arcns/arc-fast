@@ -1,6 +1,6 @@
 ext.versions = [
         min_sdk     : 21,
         compile_sdk : 33,
-        publish_code: 21,
-        publish_name: "1.15.0"
+        publish_code: 22,
+        publish_name: "1.16.1"
 ]

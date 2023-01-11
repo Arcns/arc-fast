@@ -2,13 +2,13 @@ package com.arc.fast.view
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.util.AttributeSet
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import com.arc.fast.view.extensions.disableTextMediumBold
-import com.arc.fast.view.extensions.setTextMediumBold
 import com.arc.fast.view.rounded.IRoundedView
 import com.arc.fast.view.rounded.RoundedViewConfig
 
@@ -312,3 +312,18 @@ open class FastTextView @JvmOverloads constructor(
     }
 
 }
+
+/**
+ * 设置文本字体为中粗
+ */
+fun TextView.setTextMediumBold() = this.setTextMediumBold(1f)
+fun TextView.setTextMediumBold(mediumWeight: Float) {
+    paint.style = Paint.Style.FILL_AND_STROKE
+    paint.strokeWidth = mediumWeight
+    invalidate()
+}
+
+/**
+ * 禁用文本字体中粗
+ */
+fun TextView.disableTextMediumBold() = setTextMediumBold(0f)
