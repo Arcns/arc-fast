@@ -2,6 +2,7 @@ package com.arc.fast.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -19,7 +20,7 @@ import kotlin.math.sign
 
 /**
  * 解决嵌套滚动事件冲突的兼容性宿主
- * 注意：使用时可滚动元素需要是此宿主布局的直接且唯一的子元素
+ * 注意：使用时，滚动控件必须是FastNestedScrollCompat直接且唯一的子元素
  */
 open class FastNestedScrollCompat @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -117,6 +118,7 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         if (e.action == MotionEvent.ACTION_DOWN) {
             initialX = e.x
             initialY = e.y
+            // 事件开始时，禁用所有Parent拦截，以便做判断处理
             parent.requestDisallowInterceptTouchEvent(true)
         } else if (e.action == MotionEvent.ACTION_MOVE) {
             val dx = e.x - initialX

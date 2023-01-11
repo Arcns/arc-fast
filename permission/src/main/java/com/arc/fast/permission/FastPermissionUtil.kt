@@ -19,8 +19,10 @@ import com.arc.fast.permission.R
 
 /**
  * 权限工具
- * 注意：根据https://developer.android.com/training/basics/intents/result?hl=zh-cn
- * 使用前您必须在CREATED之前创建该工具
+ * 使用方式一：通过FastPermissionUtil.request进行请求权限
+ * 使用方式二：通过创建FastPermissionUtil实例进行请求权限
+ * 注意：根据https://developer.android.com/training/basics/intents/result?hl=zh-cn，使用方式二时，
+ * 你必须在 fragment 或 activity 的 Lifecycle 达到 CREATED 之前创建FastPermissionUtil实例
  */
 class FastPermissionUtil {
 
