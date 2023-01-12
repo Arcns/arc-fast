@@ -464,9 +464,10 @@ class CustomView @JvmOverloads constructor(
 > 在日常开发中，TextView是我们经常使用的控件，但是原生的TextView却无法帮我们实现一些常用的功能，例如：设置中粗、设置TextView drawable的宽高、分别设置TextView不同方向drawable的padding，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现TextView中粗、四个方向drawable的不同Padding和宽高。
 
 #### 1.实现思路：
-（1）设置TextView中粗：通过设置画笔的边框来实现中粗效果（`paint.style = Paint.Style.FILL_AND_STROKE`和`paint.strokeWidth=1`）
-（2）设置TextView drawable的宽高：`drawable.setBounds(0,0,width,height)`
-（3）分别设置TextView不同方向drawable的padding：TextView虽然提供了`drawablePadding`，但只能为不同方向drawable设置一个相同的padding，因此如果需要为TextView不同方向drawable设置不同的padding，需要使用其他的方式来实现。经过研究对比，这里我们使用`InsetDrawable(drawable, paddingLeft, paddingTop, paddingRight, paddingBottom)`来实现
+- （1）设置TextView中粗：通过设置画笔的边框来实现中粗效果（`paint.style = Paint.Style.FILL_AND_STROKE`和`paint.strokeWidth=1`）
+- （2）设置TextView drawable的宽高：`drawable.setBounds(0,0,width,height)`
+- （3）分别设置TextView不同方向drawable的padding：TextView虽然提供了`drawablePadding`，但只能为不同方向drawable设置一个相同的padding，因此如果需要为TextView不同方向drawable设置不同的padding，需要使用其他的方式来实现。经过研究对比，这里我们使用`InsetDrawable(drawable, paddingLeft, paddingTop, paddingRight, paddingBottom)`来实现
+
 
 #### 2.集成方式：
 ```
@@ -533,10 +534,11 @@ allprojects {
 之所以会出现滚动控件嵌套后的滑动冲突，主要是因为里面嵌套的滚动控件不知道在什么时候需要把`TouchEvent`交给外层的滚动控件处理，所以会产生滑动冲突。
 因此我们可以考虑在里面嵌套的每个滚动控件的外面都添加上一个`处理控件`，根据TouchEvent机制，`处理控件`会优先于里面的滚动控件接收到`TouchEvent`，我们就可以在处理控件中判断是否需要把`TouchEvent`交给外层的滚动控件处理。
 在`处理控件`中，我们通过重写`onInterceptTouchEvent`来处理TouchEvent，处理流程如下：
-（1）在`TouchEvent`开始时(`ACTION_DOWN`)，先通过`parent.requestDisallowInterceptTouchEvent(true)`暂时禁止所有`parent`拦截`TouchEvent`，以便`处理控件`进行判断处理
-（2）在`TouchEvent`移动时(`ACTION_MOVE`)，根据TouchEvent判断用户意图的滑动方向
-（3）判断里面的滚动控件是否支持用户意图的滑动方向，如果不支持则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截，如果支持则跳到（4）
-（4）根据用户意图的滑动方向，判断里面的滚动控件是否能够在该方向进行滑动(通过`canScrollHorizontally`/`canScrollVertically`)，如果不能滑动则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截
+- （1）在`TouchEvent`开始时(`ACTION_DOWN`)，先通过`parent.requestDisallowInterceptTouchEvent(true)`暂时禁止所有`parent`拦截`TouchEvent`，以便`处理控件`进行判断处理
+- （2）在`TouchEvent`移动时(`ACTION_MOVE`)，根据TouchEvent判断用户意图的滑动方向
+- （3）判断里面的滚动控件是否支持用户意图的滑动方向，如果不支持则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截，如果支持则跳到（4）
+- （4）根据用户意图
+的滑动方向，判断里面的滚动控件是否能够在该方向进行滑动(通过`canScrollHorizontally`/`canScrollVertically`)，如果不能滑动则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截
 这样处理之后，如果里面的滚动控件能够滑动则交由里面的滚动控件处理，如果里面的滚动控件不能滑动则交由上级的滚动控件处理，因此能够解决绝大多数场景下滚动控件嵌套产生的滑动事件冲突。
 
 #### 2.集成方式：
@@ -583,9 +585,9 @@ allprojects {
 > 最近小伙伴有个需求，就是实现类似于小红书、Lemon8的拖拽退出效果，查了一圈发现并没有实现该功能的Library，于是便做了一个开源Library项目，方便大家集成后，一行代码实现Android仿小红书、Lemon8的拖拽退出效果。
 
 #### 1.实现思路：
-（1）创建一个`自定义Layout`，作为实现拖拽退出的视图
-（2）在`自定义Layout中`，重写`onInterceptTouchEvent`，用来检查`TouchEvent`的滑动方向是否可以执行退拽退出效果，如果可以执行退拽退出效果则返回`true`表示拦截`TouchEvent`
-（3）在`自定义Layout中`，重写`onTouchEvent`，在可以执行退拽退出效果时，先根据`TouchEvent`计算出滑动距离，然后使用滑动距离来设置leftMargin和topMargin以实现`自定义Layout`拖拽时移动的效果，同时设置`scaleX`和`scaleY`以实现`自定义Layout`拖拽时缩放的效果。
+- （1）创建一个`自定义Layout`，作为实现拖拽退出的视图
+- （2）在`自定义Layout中`，重写`onInterceptTouchEvent`，用来检查`TouchEvent`的滑动方向是否可以执行退拽退出效果，如果可以执行退拽退出效果则返回`true`表示拦截`TouchEvent`
+- （3）在`自定义Layout中`，重写`onTouchEvent`，在可以执行退拽退出效果时，先根据`TouchEvent`计算出滑动距离，然后使用滑动距离来设置leftMargin和topMargin以实现`自定义Layout`拖拽时移动的效果，同时设置`scaleX`和`scaleY`以实现`自定义Layout`拖拽时缩放的效果。
 
 #### 2.集成方式：
 ```
