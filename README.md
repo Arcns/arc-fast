@@ -11,6 +11,7 @@
 - [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
 - [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
 - [九、Fast TextView:一行代码实现TextView四个方向drawable的不同Padding和宽高](#九fast-textview)
+- [十、Fast NestedScrollCompat:一行代码解决Android滚动控件嵌套产生的滑动事件冲突](#十fast-nestedscrollcompat)
 
 
 ## 一、介绍
@@ -511,3 +512,56 @@ allprojects {
 | rounded_background_color | 背景颜色 | color，例如#FFFFFF | 空 |
 | rounded_border_color | 边框颜色 | color，例如#FFFFFF | 空 |
 | rounded_border_size | 边框大小 | dimension，例如10dp | 0 |
+
+## 十、Fast NestedScrollCompat
+- 一行代码解决Android滚动控件嵌套产生的滑动事件冲突
+> 在日常开发中，我们经常需要解决NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2、Banner等各种滚动控件之间相互嵌套带来的滑动事件冲突问题，修复起来往往也比较麻烦，所以我做了一个开源Library项目，方便大家集成后，一行代码解决Android绝大多数场景下的滑动冲突。
+
+#### 1.实现思路：
+之所以会出现滚动控件嵌套后的滑动冲突，主要是因为里面嵌套的滚动控件不知道在什么时候需要把`TouchEvent`交给外层的滚动控件处理，所以会产生滑动冲突。
+因此我们可以考虑在里面嵌套的每个滚动控件的外面都添加上一个`处理控件`，根据TouchEvent机制，`处理控件`会优先于里面的滚动控件接收到`TouchEvent`，我们就可以在处理控件中判断是否需要把`TouchEvent`交给外层的滚动控件处理。
+在`处理控件`中，我们通过重写`onInterceptTouchEvent`来处理TouchEvent，处理流程如下：
+（1）在`TouchEvent`开始时(`ACTION_DOWN`)，先通过`parent.requestDisallowInterceptTouchEvent(true)`暂时禁止所有`parent`拦截`TouchEvent`，以便`处理控件`进行判断处理
+（2）在`TouchEvent`移动时(`ACTION_MOVE`)，根据TouchEvent判断用户意图的滑动方向
+（3）判断里面的滚动控件是否支持用户意图的滑动方向，如果不支持则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截，如果支持则跳到（4）
+（4）根据用户意图的滑动方向，判断里面的滚动控件是否能够在该方向进行滑动(通过`canScrollHorizontally`/`canScrollVertically`)，如果不能滑动则调用`parent.requestDisallowInterceptTouchEvent(false)`允许所有`parent`拦截
+这样处理之后，如果里面的滚动控件能够滑动则交由里面的滚动控件处理，如果里面的滚动控件不能滑动则交由上级的滚动控件处理，因此能够解决绝大多数场景下滚动控件嵌套产生的滑动事件冲突。
+
+#### 2.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:view:1.16.1'
+```
+
+#### 3.使用方式
+使用时，只需要在里面嵌套的每个滚动控件的外面都添加上FastNestedScrollCompat即可
+（1）NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2等滚动控件
+```
+<com.arc.fast.view.FastNestedScrollCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+      // 注意：使用时，滚动控件必须是FastNestedScrollCompat直接且唯一的子元素
+      // 此处RecyclerView仅为示例，你可以替换为NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2等滚动控件
+      <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/> 
+</com.arc.fast.view.FastNestedScrollCompat>
+```
+（2）Banner
+```
+<com.arc.fast.view.FastBannerNestedScrollCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+      // 注意：使用时，Banner必须是FastNestedScrollCompat直接且唯一的子元素
+      <com.youth.banner.Banner
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/> 
+</com.arc.fast.view.FastBannerNestedScrollCompat>
+```
