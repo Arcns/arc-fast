@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/immersive_dialog"
+            app:title="Immersive Dialog"
             app:titleCentered="true"
             app:titleTextAppearance="@style/styleToolbarTitle" />
 

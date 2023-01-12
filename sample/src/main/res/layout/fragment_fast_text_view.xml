@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/fast_text_view"
+            app:title="Fast TextView"
             app:titleCentered="true"
             app:titleTextAppearance="@style/styleToolbarTitle" />
 

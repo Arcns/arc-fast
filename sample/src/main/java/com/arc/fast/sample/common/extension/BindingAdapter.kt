@@ -69,11 +69,6 @@ fun ImageView.setBindingUrl(value: String?) {
     Glide.with(this).load(value).into(this)
 }
 
-@BindingAdapter("menu")
-fun TextView.setBindingMenu(menu: Menu) {
-    text = menu.title
-}
-
 @BindingAdapter(
     value = [
         "viewModel",

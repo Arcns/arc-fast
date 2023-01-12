@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/span"
+            app:title="Fast Span"
             app:titleCentered="true"
             app:titleTextAppearance="@style/styleToolbarTitle" />
 
@@ -27,9 +27,9 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="16dp"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
