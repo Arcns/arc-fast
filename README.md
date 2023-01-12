@@ -10,7 +10,7 @@
 - [六、Fast Span:一行代码简单实现Android TextView常用样式Span](#六fast-span)
 - [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
 - [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
-- [九、Fast TextView:一行代码实现TextView四个方向drawable的不同Padding和宽高](#九fast-textview)
+- [九、Fast TextView:一行代码实现TextView中粗、四个方向drawable的不同Padding和宽高](#九fast-textview)
 - [十、Fast NestedScrollCompat:一行代码解决Android滚动控件嵌套产生的滑动事件冲突](#十fast-nestedscrollcompat)
 
 
@@ -453,10 +453,15 @@ class CustomView @JvmOverloads constructor(
 
 
 ## 九、Fast TextView
-- 一行代码实现TextView四个方向drawable的不同Padding和宽高
-> 在日常开发中，我们经常需要为TextView实现不同方向的drawable，但是原生的TextView drawable功能却无法帮我们实现一些常用的功能，例如：设置TextView drawable的宽高、分别设置TextView不同方向drawable的padding，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现TextView四个方向drawable的不同Padding和宽高。
+- 一行代码实现TextView中粗、四个方向drawable的不同Padding和宽高
+> 在日常开发中，TextView是我们经常使用的控件，但是原生的TextView却无法帮我们实现一些常用的功能，例如：设置中粗、设置TextView drawable的宽高、分别设置TextView不同方向drawable的padding，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现TextView中粗、四个方向drawable的不同Padding和宽高。
 
-#### 1.集成方式：
+#### 1.实现思路：
+（1）设置TextView中粗：通过设置画笔的边框来实现中粗效果（`paint.style = Paint.Style.FILL_AND_STROKE`和`paint.strokeWidth=1`）
+（2）设置TextView drawable的宽高：`drawable.setBounds(0,0,width,height)`
+（3）分别设置TextView不同方向drawable的padding：TextView虽然提供了`drawablePadding`，但只能为不同方向drawable设置一个相同的padding，因此如果需要为TextView不同方向drawable设置不同的padding，需要使用其他的方式来实现。经过研究对比，这里我们使用`InsetDrawable(drawable, paddingLeft, paddingTop, paddingRight, paddingBottom)`来实现
+
+#### 2.集成方式：
 ```
 allprojects {
 	repositories {
@@ -469,7 +474,7 @@ allprojects {
  implementation 'com.gitee.arcns.arc-fast:view:latest.release'
 ```
 
-#### 2.使用方式
+#### 3.使用方式
 ```
 <com.arc.fast.view.FastTextView
             android:id="@+id/tvTest"
