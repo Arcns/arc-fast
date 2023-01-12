@@ -12,7 +12,7 @@
 - [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
 - [九、Fast TextView:一行代码实现TextView中粗、四个方向drawable的不同Padding和宽高](#九fast-textview)
 - [十、Fast NestedScrollCompat:一行代码解决Android滚动控件嵌套产生的滑动事件冲突](#十fast-nestedscrollcompat)
-- [十一、Fast DragExitLayout:一行代码实现Android仿小红书、Lemon8拖拽退出效果突](#十fast-dragexitlayout)
+- [十一、Fast DragExitLayout:一行代码实现Android仿小红书、Lemon8拖拽退出效果突](#十一fast-dragexitlayout)
 
 
 ## 一、介绍
