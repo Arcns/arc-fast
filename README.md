@@ -34,9 +34,15 @@ allprojects {
 
 ## 三、Fast Permission
 - 一行代码实现基于Activity Result API的动态权限获取`
-> 众所周知，在Android中如果我们想要实现动态权限获取，只需要调用`ActivityCompat.requestPermissions(activity/fragment,permissions,requestCode)`，然后在`activity/fragment`中重写`onRequestPermissionsResult`来响应请求结果即可，当然我们也可以通过`RxPermissions`、`easypermissions`等第三方库实现，简单而便捷。可如今却有一个小问题，就是在新的API中，`onRequestPermissionsResult`已被弃用，取而代之的是`Activity Result API`，但大多数第三方库仍然使用旧的解决方案。因此，假设你想要不使用已被弃用的`onRequestPermissionsResult`，大概率就只能自己通过`Activity Result API`实现了，经过实践，我发现如果项目中全部使用`Activity Result API`代替原有方法，会存在大量样板代码，于是便做了一个开源Library项目，方便大家集成后，一行代码实现基于Activity Result API的动态权限获取。
+> 众所周知，在Android中如果我们想要实现动态权限获取，只需要调用`ActivityCompat.requestPermissions(activity/fragment,permissions,requestCode)`，然后在`activity/fragment`中重写`onRequestPermissionsResult`来响应请求结果即可，当然我们也可以通过`RxPermissions`、`easypermissions`等第三方库实现，简单而便捷。可如今却有一个小问题，就是在新的API中，`onRequestPermissionsResult`已被弃用，取而代之的是`Activity Result API`，但大多数第三方库仍然使用旧的解决方案。因此，假设你想要不使用已被弃用的`onRequestPermissionsResult`，大概率就只能自己通过`Activity Result API`实现了，经过实践，我发现如果项目中全部使用`Activity Result API`代替原有方法，会存在大量样板代码，而且`registerForActivityResult`要求必须在`fragment`或`activity`的`Lifecycle`达到`CREATED`之前创建，所以也无法进行按需加载，于是便做了一个开源Library项目，方便大家集成后，一行代码实现基于Activity Result API的动态权限获取。
 
-#### 1.集成方式：
+#### 1.实现思路：
+相对比原来的`onRequestPermissionsResult`，`Activity Result API`使用起来更加的便捷友好，我们只需要简单的封装和实现权限理由相关的逻辑，即可方便的调用。
+唯一的难度在于：根据https://developer.android.com/training/basics/intents/result?hl=zh-cn，`registerForActivityResult`要求必须在`fragment`或`activity`的`Lifecycle`达到`CREATED`之前创建，这意味着我们无法进行按需加载，而且每次都要创建实例，无法通过静态方法进行一键调用。
+经过研究，这里我们通过创建一个专用的`fragment`来解决上述的问题：
+在调用动态权限获取的时候，我们创建一个空布局的`fragment`，并在这个`fragment`的onCreate中进行`registerForActivityResult`，从而满足创建条件并实现按需加载；另外为了提高效率，我们也做了实例池避免这个专用`fragment`的重复创建问题，并实现了自动的生命周期管理。
+
+#### 2.集成方式：
 ```
 allprojects {
 	repositories {
@@ -48,7 +54,7 @@ allprojects {
 ```
  implementation 'com.gitee.arcns.arc-fast:permission:latest.release'
 ```
-#### 2.使用方式：
+#### 3.使用方式：
 - 简单获取权限
 ```
  FastPermissionUtil.request(
