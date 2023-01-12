@@ -12,6 +12,7 @@
 - [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
 - [九、Fast TextView:一行代码实现TextView中粗、四个方向drawable的不同Padding和宽高](#九fast-textview)
 - [十、Fast NestedScrollCompat:一行代码解决Android滚动控件嵌套产生的滑动事件冲突](#十fast-nestedscrollcompat)
+- [十一、Fast DragExitLayout:一行代码实现Android仿小红书、Lemon8拖拽退出效果突](#十fast-dragexitlayout)
 
 
 ## 一、介绍
@@ -575,4 +576,63 @@ allprojects {
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/> 
 </com.arc.fast.view.FastBannerNestedScrollCompat>
+```
+
+## 十一、Fast DragExitLayout
+- 一行代码实现Android仿小红书、Lemon8拖拽退出效果
+> 最近小伙伴有个需求，就是实现类似于小红书、Lemon8的拖拽退出效果，查了一圈发现并没有实现该功能的Library，于是便做了一个开源Library项目，方便大家集成后，一行代码实现Android仿小红书、Lemon8的拖拽退出效果。
+
+#### 1.实现思路：
+（1）创建一个`自定义Layout`，作为实现拖拽退出的视图
+（2）在`自定义Layout中`，重写`onInterceptTouchEvent`，用来检查`TouchEvent`的滑动方向是否可以执行退拽退出效果，如果可以执行退拽退出效果则返回`true`表示拦截`TouchEvent`
+（3）在`自定义Layout中`，重写`onTouchEvent`，在可以执行退拽退出效果时，先根据`TouchEvent`计算出滑动距离，然后使用滑动距离来设置leftMargin和topMargin以实现`自定义Layout`拖拽时移动的效果，同时设置`scaleX`和`scaleY`以实现`自定义Layout`拖拽时缩放的效果。
+
+#### 2.集成方式：
+```
+allprojects {
+	repositories {
+		...
+		maven { url 'https://www.jitpack.io' }
+	}
+}
+```
+```
+ implementation 'com.gitee.arcns.arc-fast:view:1.16.1'
+```
+
+#### 3.使用方式
+使用时，只需要在布局文件的最外层包裹`FastDragExitLayout`，然后在代码文件中使用`FastDragExitLayout.enableDragExit()`启用拖拽退出效果即可。
+布局文件：
+```
+ <com.arc.fast.view.FastDragExitLayout
+        android:id="@+id/dragExitLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+      // 你自己的布局
+      ... ...
+</com.arc.fast.view.FastDragExitLayout>
+```
+代码文件：
+```
+// 简单调用方式一：在拖拽退出时关闭activity
+dragExitLayout.enableDragExit(activity)
+
+// 简单调用方式二：在拖拽退出时自定义处理操作
+dragExitLayout.enableDragExit{
+        // 自定义处理操作
+}
+
+// 完整的调用方式：
+dragExitLayout.enableDragExit(
+        bindExitActivity = activity, // 可选项：绑定在拖拽退出时的关闭activity
+        onDragCallback = {isDrag:Boolean-> 
+                 // 可选项：在开始或取消拖拽时的回调
+        },
+        onExitWaitCallback = {currentScale: Float, continueExit: (() -> Unit) ->
+                 // 可选项：在拖拽退出之前的回调，你可以在此处进行耗时的操作，完成后调用        continueExit即可继续退出
+        },
+        onExitCallback = { currentScale: Float ->
+                 // 可选项：在拖拽退出时的回调
+        }
+)
 ```
