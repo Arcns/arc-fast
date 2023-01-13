@@ -638,3 +638,12 @@ dragExitLayout.enableDragExit(
         }
 )
 ```
+ps：如果你希望`dragExitLayout`在拖拽后，当前activity背景能够变得透明（即拖拽后可以看到上一个activity），那么你需要设置当前activity为透明样式：
+```
+<style name="TransitionTheme" parent="@style/YourAppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item> // 注意：因系统bug，API26时android:windowIsTranslucent必须为false
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowActivityTransitions">true</item>
+ </style>
+```
