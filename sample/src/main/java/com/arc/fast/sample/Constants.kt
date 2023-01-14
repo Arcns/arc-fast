@@ -1,8 +1,7 @@
 package com.arc.fast.sample
 
 const val DATA = "data"
-const val SERVER_ONLINE = "https://www.taobao.com"
-const val SERVER_TEST_DEV = "http://www.taobao.com"
+const val ACTION_INTRODUCTION = "arc://introduction"
 const val ACTION_PERMISSION = "arc://permission"
 const val ACTION_DIALOG = "arc://dialog"
 const val ACTION_POPUP = "arc://popup"
@@ -13,4 +12,3 @@ const val ACTION_FAST_TEXT_VIEW = "arc://fasttextview"
 const val ACTION_DRAG_EXIT_LAYOUT = "arc://dragexitlayout"
 const val ACTION_DRAG_EXIT_LAYOUT_ACTIVITY = "arc://dragexitlayout_activity"
 const val ACTION_TEST = "arc://test"
-const val ACTION_SCAN = "arc://scan"

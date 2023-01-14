@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 class Menu(
     var title: String?,
     var subTitle: String? = null,
-    var url: String?,
+    var url: String? = null,
     var is_new: Int? = 0
 ) : Parcelable {
     val isFullScreen: Boolean get() = url?.contains("manage/order/index.php", true) == true

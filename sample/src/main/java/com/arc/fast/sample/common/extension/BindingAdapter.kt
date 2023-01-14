@@ -4,7 +4,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arc.fast.immersive.applySystemWindowsInsetsMargin
 import com.arc.fast.immersive.applySystemWindowsInsetsPadding
 import com.arc.fast.sample.R
-import com.arc.fast.sample.common.data.ApiStatus
-import com.arc.fast.sample.common.data.entity.ApiResult
 import com.arc.fast.sample.common.data.entity.Menu
 import com.arc.fast.sample.databinding.ItemMenuBinding
 import com.arc.fast.sample.main.MainViewModel
@@ -76,8 +73,7 @@ fun ImageView.setBindingUrl(value: String?) {
     ],
     requireAll = true
 )
-fun RecyclerView.setBindData(viewModel: MainViewModel, data: ApiResult<List<Menu>>?) {
-    if (data?.status != ApiStatus.SUCCESS) return
+fun RecyclerView.setBindData(viewModel: MainViewModel, data: List<Menu>?) {
     if (adapter == null) {
         itemAnimator?.changeDuration = 0;
         adapter = object : BaseQuickAdapter<Menu, BaseViewHolder>(R.layout.item_menu) {
@@ -94,7 +90,7 @@ fun RecyclerView.setBindData(viewModel: MainViewModel, data: ApiResult<List<Menu
             }
         }
     }
-    (adapter as? BaseQuickAdapter<Menu, *>)?.setList(data.data)
+    (adapter as? BaseQuickAdapter<Menu, *>)?.setList(data)
 }
 
 @BindingAdapter("enterLinkClick")

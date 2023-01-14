@@ -1,4 +1,4 @@
-package com.arc.fast.sample.scan
+package com.arc.fast.sample.mask
 
 import android.graphics.*
 import android.os.Handler

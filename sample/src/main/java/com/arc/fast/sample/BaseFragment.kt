@@ -15,8 +15,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import com.arc.fast.sample.common.utils.NavTransitionOptions
-import com.arc.fast.sample.common.utils.NavTransitionPresenter
 
 abstract class BaseFragment<Binding : ViewDataBinding> :
     Fragment() {
@@ -28,18 +26,6 @@ abstract class BaseFragment<Binding : ViewDataBinding> :
             progress = 1f
         }
     protected open var isBackCLoseApp = false
-    private val navTransitionPresenter by lazy {
-        NavTransitionPresenter(onCreateTransition())
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        navTransitionPresenter.setupTransition(this)
-    }
-
-    protected open fun onCreateTransition(): NavTransitionOptions? {
-        return NavTransitionOptions()
-    }
 
     protected abstract fun onCreateBinding(
         inflater: LayoutInflater,
@@ -55,7 +41,6 @@ abstract class BaseFragment<Binding : ViewDataBinding> :
         binding = onCreateBinding(inflater, container, savedInstanceState)
         return binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            navTransitionPresenter.setupView(root)
         }.root
     }
 

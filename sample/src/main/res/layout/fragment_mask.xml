@@ -9,31 +9,14 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        paddingBottomSystemWindowInsets="@{true}"
-        paddingTopSystemWindowInsets="@{true}"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="Fast Mask"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/styleToolbarTitle" />
-
-        <com.arc.fast.mask.MaskHollowView
+        <androidx.camera.view.PreviewView
+            android:id="@+id/view_finder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top|center_horizontal"
-            app:maskHollowView_hollow_border_color="@android:color/holo_orange_light"
-            app:maskHollowView_hollow_border_size="4dp"
-            app:maskHollowView_hollow_height="80dp"
-            app:maskHollowView_hollow_margin_top="40dp"
-            app:maskHollowView_hollow_radius="16dp"
-            app:maskHollowView_hollow_width="80dp"
-            app:maskHollowView_mask_background="@android:color/holo_blue_light" />
+            android:background="@color/black" />
 
         <com.arc.fast.mask.MaskHollowView
             android:layout_width="match_parent"

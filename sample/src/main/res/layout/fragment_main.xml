@@ -36,42 +36,24 @@
                     app:title="@string/app_name"
                     app:titleCentered="true"
                     app:titleTextAppearance="@style/styleToolbarTitle" />
-
-
-                <ImageView
-                    android:id="@+id/ivLogout"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="16dp"
-                    android:background="?actionBarItemBackground"
-                    android:src="@mipmap/ic_logout"
-                    app:layout_constraintBottom_toBottomOf="@id/toolbar"
-                    app:layout_constraintRight_toRightOf="@id/toolbar"
-                    app:layout_constraintTop_toTopOf="@id/toolbar" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refreshLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvContent"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="@color/bg_2"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            app:data="@{viewModel.valueMenuList}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appbar">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvContent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bg_2"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                app:data="@{viewModel.valueMenuList}"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:viewModel="@{viewModel}"
-                tools:listitem="@layout/item_menu" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            app:layout_constraintTop_toBottomOf="@id/appbar"
+            app:viewModel="@{viewModel}"
+            tools:listitem="@layout/item_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

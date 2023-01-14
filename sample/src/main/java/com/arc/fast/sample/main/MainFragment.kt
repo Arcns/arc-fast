@@ -8,36 +8,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.arc.fast.core.extensions.isInternetResources
 import com.arc.fast.sample.*
-import com.arc.fast.sample.common.data.LocalData
 import com.arc.fast.sample.common.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
-import com.arc.fast.sample.common.extension.titleTextView
-import com.arc.fast.sample.common.utils.NavTransitionOptions
-import com.arc.fast.sample.common.utils.SHARED_ELEMENT_APP_NAME
 import com.arc.fast.sample.view.DragExitActivity
-import kotlinx.coroutines.delay
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 
 class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     private val viewModel: MainViewModel by viewModels()
     private var recyclerViewY = 0L
-
-    override fun onCreateTransition(): NavTransitionOptions {
-        return NavTransitionOptions(
-            isSharedElementsDestination = true
-        ).addSharedElementViews({ root: View ->
-            binding.toolbar.titleTextView
-        } to SHARED_ELEMENT_APP_NAME)
-    }
 
     override var isBackCLoseApp: Boolean = true
 
@@ -62,40 +47,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                     binding.appbar.isLifted = recyclerViewY != 0L
                 }
             })
-        // 注销
-        binding.ivLogout.setOnClickListener {
-            LocalData.currentLoginSecret = null
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToLoginFragment(),
-                FragmentNavigatorExtras(
-                    binding.toolbar.titleTextView!! to SHARED_ELEMENT_APP_NAME
-                )
-            )
-        }
-        // 下拉刷新
-        binding.refreshLayout.setOnRefreshListener {
-            viewModel.loadMenu()
-        }
-        // 返回时的元素转场动画（列表加载后再执行动画）
-        postponeEnterTransition()
-        binding.rvContent.viewTreeObserver.addOnPreDrawListener {
-            startPostponedEnterTransition()
-            true
-        }
-        lifecycleScope.launch {
-            delay(500)
-            // 监听列表加载清空来控制下拉刷新
-            viewModel.valueMenuList.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
-                if (it == null) {
-                    // 首次监听触发null回调
-                    binding.refreshLayout.isRefreshing = true
-                    viewModel.loadMenu(true)
-                } else if (!it.isLoading) {
-                    // 加载完成后结束下拉刷新
-                    binding.refreshLayout.isRefreshing = false
-                }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
-        }
+        viewModel.valueMenuList.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
+            if (it.isNullOrEmpty()) viewModel.loadMenu()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
         // 点击菜单回调
         viewModel.eventMenuClick.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
             onMenuClick(it)
@@ -103,34 +57,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun onMenuClick(menu: Menu) {
-        if (menu.url?.isInternetResources == true) {
-            val sharedElementView = if (menu.isFullScreen) null else
-                viewModel.valueMenuList.value?.response?.data?.indexOf(menu)?.let { itemIndex ->
-                    if (itemIndex >= 0) binding.rvContent.findViewHolderForAdapterPosition(
-                        itemIndex
-                    ) else null
-                }?.itemView?.findViewById<View>(R.id.tvTitle)
-            if (sharedElementView != null && !menu.title.isNullOrBlank()) {
-                // 设置元素转场动画
-                findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToWebViewFragment(
-                        menu
-                    ),
-                    FragmentNavigatorExtras(
-                        sharedElementView to menu.title!!
-                    )
-                )
-            } else {
-                findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToWebViewFragment(
-                        menu
-                    )
-                )
-            }
-        } else if (menu.url == ACTION_SCAN) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToScanFragment()
-            )
+        if (menu.url == ACTION_INTRODUCTION) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setMessage("本项目包含一系列Android开发的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～")
+                .show()
         } else if (menu.url == ACTION_PERMISSION) {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToPermissionFragment()

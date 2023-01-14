@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.arc.fast.immersive.setAutoInitSystemBarHeight
-import com.arc.fast.sample.common.data.LocalData
 
 class SampleApp : Application() {
 
@@ -15,7 +14,6 @@ class SampleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        LocalData.initialize(this)
         setAutoInitSystemBarHeight()
 //        DynamicColors.applyToActivitiesIfAvailable(this) { _, _ ->
 //            LocalData.enableDynamicColors
