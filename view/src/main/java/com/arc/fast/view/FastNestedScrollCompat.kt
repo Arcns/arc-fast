@@ -162,7 +162,7 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         get() = if (this == LinearLayout.HORIZONTAL) Orientation.Horizontal else Orientation.Vertical
 
     enum class Orientation(val value: Int) {
-        Horizontal(LinearLayout.HORIZONTAL), Vertical(LinearLayout.VERTICAL), Auto(LinearLayout.HORIZONTAL + LinearLayout.VERTICAL)
+        Horizontal(LinearLayout.HORIZONTAL), Vertical(LinearLayout.VERTICAL), Auto(3)
 
     }
 }

@@ -22,12 +22,4 @@ open class FastBannerNestedScrollCompat @JvmOverloads constructor(
             } else it
         } else null
 
-
-    override fun checkActualCompatibleOrientation(orientation: Orientation): Orientation {
-        val child = child
-        if (child is Banner<*, *>) {
-            return child.viewPager2.orientation.toOrientation
-        }
-        return super.checkActualCompatibleOrientation(orientation)
-    }
 }
