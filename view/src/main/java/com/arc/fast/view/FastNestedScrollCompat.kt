@@ -154,9 +154,9 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         }
     }
 
-    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-        parent.requestDisallowInterceptTouchEvent(disallowIntercept)
-    }
+//    override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+//        parent.requestDisallowInterceptTouchEvent(disallowIntercept)
+//    }
 
     protected val Int.toOrientation: Orientation
         get() = if (this == LinearLayout.HORIZONTAL) Orientation.Horizontal else Orientation.Vertical
