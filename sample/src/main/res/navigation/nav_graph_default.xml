@@ -28,8 +28,8 @@
             android:id="@+id/action_mainFragment_to_fastTextViewFragment"
             app:destination="@id/fastTextViewFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_dragExitFragment"
-            app:destination="@id/dragExitFragment" />
+            android:id="@+id/action_mainFragment_to_dragExitMainFragment"
+            app:destination="@id/dragExitMainFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -66,6 +66,14 @@
         android:id="@+id/permissionFragment"
         android:name="com.arc.fast.sample.permission.PermissionFragment"
         android:label="PermissionFragment" />
+    <fragment
+        android:id="@+id/dragExitMainFragment"
+        android:name="com.arc.fast.sample.view.DragExitMainFragment"
+        android:label="DragExitMainFragment">
+        <action
+            android:id="@+id/action_dragExitMainFragment_to_dragExitFragment"
+            app:destination="@id/dragExitFragment" />
+    </fragment>
     <fragment
         android:id="@+id/dragExitFragment"
         android:name="com.arc.fast.sample.view.DragExitFragment"

@@ -91,10 +91,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
             )
         } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT) {
             findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDragExitFragment()
+                MainFragmentDirections.actionMainFragmentToDragExitMainFragment()
             )
-        } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT_ACTIVITY) {
-            startActivity(Intent(requireContext(), DragExitActivity::class.java))
         } else if (menu.url == ACTION_TEST) {
             findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
         }

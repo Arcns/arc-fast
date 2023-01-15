@@ -78,7 +78,7 @@ class MainViewModel : ViewModel() {
             Menu(
                 "十一、Fast DragExitLayout",
                 "一行代码实现Android仿小红书、Lemon8拖拽退出效果突",
-                ACTION_DRAG_EXIT_LAYOUT_ACTIVITY,
+                ACTION_DRAG_EXIT_LAYOUT,
                 1
             ),
 //                Menu("test", ACTION_TEST, 0),
