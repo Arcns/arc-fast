@@ -11,6 +11,8 @@ import com.arc.fast.sample.databinding.FragmentPopupBinding
 
 class PopupFragment : BaseFragment<FragmentPopupBinding>() {
 
+    override val toolbar get() = binding.toolbar
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -19,12 +21,6 @@ class PopupFragment : BaseFragment<FragmentPopupBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
         binding.btnBottomPopup.setOnClickListener {
             TestBottomPopupWindow(requireContext()).showAtLocation(
                 binding.root,

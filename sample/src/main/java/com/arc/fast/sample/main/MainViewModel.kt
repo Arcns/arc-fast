@@ -68,7 +68,7 @@ class MainViewModel : ViewModel() {
             Menu(
                 "十、Fast NestedScrollCompat",
                 "一行代码解决Android滚动控件嵌套产生的滑动事件冲突",
-                ACTION_FAST_TEXT_VIEW
+                ACTION_NSC
             ),
             Menu(
                 "十一、Fast DragExitLayout",

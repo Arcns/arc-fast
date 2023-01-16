@@ -20,6 +20,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> :
     Fragment() {
 
     protected lateinit var binding: Binding
+    protected open val toolbar: Toolbar? = null
     protected val appViewModel: AppViewModel by activityViewModels()
     protected val navigationIconForBack: Drawable
         get() = DrawerArrowDrawable(requireContext()).apply {
@@ -39,6 +40,12 @@ abstract class BaseFragment<Binding : ViewDataBinding> :
         savedInstanceState: Bundle?
     ): View? {
         binding = onCreateBinding(inflater, container, savedInstanceState)
+        toolbar?.apply {
+            this.navigationIcon = navigationIconForBack
+            this.setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
         return binding.apply {
             lifecycleOwner = viewLifecycleOwner
         }.root

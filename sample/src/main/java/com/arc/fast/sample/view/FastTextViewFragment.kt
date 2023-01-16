@@ -10,6 +10,8 @@ import com.arc.fast.sample.databinding.FragmentFastTextViewBinding
 
 class FastTextViewFragment : BaseFragment<FragmentFastTextViewBinding>() {
 
+    override val toolbar get() = binding.toolbar
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -18,11 +20,5 @@ class FastTextViewFragment : BaseFragment<FragmentFastTextViewBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
     }
 }

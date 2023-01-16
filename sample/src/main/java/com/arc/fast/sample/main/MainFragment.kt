@@ -14,6 +14,7 @@ import com.arc.fast.sample.*
 import com.arc.fast.sample.common.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
 import com.arc.fast.sample.view.DragExitActivity
+import com.arc.fast.sample.view.DragExitMainFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,6 +61,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         if (menu.url == ACTION_INTRODUCTION) {
             MaterialAlertDialogBuilder(requireContext())
                 .setMessage("本项目包含一系列Android开发的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～")
+                .setPositiveButton("确定") { _, _ -> }
                 .show()
         } else if (menu.url == ACTION_PERMISSION) {
             findNavController().navigate(
@@ -88,6 +90,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         } else if (menu.url == ACTION_FAST_TEXT_VIEW) {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToFastTextViewFragment()
+            )
+        } else if (menu.url == ACTION_NSC) {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToNestedScrollCompatFragment()
             )
         } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT) {
             findNavController().navigate(

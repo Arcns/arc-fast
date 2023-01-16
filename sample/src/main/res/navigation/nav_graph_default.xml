@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_mainFragment_to_dragExitMainFragment"
             app:destination="@id/dragExitMainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_nestedScrollCompatFragment"
+            app:destination="@id/nestedScrollCompatFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -66,6 +69,10 @@
         android:id="@+id/permissionFragment"
         android:name="com.arc.fast.sample.permission.PermissionFragment"
         android:label="PermissionFragment" />
+    <fragment
+        android:id="@+id/nestedScrollCompatFragment"
+        android:name="com.arc.fast.sample.nsc.NestedScrollCompatFragment"
+        android:label="NestedScrollCompatFragment" />
     <fragment
         android:id="@+id/dragExitMainFragment"
         android:name="com.arc.fast.sample.view.DragExitMainFragment"

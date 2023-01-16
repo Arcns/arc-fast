@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.databinding.FragmentDialogBinding
 
 class DialogFragment : BaseFragment<FragmentDialogBinding>() {
+
+    override val toolbar get() = binding.toolbar
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -18,12 +21,6 @@ class DialogFragment : BaseFragment<FragmentDialogBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
         binding.btnCenterDialog.setOnClickListener {
             TestCenterDialog().show(parentFragmentManager, null)
         }

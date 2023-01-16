@@ -18,6 +18,8 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 
 class DragExitFragment : BaseFragment<FragmentDragExitBinding>() {
 
+    override val toolbar get() = binding.toolbar
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,12 +28,6 @@ class DragExitFragment : BaseFragment<FragmentDragExitBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
         // 启用拖拽退出
         binding.dragExitLayout.enableDragExit {
             findNavController().navigateUp()

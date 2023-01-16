@@ -20,6 +20,8 @@ import com.arc.fast.view.*
 
 class SpanFragment : BaseFragment<FragmentSpanBinding>() {
 
+    override val toolbar get() = binding.toolbar
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,12 +30,6 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
         val spannableStringBuilder = SpannableStringBuilder()
         spannableStringBuilder.appendFastImageStyle(
             context = requireContext(),

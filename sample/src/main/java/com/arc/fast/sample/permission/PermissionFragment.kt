@@ -16,6 +16,8 @@ import com.arc.fast.sample.databinding.FragmentViewBinding
 
 class PermissionFragment : BaseFragment<FragmentPermissionBinding>() {
 
+    override val toolbar get() = binding.toolbar
+
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,12 +26,6 @@ class PermissionFragment : BaseFragment<FragmentPermissionBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.apply {
-            this.navigationIcon = navigationIconForBack
-            this.setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
         binding.tvGet.setOnClickListener {
             FastPermissionUtil.request(
                 this, // or fragment

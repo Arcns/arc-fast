@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -23,20 +24,46 @@ fun TabLayout.disabledTooltipText() {
 // 绑定ViewPager2与TabLayout
 fun <Data> TabLayout.bindToViewPager2(
     activity: AppCompatActivity,
+    lifecycle: Lifecycle = activity.lifecycle,
     viewPager: ViewPager2,
     items: List<ViewPager2FragmentItem<Data>>,
-    customView: ((TabLayout.Tab, ViewPager2FragmentItem<Data>, Int) -> Unit)? = null,
+    customView: ((TabLayout.Tab, ViewPager2Item<Data>, Int) -> Unit)? = null,
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
+    isEnableScrollPage: Boolean = true,
     onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
 ) = this.bindToViewPager2(
     activity.supportFragmentManager,
-    activity.lifecycle,
+    lifecycle,
     viewPager,
     items,
     customView,
     currentItemId,
     offscreenPageLimit,
+    isEnableScrollPage,
+    onCreateFragment
+)
+
+// 绑定ViewPager2与TabLayout
+fun <Data> TabLayout.bindToViewPager2(
+    fragment: Fragment,
+    lifecycle: Lifecycle = fragment.viewLifecycleOwner.lifecycle,
+    viewPager: ViewPager2,
+    items: List<ViewPager2FragmentItem<Data>>,
+    customView: ((TabLayout.Tab, ViewPager2Item<Data>, Int) -> Unit)? = null,
+    currentItemId: String? = null,
+    offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
+    isEnableScrollPage: Boolean = true,
+    onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
+) = this.bindToViewPager2(
+    fragment.childFragmentManager,
+    lifecycle,
+    viewPager,
+    items,
+    customView,
+    currentItemId,
+    offscreenPageLimit,
+    isEnableScrollPage,
     onCreateFragment
 )
 
@@ -46,32 +73,52 @@ fun <Data> TabLayout.bindToViewPager2(
     lifecycle: Lifecycle,
     viewPager: ViewPager2,
     items: List<ViewPager2FragmentItem<Data>>,
-    customView: ((TabLayout.Tab, ViewPager2FragmentItem<Data>, Int) -> Unit)? = null,
+    customView: ((TabLayout.Tab, ViewPager2Item<Data>, Int) -> Unit)? = null,
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
+    isEnableScrollPage: Boolean = true,
     onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
 ) {
-    viewPager.offscreenPageLimit = offscreenPageLimit
-    viewPager.adapter = ViewPager2FragmentAdapter(
-        fragmentManager, lifecycle, items, onCreateFragment
+    bindToViewPager2(
+        lifecycle = lifecycle,
+        viewPager = viewPager,
+        adapter = ViewPager2FragmentAdapter(
+            fragmentManager, lifecycle, items, onCreateFragment
+        ),
+        items = items,
+        customView = customView,
+        currentItemId = currentItemId,
+        offscreenPageLimit = offscreenPageLimit,
+        isEnableScrollPage = isEnableScrollPage
     )
+}
+
+// 绑定ViewPager2与TabLayout
+fun <Data> TabLayout.bindToViewPager2(
+    lifecycle: Lifecycle,
+    viewPager: ViewPager2,
+    adapter: RecyclerView.Adapter<*>,
+    items: List<ViewPager2Item<Data>>,
+    customView: ((TabLayout.Tab, ViewPager2Item<Data>, Int) -> Unit)? = null,
+    currentItemId: String? = null,
+    offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
+    isEnableScrollPage: Boolean = true
+) {
+    (viewPager.getChildAt(0) as? RecyclerView)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+    viewPager.offscreenPageLimit = offscreenPageLimit
+    viewPager.adapter = adapter
+    viewPager.isUserInputEnabled = isEnableScrollPage
     val tabLayoutMediator =
         TabLayoutMediator(
             this,
-            viewPager
+            viewPager,
+            true,
+//            isEnableScrollPage
         ) { tab, position ->
             if (customView != null) customView.invoke(tab, items[position], position)
             else tab.text = items[position].title
         }
     tabLayoutMediator.attach()
-    disabledTooltipText()
-    var selectedId = currentItemId ?: items.firstOrNull { it.selected == true }?.id
-    if (!selectedId.isNullOrBlank()) {
-        val selectTab = items.indexOfFirst { it.id == selectedId }
-        if (selectTab > 0) {
-            getTabAt(selectTab)?.select()
-        }
-    }
     lifecycle.addObserver(object : DefaultLifecycleObserver {
         override fun onDestroy(owner: LifecycleOwner) {
             lifecycle.removeObserver(this)
@@ -80,16 +127,43 @@ fun <Data> TabLayout.bindToViewPager2(
             super.onDestroy(owner)
         }
     })
+    disabledTooltipText()
+    val selectedId = currentItemId ?: items.firstOrNull { it.selected == true }?.id
+    if (!selectedId.isNullOrBlank()) {
+        val selectTab = items.indexOfFirst { it.id == selectedId }
+        if (selectTab > 0) {
+//            getTabAt(selectTab)?.select()
+            viewPager.setCurrentItem(selectTab, false)
+        }
+    }
 }
 
-data class ViewPager2FragmentItem<Data>(
+open class ViewPager2Item<Data>(
     val id: String,
     val title: String,
     val data: Data? = null,
-    val args: Bundle? = null,
     val selected: Boolean? = null,
-)
+) {
+    constructor(title: String, data: Data? = null, selected: Boolean? = null) :
+            this(title, title, data, selected)
+}
 
+open class ViewPager2FragmentItem<Data>(
+    id: String,
+    title: String,
+    data: Data? = null,
+    val args: Bundle? = null,
+    selected: Boolean? = null,
+) : ViewPager2Item<Data>(
+    id, title, data, selected
+) {
+    constructor(
+        title: String,
+        data: Data? = null,
+        args: Bundle? = null,
+        selected: Boolean? = null,
+    ) : this(title, title, data, args, selected)
+}
 
 class ViewPager2FragmentAdapter<Data>(
     fragmentManager: FragmentManager,
