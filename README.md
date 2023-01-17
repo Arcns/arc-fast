@@ -584,7 +584,7 @@ allprojects {
 - 一行代码实现Android仿小红书、Lemon8拖拽退出效果
 > 最近小伙伴有个需求，就是实现类似于小红书、Lemon8的拖拽退出效果，查了一圈发现并没有实现该功能的Library，于是便做了一个开源Library项目，方便大家集成后，一行代码实现Android仿小红书、Lemon8的拖拽退出效果。
 
-![集成效果](image/drag_exit.jpg)
+![集成效果](https://gitee.com/arcns/arc-fast/raw/master/image/drag_exit.gif)
 
 #### 1.实现思路：
 - （1）创建一个`自定义Layout`，作为实现拖拽退出的视图
