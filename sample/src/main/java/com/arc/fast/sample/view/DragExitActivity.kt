@@ -45,7 +45,7 @@ class DragExitActivity : AppCompatActivity() {
             }
         }
         val data = arrayListOf<String>()
-        for (i in 0..100) {
+        for (i in 0..20) {
             data.add(i.toString())
         }
         binding.rv.adapter =

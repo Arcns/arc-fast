@@ -31,12 +31,14 @@ val Int.stringOrNull: String? get() = invokeOrNull { string }
 
 /**
  * 获取string资源
+ * 格式例：%1$s
  */
 fun Int.string(vararg values: Any?): String = FastCore.context.getString(this, *values)
 
 
 /**
  * 获取string资源
+ * 格式例：%1$s
  */
 fun Int.stringOrNull(vararg values: Any?): String? = invokeOrNull { string(*values) }
 

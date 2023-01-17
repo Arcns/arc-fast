@@ -2,7 +2,7 @@
 <resources>
 
     <style name="TransitionTheme" parent="@style/AppTheme">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/black_30</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowActivityTransitions">true</item>

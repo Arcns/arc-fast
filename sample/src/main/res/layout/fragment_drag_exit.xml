@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="123456789"
-                    android:textSize="400sp" />
+                    android:textSize="450sp" />
             </androidx.core.widget.NestedScrollView>
         </com.arc.fast.view.FastNestedScrollCompat>
 

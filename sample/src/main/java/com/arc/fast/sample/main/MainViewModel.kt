@@ -72,18 +72,15 @@ class MainViewModel : ViewModel() {
             ),
             Menu(
                 "十一、Fast DragExitLayout",
-                "一行代码实现Android仿小红书、Lemon8拖拽退出效果突",
-                ACTION_DRAG_EXIT_LAYOUT
+                "一行代码实现Android仿小红书、Lemon8拖拽退出效果",
+                ACTION_DRAG_EXIT_LAYOUT, 1
             ),
             Menu(
-                "十一、Fast DragExitLayout",
-                "一行代码实现Android仿小红书、Lemon8拖拽退出效果突",
-                ACTION_DRAG_EXIT_LAYOUT,
+                "其他测试",
+                "测试页面",
+                ACTION_TEST,
                 1
             ),
-//                Menu("test", ACTION_TEST, 0),
-//                Menu("test_webview", "http://www.baidu.com", 0),
-//                Menu("test_scan", ACTION_SCAN, 0),
         )
     }
 
