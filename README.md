@@ -3,7 +3,7 @@
 
 #### 目录
 - [一、介绍](#一介绍)
-- [二、Fast Core](#二fast-core)
+- [二、Fast Resource:一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取](#二fast-resource)
 - [三、Fast Permission:一行代码实现基于Activity Result API的动态权限获取](#三fast-permission)
 - [四、Immersive Dialog:一行代码简单实现Android沉浸式Dialog](#四immersive-dialog)
 - [五、Immersive PopupWindow:一行代码简单实现Android沉浸式PopupWindow](#五immersive-popupwindow)
@@ -18,8 +18,8 @@
 ## 一、介绍
 本项目包含一系列开箱即用的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～
 
-## 二、Fast Core
-- 核心类库
+## 二、Fast Resource
+- 一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取
 #### 1.集成方式：
 ```
 allprojects {
@@ -32,6 +32,57 @@ allprojects {
 ```
  implementation 'com.gitee.arcns.arc-fast:core:latest.release'
 ```
+
+#### 2.使用方式
+（1）dp2px、px2dp
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Float.dpToPx | 把dp转换为px(Float格式) | 100f.dpToPx |
+| Int.dpToPx | 把dp转换为px(Int格式) | 100.dpToPx |
+| Float.pxToDp | 把px转换为dp(Float格式) | 100f.pxToDp |
+| Int.pxToDp | 把px转换为dp(Int格式) | 100.pxToDp |
+（2）sp2px
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Float.spToPx | 把sp转换为px(Float格式) | 100f.spToPx |
+| Int.spToPx | 把sp转换为px(Int格式) | 100.spToPx |
+（3）获取String资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToString | 通过StringRes获取String值 | R.string.test.resToString |
+| Int.resToStringOrNull | 通过StringRes获取String值，获取失败时返回null | R.string.test.resToStringOrNull |
+| Int.resToString(vararg values: Any?) | 通过StringRes获取String值，并替换格式参数(例如%1$s) | R.string.test.resToString("1","2") |
+| Int.resToStringOrNull(vararg values: Any?) | 通过StringRes获取String值，并替换格式参数(例如%1$s)，获取失败时返回null | R.string.test.resToStringOrNull("1","2") |
+（4）Drawable资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToDrawable | 通过DrawableRes获取Drawable值 | R.drawable.test.resToDrawable |
+| Int.resToDrawableOrNull | 通过DrawableRes获取Drawable值，获取失败时返回null | R.drawable.test.resToDrawableOrNull |
+| Drawable.applyTint(color: Int?) | 为Drawable实现着色效果 | R.drawable.test.applyTint(0x24000000) |
+| Drawable.applyRipple(context: Context,rippleColor: Int? = null,rippleColorStateList: ColorStateList? = null) | 为Drawable实现Ripple效果，ColorStateList优先级高于rippleColor | R.drawable.test.applyRipple(context,0x00000000) |
+（5）Color资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToColor | 通过ColorRes获取Color值 | R.color.test.resToColor |
+| Int.resToColorOrNull | 通过ColorRes获取Color值，获取失败时返回null  | R.color.test.resToColorOrNull |
+| String.hexToColor | 把Hex Color转换为Color(Int格式) | "#00000000".hexToColor |
+| String.hexToColorOrNull | 把Hex Color转换为Color(Int格式)，获取失败时返回null  | "#000000".hexToColorOrNull |
+| Int.colorToHex | 把Color转换为Hex Color(String格式) | 0x00000000.colorToHex |
+| Int.colorToHexOrNull | 把Color转换为Hex Color(String格式)，获取失败时返回null  | 0x00000000.colorToHexOrNull |
+| Int.lightColorNess | 获取Color的亮度(0-1) | 0x00000000.lightColorNess |
+| Int.isLightColor | 判断Color是否为亮色调 | 0x00000000.isLightColor |
+（6）Dimension资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToDimenValue | 通过DimenRes获取Dimen值 | R.dimen.test.resToDimenValue |
+| Int.resToDimenValueOrNull | 通过DimenRes获取Dimen值，获取失败时返回null  | R.dimen.test.resToDimenValueOrNull |
+（7）Attr资源（Attr的Res资源与Context的theme相关，因此此处必须手动传入Attr对应的Context）
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Context.getAttributeResource(attr: Int, defResId: Int? = null) | 通过AttrResId获取Res资源 | context.getAttributeResource(R.attr.test) |
+| Context.selectableItemBackgroundRes | 获取selectableItemBackground资源 | context.selectableItemBackgroundRes |
+| Context.selectableItemBackgroundBorderlessRes | 获取selectableItemBackgroundBorderless资源 | context.selectableItemBackgroundBorderlessRes |
+| Context.actionBarItemBackgroundRes | 获取actionBarItemBackground资源 | context.actionBarItemBackgroundRes |
 
 ## 三、Fast Permission
 - 一行代码实现基于Activity Result API的动态权限获取`
