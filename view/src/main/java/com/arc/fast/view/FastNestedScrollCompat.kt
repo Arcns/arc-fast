@@ -2,7 +2,6 @@ package com.arc.fast.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.youth.banner.Banner
-import com.youth.banner.config.BannerConfig
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -46,8 +43,8 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
     private var initialX = 0f
     private var initialY = 0f
 
-    // 启用拦截处理
-    private var enableInterceptHandler: Boolean? = null
+    // 拦截处理结果
+    private var handleInterceptResult = HandleInterceptState.Wait
 
     open val child: View? get() = if (childCount > 0) getChildAt(0) else null
 
@@ -79,6 +76,9 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 获取实际需要兼容的滑动方向
+     */
     protected open fun checkActualCompatibleOrientation(orientation: Orientation): Orientation {
         if (orientation != Orientation.Auto) return orientation
         val child = child ?: return Orientation.Vertical
@@ -98,6 +98,9 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         return Orientation.Vertical
     }
 
+    /**
+     * 是否可以往指定方向进行滑动
+     */
     private fun canChildScroll(orientation: Orientation, delta: Float): Boolean {
         val direction = -delta.sign.toInt()
         return when (orientation) {
@@ -113,74 +116,77 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
     }
 
     private fun handleInterceptTouchEvent(e: MotionEvent) {
-        if (enableInterceptHandler == false) return
+        // 取消事件
+        if (e.action == MotionEvent.ACTION_CANCEL) {
+            handleInterceptResult = HandleInterceptState.Wait
+            return
+        }
         // 如果Child不能向与Parent相同的方向滚动，则不需要下一步判断
         val orientation = actualCompatibleOrientation
-        if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-            Log.e("aaaaaaa", "aaaaa:" + child.hashCode() + "---" + orientation + "---" + e.action)
         if (orientation == Orientation.Auto) return
         if (!canChildScroll(orientation, -1f) &&
             !canChildScroll(orientation, 1f)
-        ) return
-
+        ) {
+            return
+        }
+        // 开始检查判断
         if (e.action == MotionEvent.ACTION_DOWN) {
             initialX = e.x
             initialY = e.y
-            // 事件开始时，禁用所有Parent拦截，以便做判断处理
+            // 事件开始时，先禁用所有Parent拦截，以便做判断处理
             parent.requestDisallowInterceptTouchEvent(true)
-            enableInterceptHandler = true
-            if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-                Log.e("aaaaaaa", "事件开始时，禁用所有Parent拦截，以便做判断处理")
+            handleInterceptResult = HandleInterceptState.Ready
         } else if (e.action == MotionEvent.ACTION_MOVE) {
+            if (handleInterceptResult == HandleInterceptState.Ready)
+                handleInterceptResult = HandleInterceptState.Check
             val dx = e.x - initialX
             val dy = e.y - initialY
-            if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-                Log.e("aaaaaaa", "ACTION_MOVE:" + dx)
-
             // 根据方向设置触摸斜率
             val scaledDx =
                 dx.absoluteValue// * if (compatibleOrientation == Orientation.Horizontal) 0.5f else 1f
             val scaledDy =
                 dy.absoluteValue// * if (compatibleOrientation == Orientation.Vertical) 0.5f else 1f
-
+            // 判断是否达到滑动的阙值
             if (scaledDx > scaledTouchSlop || scaledDy > scaledTouchSlop) {
                 if ((orientation == Orientation.Horizontal && scaledDy > scaledDx) ||
                     (orientation == Orientation.Vertical && scaledDy < scaledDx)
                 ) {
-                    // 滚动方向与Parent方向不一致时，允许所有Parent拦截
+                    // 滚动方向与兼容方向不一致时，允许所有Parent拦截
+                    handleInterceptResult = HandleInterceptState.Allow
                     parent.requestDisallowInterceptTouchEvent(false)
-                    if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-                        Log.e("aaaaaaa", "aaaaa:方向不一致")
                     return
                 }
-                // 检查Child是否可以向Parent方向滚动
+                // 检查Child是否可以向兼容方向滚动
                 val isCanChildScroll = canChildScroll(
                     orientation,
                     if (orientation == Orientation.Horizontal) dx else dy
                 )
                 if (isCanChildScroll) {
-                    // Child可以滚动时，不允许所有Parent拦截
+                    // Child可以滚动时，禁用所有Parent拦截
+                    handleInterceptResult = HandleInterceptState.Disallow
                     parent.requestDisallowInterceptTouchEvent(true)
-                    enableInterceptHandler = false
-                    Log.e("aaaaaaa", "Child可以滚动:" + child!!::class.java)
                 } else {
                     // Child不可以滚动时, 允许所有Parent拦截
+                    handleInterceptResult = HandleInterceptState.Allow
                     parent.requestDisallowInterceptTouchEvent(false)
-                    enableInterceptHandler = false
-                    if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-                        Log.e("aaaaaaa", "Child不可以滚动")
                 }
             }
-        } else if (e.action == MotionEvent.ACTION_CANCEL) {
-            enableInterceptHandler = null
         }
     }
 
     override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-//        if (enableInterceptHandler == true) return
-        if (child is ViewPager2 && !(child?.parent is Banner<*, *>))
-            Log.e("aaaaaaa", "requestDisallowInterceptTouchEvent:" + disallowIntercept)
+        if (!disallowIntercept && handleInterceptResult == HandleInterceptState.Disallow) {
+            // 如果处理状态是”禁用拦截“，则无法再允许拦截
+            return
+        }
+        if (!disallowIntercept && handleInterceptResult == HandleInterceptState.Ready) {
+            // 如果处理状态是”准备处理“，而程序通知”允许拦截“时，则本视图”允许拦截“，但Parent仍然”禁止拦截“（以便做判断处理）
+            super.requestDisallowInterceptTouchEvent(disallowIntercept)
+            parent.requestDisallowInterceptTouchEvent(true)
+            return
+        }
         if (child is ScrollView || child is NestedScrollView || child is HorizontalScrollView) {
+            // ScrollView会默认”禁用拦截“，因此需要在此进行特殊处理
             parent.requestDisallowInterceptTouchEvent(disallowIntercept)
         } else {
             super.requestDisallowInterceptTouchEvent(disallowIntercept)
@@ -192,6 +198,22 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
 
     enum class Orientation(val value: Int) {
         Horizontal(LinearLayout.HORIZONTAL), Vertical(LinearLayout.VERTICAL), Auto(3)
+    }
 
+    enum class HandleInterceptState {
+        // 等待处理
+        Wait,
+
+        // 准备处理：已执行ACTION_DOWN（未执行ACTION_MOVE）
+        Ready,
+
+        // 处理中：已执行ACTION_MOVE，开始进行处理
+        Check,
+
+        // 处理完成：允许拦截
+        Allow,
+
+        // 处理完成：禁止拦截
+        Disallow
     }
 }

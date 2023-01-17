@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import com.arc.fast.core.extensions.ViewPager2FragmentItem
 import com.arc.fast.core.extensions.bindToViewPager2
 import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.databinding.*
-import com.arc.fast.sample.test.TestFragment
+import com.arc.fast.sample.databinding.FragmentNestedScrollChildViewpager2Binding
 
 class NestedScrollCompatChildViewPager2Fragment :
     BaseFragment<FragmentNestedScrollChildViewpager2Binding>() {
@@ -26,12 +25,12 @@ class NestedScrollCompatChildViewPager2Fragment :
             fragment = this,
             viewPager = binding.vp,
             items = listOf(
-                ViewPager2FragmentItem<Unit>("ViewPager2+RecyclerView+Banner"),
-                ViewPager2FragmentItem("ViewPager2+RecyclerView+HorizontalScrollView")
+                ViewPager2FragmentItem<Unit>("ViewPager2+RecyclerView\n+Banner"),
+                ViewPager2FragmentItem("ViewPager2+RecyclerView\n+HorizontalScrollView"),
             ),
             onCreateFragment = { position, _ ->
                 when (position) {
-                    0 -> TestFragment()
+                    0 -> NestedScrollCompatChildBannerFragment()
                     else -> NestedScrollCompatChildHSBFragment()
                 }
             }

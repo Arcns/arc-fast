@@ -28,20 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-        <!--        <com.arc.fast.view.FastNestedScrollCompat-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tl">-->
-
-        <!--            <androidx.viewpager2.widget.ViewPager2-->
-        <!--                android:id="@+id/vp"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="match_parent" />-->
-
-        <!--        </com.arc.fast.view.FastNestedScrollCompat>-->
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:tabMode="auto" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp"

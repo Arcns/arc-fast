@@ -26,15 +26,15 @@ class NestedScrollCompatFragment : BaseFragment<FragmentNestedScrollBinding>() {
             fragment = this,
             viewPager = binding.vp,
             items = listOf(
-                ViewPager2FragmentItem<Unit>("ViewPager2+RecyclerView+Banner"),
-                ViewPager2FragmentItem("ViewPager2+RecyclerView+HorizontalScrollView"),
-                ViewPager2FragmentItem("ViewPager2+ViewPager2"),
+                ViewPager2FragmentItem("ViewPager2+RecyclerView\n+HorizontalScrollView"),
+                ViewPager2FragmentItem("ViewPager2\n+ViewPager2"),
+                ViewPager2FragmentItem<Unit>("ViewPager2+RecyclerView\n+Banner"),
             ),
             onCreateFragment = { position, _ ->
                 when (position) {
-                    0 -> NestedScrollCompatChildBannerFragment()
-                    1 -> NestedScrollCompatChildHSBFragment()
-                    else -> NestedScrollCompatChildViewPager2Fragment()
+                    0 -> NestedScrollCompatChildHSBFragment()
+                    1 -> NestedScrollCompatChildViewPager2Fragment()
+                    else -> NestedScrollCompatChildBannerFragment()
                 }
             }
         )
