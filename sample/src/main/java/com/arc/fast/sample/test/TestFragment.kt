@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.arc.fast.core.extensions.dp
+import com.arc.fast.core.extensions.dpToPx
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.common.data.entity.TestListItem
 import com.arc.fast.sample.common.data.entity.TestListItemType
@@ -43,7 +42,7 @@ class TestFragment : BaseFragment<FragmentTestBinding>() {
             data.add(TestListItem.TestTitle("test menu $i"))
         }
         binding.rvData.addItemDecoration(object : ItemDecoration() {
-            private val dp10 by lazy { 10.dp }
+            private val dp10 by lazy { 10.dpToPx }
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,

@@ -2,6 +2,7 @@ package com.arc.fast.sample
 
 const val DATA = "data"
 const val ACTION_INTRODUCTION = "arc://introduction"
+const val ACTION_CORE = "arc://core"
 const val ACTION_PERMISSION = "arc://permission"
 const val ACTION_DIALOG = "arc://dialog"
 const val ACTION_POPUP = "arc://popup"

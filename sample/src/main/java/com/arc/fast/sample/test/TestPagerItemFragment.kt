@@ -9,7 +9,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.arc.fast.core.extensions.dp
+import com.arc.fast.core.extensions.dpToPx
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.DATA
 import com.arc.fast.sample.R
@@ -35,8 +35,8 @@ class TestPagerItemFragment :
         super.onViewCreated(view, savedInstanceState)
         binding.rvData.itemAnimator?.changeDuration = 0
         binding.rvData.addItemDecoration(object : ItemDecoration() {
-            private val dp10 by lazy { 10.dp }
-            private val dp5 by lazy { 5.dp }
+            private val dp10 by lazy { 10.dpToPx }
+            private val dp5 by lazy { 5.dpToPx }
             override fun getItemOffsets(
                 outRect: Rect,
                 view: View,
@@ -57,7 +57,7 @@ class TestPagerItemFragment :
         })
         binding.rvData.adapter =
             object : BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_test_card, data.data) {
-                val heights by lazy { arrayOf(200.dp, 250.dp, 300.dp) }
+                val heights by lazy { arrayOf(200.dpToPx, 250.dpToPx, 300.dpToPx) }
 
                 override fun createBaseViewHolder(view: View): BaseViewHolder {
                     ItemTestCardBinding.bind(view)

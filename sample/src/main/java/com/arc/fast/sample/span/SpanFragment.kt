@@ -1,22 +1,19 @@
 package com.arc.fast.sample.span
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
-import com.arc.fast.core.extensions.color
-import com.arc.fast.core.extensions.dp
-import com.arc.fast.core.extensions.sp
+import com.arc.fast.core.extensions.resToColor
+import com.arc.fast.core.extensions.dpToPx
+import com.arc.fast.core.extensions.spToPx
 import com.arc.fast.sample.BaseFragment
 import com.arc.fast.sample.R
 import com.arc.fast.sample.databinding.FragmentSpanBinding
 import com.arc.fast.span.*
-import com.arc.fast.view.*
 
 class SpanFragment : BaseFragment<FragmentSpanBinding>() {
 
@@ -35,9 +32,9 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
             context = requireContext(),
             drawableRes = R.mipmap.ic_launcher_round
         ) {
-            width = 20.dp
-            height = 20.dp
-            paddingRight = 8.dp
+            width = 20.dpToPx
+            height = 20.dpToPx
+            paddingRight = 8.dpToPx
             onClick = {
                 Toast.makeText(requireContext(), "图标", Toast.LENGTH_SHORT)
                     .show()
@@ -45,23 +42,23 @@ class SpanFragment : BaseFragment<FragmentSpanBinding>() {
         }
         spannableStringBuilder.appendFastSpan(
             "满99元减10元", FastTextWrapSpan(
-                radius = 4f.dp,
-                borderSize = 1f.dp,
-                borderColor = R.color.main.color,
-                textSize = 12f.sp,
-                textColor = R.color.main.color,
-                textRightMargin = 6f.dp,
-                topPadding = 2f.dp,
-                bottomPadding = 2f.dp,
-                leftPadding = 6f.dp,
-                rightPadding = 6f.dp
+                radius = 4f.dpToPx,
+                borderSize = 1f.dpToPx,
+                borderColor = R.color.main.resToColor,
+                textSize = 12f.spToPx,
+                textColor = R.color.main.resToColor,
+                textRightMargin = 6f.dpToPx,
+                topPadding = 2f.dpToPx,
+                bottomPadding = 2f.dpToPx,
+                leftPadding = 6f.dpToPx,
+                rightPadding = 6f.dpToPx
             )
         )
         spannableStringBuilder.append("华为平板MatePad 11 平板电脑120Hz高刷全面屏 鸿蒙HarmonyOS 6G+128GB WIFI 曜石灰 WIFI海岛蓝")
-        spannableStringBuilder.appendFastSpacing(6.dp)
+        spannableStringBuilder.appendFastSpacing(6.dpToPx)
         spannableStringBuilder.appendFastTextStyle("10月31日-11月3日的订单，预计在2日内发货") {
             textColor = 0xFF999999.toInt()
-            textSize = 14.sp
+            textSize = 14.spToPx
 //            textStyle = Typeface.BOLD
             underlineColor = Color.TRANSPARENT
             setTextMediumBold()

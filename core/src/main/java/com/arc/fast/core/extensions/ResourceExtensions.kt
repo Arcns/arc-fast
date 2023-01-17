@@ -10,6 +10,7 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.util.TypedValue
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.DrawableCompat
@@ -19,38 +20,76 @@ import kotlin.math.roundToInt
 
 
 /**
- * 获取string资源
+ * dp转px，如[xxhdpi](360 -> 1080)
  */
-val Int.string: String get() = FastCore.context.getString(this)
+val Float.dpToPx: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
+    )
+
+/**
+ * dp转px，如[xxhdpi](360 -> 1080)
+ */
+val Int.dpToPx: Int get() = toFloat().dpToPx.roundToInt()
+
+
+/**
+ * sp转px
+ */
+val Float.spToPx: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics
+    )
+
+/**
+ * sp转px
+ */
+val Int.spToPx: Int get() = toFloat().spToPx.roundToInt()
+
+/**
+ * px转dp，如[xxhdpi](1080 -> 360)
+ */
+val Float.pxToDp: Float get() = this / Resources.getSystem().displayMetrics.density + 0.5f * if (this >= 0) 1 else -1
+
+/**
+ * px转dp，如[xxhdpi](1080 -> 360)
+ */
+val Int.pxToDp: Int get() = toFloat().pxToDp.roundToInt()
+
 
 /**
  * 获取string资源
  */
-val Int.stringOrNull: String? get() = invokeOrNull { string }
+val Int.resToString: String get() = FastCore.context.getString(this)
+
+/**
+ * 获取string资源
+ */
+val Int.resToStringOrNull: String? get() = invokeOrNull { resToString }
 
 
 /**
  * 获取string资源
  * 格式例：%1$s
  */
-fun Int.string(vararg values: Any?): String = FastCore.context.getString(this, *values)
+fun Int.resToString(vararg values: Any?): String = FastCore.context.getString(this, *values)
 
 
 /**
  * 获取string资源
  * 格式例：%1$s
  */
-fun Int.stringOrNull(vararg values: Any?): String? = invokeOrNull { string(*values) }
+fun Int.resToStringOrNull(vararg values: Any?): String? = invokeOrNull { resToString(*values) }
 
 /**
  * 获取drawable资源
  */
-val Int.drawable: Drawable get() = ContextCompat.getDrawable(FastCore.context, this)!!
+val Int.resToDrawable: Drawable get() = ContextCompat.getDrawable(FastCore.context, this)!!
 
 /**
  * 获取drawable资源
  */
-val Int.drawableOrNull: Drawable?
+val Int.resToDrawableOrNull: Drawable?
     get() = invokeOrNull {
         ContextCompat.getDrawable(
             FastCore.context,
@@ -58,36 +97,65 @@ val Int.drawableOrNull: Drawable?
         )
     }
 
+
 /**
- * 获取color资源
+ * 为Drawable着色
  */
-val Int.color: Int get() = ContextCompat.getColor(FastCore.context, this)
+fun Drawable.applyTint(@ColorInt color: Int?): Drawable {
+    if (color == null) return this
+    return DrawableCompat.wrap(this).mutate().apply {
+        DrawableCompat.setTint(this, color)
+    }
+}
+
+/**
+ * 为Drawable添加Ripple效果
+ */
+fun Drawable.applyRipple(
+    context: Context,
+    @ColorInt rippleColor: Int? = null,
+    rippleColorStateList: ColorStateList? = null
+): RippleDrawable = RippleDrawable(
+    rippleColorStateList
+        ?: ColorStateList.valueOf(
+            rippleColor
+                ?: context.getAttributeResource(android.R.attr.colorControlHighlight)?.resToColor
+                ?: Color.GRAY
+        ),
+    this,
+    null
+)
 
 /**
  * 获取color资源
  */
-val Int.colorOrNull: Int? get() = invokeOrNull { color }
+val Int.resToColor: Int get() = ContextCompat.getColor(FastCore.context, this)
+
+/**
+ * 获取color资源
+ */
+val Int.resToColorOrNull: Int? get() = invokeOrNull { resToColor }
 
 
 /**
  * hex color 转 color
  */
-val String.color: Int get() = Color.parseColor(if (this.startsWith("#")) this else "#$this")
+val String.hexToColor: Int get() = Color.parseColor(if (this.startsWith("#")) this else "#$this")
 
 /**
  * hex color 转 color
  */
-val String.colorOrNull: Int? get() = invokeOrNull { color }
+val String.hexToColorOrNull: Int? get() = invokeOrNull { hexToColor }
 
 /**
  * color 转 hex color
  */
-val Int.hexColor: String get() = "#${Integer.toHexString(this)}"
+val Int.colorToHex: String get() = "#${Integer.toHexString(this)}"
 
 /**
  * color 转 hex color
  */
-val Int.hexColorOrNull: String? get() = invokeOrNull { hexColor }
+val Int.colorToHexOrNull: String? get() = invokeOrNull { colorToHex }
 
 
 /**
@@ -101,14 +169,14 @@ val Int.isLightColor get() = ColorUtils.calculateLuminance(this) >= 0.5
 val Int.lightColorNess get() = ColorUtils.calculateLuminance(this)
 
 /**
- * 获取dimen资源
+ * 获取dimen资源的值
  */
-val Int.dimen: Float get() = FastCore.context.resources.getDimension(this)
+val Int.resToDimenValue: Float get() = FastCore.context.resources.getDimension(this)
 
 /**
- * 获取dimen资源
+ * 获取dimen资源的值
  */
-val Int.dimenOrNull: Float? get() = invokeOrNull { dimen }
+val Int.resToDimenValueOrNull: Float? get() = invokeOrNull { resToDimenValue }
 
 
 /**
@@ -132,73 +200,7 @@ val Context.selectableItemBackgroundBorderlessRes: Int? get() = getAttributeReso
 /**
  * 获取attr资源 actionBarItemBackground
  */
-val Context.actionBarItemBackground: Int? get() = getAttributeResource(android.R.attr.actionBarItemBackground)
-
-/**
- * 为Drawable着色
- */
-fun Drawable.applyTint(color: Int?): Drawable {
-    if (color == null) return this
-    return DrawableCompat.wrap(this).mutate().apply {
-        DrawableCompat.setTint(this, color)
-    }
-}
-
-/**
- * 为Drawable添加Ripple效果
- */
-fun Drawable.applyRipple(
-    context: Context,
-    rippleColor: Int? = null,
-    rippleColorStateList: ColorStateList? = null
-): RippleDrawable = RippleDrawable(
-    rippleColorStateList
-        ?: ColorStateList.valueOf(
-            rippleColor
-                ?: context.getAttributeResource(android.R.attr.colorControlHighlight)?.color
-                ?: Color.GRAY
-        ),
-    this,
-    null
-)
-
-/**
- * dp转px，如[xxhdpi](360 -> 1080)
- */
-val Float.dp: Float
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
-    )
-
-/**
- * dp转px，如[xxhdpi](360 -> 1080)
- */
-val Int.dp: Int get() = toFloat().dp.roundToInt()
-
-
-/**
- * sp转px
- */
-val Float.sp: Float
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics
-    )
-
-/**
- * sp转px
- */
-val Int.sp: Int get() = toFloat().sp.roundToInt()
-
-/**
- * px转dp，如[xxhdpi](1080 -> 360)
- */
-val Float.px2dp: Float get() = this / Resources.getSystem().displayMetrics.density + 0.5f * if (this >= 0) 1 else -1
-
-/**
- * px转dp，如[xxhdpi](1080 -> 360)
- */
-val Int.px2dp: Int get() = toFloat().px2dp.roundToInt()
-
+val Context.actionBarItemBackgroundRes: Int? get() = getAttributeResource(android.R.attr.actionBarItemBackground)
 
 /**
  * string转html
@@ -210,17 +212,3 @@ val String.html: Spanned
         } else {
             Html.fromHtml(this)
         }
-
-/**
- * string外包裹html color标签
- */
-fun String.wrapHtmlColor(color: Int): String =
-    "<font color='${color.hexColor}'>$this</font>"
-
-/**
- * string外包裹html a标签
- */
-fun String.wrapHtmlHref(url: String): String =
-    "<a href='${url}'>$this</a>"
-
-

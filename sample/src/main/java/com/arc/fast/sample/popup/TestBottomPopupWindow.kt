@@ -3,7 +3,7 @@ package com.arc.fast.sample.popup
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.arc.fast.core.extensions.color
+import com.arc.fast.core.extensions.resToColor
 import com.arc.fast.core.screenHeight
 import com.arc.fast.immersive.ImmersivePopupWindow
 import com.arc.fast.immersive.ImmersivePopupWindowConfig
@@ -21,7 +21,7 @@ class TestBottomPopupWindow(val context: Context) :
         ImmersivePopupWindowConfig.createBottomPopupWindow(context).apply {
 //            navigationColor = Color.TRANSPARENT
             isLightNavigationBarForegroundColor = null
-            backgroundColor = R.color.md_theme_light_primary_transparent_26.color
+            backgroundColor = R.color.md_theme_light_primary_transparent_26.resToColor
         }
 
     init {

@@ -27,8 +27,9 @@ class MainViewModel : ViewModel() {
                 url = ACTION_INTRODUCTION
             ),
             Menu(
-                "二、Fast Core",
-                "Arc Fast Core",
+                "二、Fast Resource",
+                "一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取",
+                ACTION_CORE
             ),
             Menu(
                 "三、Fast Permission",

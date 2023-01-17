@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import com.arc.fast.core.extensions.ViewPager2FragmentItem
 import com.arc.fast.core.extensions.bindToViewPager2
-import com.arc.fast.core.extensions.dp
+import com.arc.fast.core.extensions.dpToPx
 import com.arc.fast.sample.DATA
 import com.arc.fast.sample.R
 import com.arc.fast.sample.common.data.entity.TestListItem
@@ -53,7 +53,7 @@ class TestTitleProvider : BaseItemProvider<TestListItem>() {
             ?.apply {
                 this.title = (item as TestListItem.TestTitle).title
                 root.updateLayoutParams {
-                    height = 56.dp
+                    height = 56.dpToPx
                 }
                 root.setOnClickListener { }
             }

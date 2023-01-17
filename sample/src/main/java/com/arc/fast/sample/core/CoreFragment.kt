@@ -1,14 +1,13 @@
-package com.arc.fast.sample.view
+package com.arc.fast.sample.core
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.databinding.FragmentDragExitBinding
+import com.arc.fast.sample.databinding.FragmentCoreBinding
 
-class DragExitFragment : BaseFragment<FragmentDragExitBinding>() {
+class CoreFragment : BaseFragment<FragmentCoreBinding>() {
 
     override val toolbar get() = binding.toolbar
 
@@ -16,13 +15,9 @@ class DragExitFragment : BaseFragment<FragmentDragExitBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): FragmentDragExitBinding = FragmentDragExitBinding.inflate(inflater, container, false)
+    ): FragmentCoreBinding = FragmentCoreBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // 启用拖拽退出
-        binding.dragExitLayout.enableDragExit {
-            findNavController().navigateUp()
-        }
     }
 }

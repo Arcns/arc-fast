@@ -58,49 +58,66 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     }
 
     private fun onMenuClick(menu: Menu) {
-        if (menu.url == ACTION_INTRODUCTION) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage("本项目包含一系列Android开发的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～")
-                .setPositiveButton("确定") { _, _ -> }
-                .show()
-        } else if (menu.url == ACTION_PERMISSION) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToPermissionFragment()
-            )
-        } else if (menu.url == ACTION_DIALOG) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDialogFragment()
-            )
-        } else if (menu.url == ACTION_POPUP) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToPopupFragment()
-            )
-        } else if (menu.url == ACTION_SPAN) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToSpanFragment()
-            )
-        } else if (menu.url == ACTION_MASK) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToMaskFragment()
-            )
-        } else if (menu.url == ACTION_VIEW) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToViewFragment()
-            )
-        } else if (menu.url == ACTION_FAST_TEXT_VIEW) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToFastTextViewFragment()
-            )
-        } else if (menu.url == ACTION_NSC) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToNestedScrollCompatFragment()
-            )
-        } else if (menu.url == ACTION_DRAG_EXIT_LAYOUT) {
-            findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDragExitMainFragment()
-            )
-        } else if (menu.url == ACTION_TEST) {
-            findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
+        when (menu.url) {
+            ACTION_INTRODUCTION -> {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("本项目包含一系列Android开发的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～")
+                    .setPositiveButton("确定") { _, _ -> }
+                    .show()
+            }
+            ACTION_CORE -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToCoreFragment()
+                )
+            }
+            ACTION_PERMISSION -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToPermissionFragment()
+                )
+            }
+            ACTION_DIALOG -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDialogFragment()
+                )
+            }
+            ACTION_POPUP -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToPopupFragment()
+                )
+            }
+            ACTION_SPAN -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToSpanFragment()
+                )
+            }
+            ACTION_MASK -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToMaskFragment()
+                )
+            }
+            ACTION_VIEW -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToViewFragment()
+                )
+            }
+            ACTION_FAST_TEXT_VIEW -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToFastTextViewFragment()
+                )
+            }
+            ACTION_NSC -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToNestedScrollCompatFragment()
+                )
+            }
+            ACTION_DRAG_EXIT_LAYOUT -> {
+                findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToDragExitMainFragment()
+                )
+            }
+            ACTION_TEST -> {
+                findNavController().navigate(MainFragmentDirections.actionGlobalTestFragment())
+            }
         }
     }
 
