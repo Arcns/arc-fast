@@ -3,7 +3,7 @@
 
 #### 目录
 - [一、介绍](#一介绍)
-- [二、Fast Core](#二fast-core)
+- [二、Fast Resource:一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取](#二fast-resource)
 - [三、Fast Permission:一行代码实现基于Activity Result API的动态权限获取](#三fast-permission)
 - [四、Immersive Dialog:一行代码简单实现Android沉浸式Dialog](#四immersive-dialog)
 - [五、Immersive PopupWindow:一行代码简单实现Android沉浸式PopupWindow](#五immersive-popupwindow)
@@ -18,8 +18,8 @@
 ## 一、介绍
 本项目包含一系列开箱即用的便携工具，主要包括Fast Permission、Immersive Dialog、Immersive PopupWindow、Fast Span、Fast Mask等，能够让你快速、优雅的享受安卓便捷开发～
 
-## 二、Fast Core
-- 核心类库
+## 二、Fast Resource
+- 一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取
 #### 1.集成方式：
 ```
 allprojects {
@@ -32,6 +32,63 @@ allprojects {
 ```
  implementation 'com.gitee.arcns.arc-fast:core:latest.release'
 ```
+
+#### 2.使用方式
+（1）dp2px、px2dp
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Float.dpToPx | 把dp转换为px(Float格式) | 100f.dpToPx |
+| Int.dpToPx | 把dp转换为px(Int格式) | 100.dpToPx |
+| Float.pxToDp | 把px转换为dp(Float格式) | 100f.pxToDp |
+| Int.pxToDp | 把px转换为dp(Int格式) | 100.pxToDp |
+
+（2）sp2px
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Float.spToPx | 把sp转换为px(Float格式) | 100f.spToPx |
+| Int.spToPx | 把sp转换为px(Int格式) | 100.spToPx |
+
+（3）获取String资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToString | 通过StringRes获取String值 | R.string.test.resToString |
+| Int.resToStringOrNull | 通过StringRes获取String值，获取失败时返回null | R.string.test.resToStringOrNull |
+| Int.resToString(vararg values: Any?) | 通过StringRes获取String值，并替换格式参数(例如%1$s) | R.string.test.resToString("1","2") |
+| Int.resToStringOrNull(vararg values: Any?) | 通过StringRes获取String值，并替换格式参数(例如%1$s)，获取失败时返回null | R.string.test.resToStringOrNull("1","2") |
+
+（4）Drawable资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToDrawable | 通过DrawableRes获取Drawable值 | R.drawable.test.resToDrawable |
+| Int.resToDrawableOrNull | 通过DrawableRes获取Drawable值，获取失败时返回null | R.drawable.test.resToDrawableOrNull |
+| Drawable.applyTint(color: Int?) | 为Drawable实现着色效果 | R.drawable.test.applyTint(0x24000000) |
+| Drawable.applyRipple(context: Context,rippleColor: Int? = null,rippleColorStateList: ColorStateList? = null) | 为Drawable实现Ripple效果，ColorStateList优先级高于rippleColor | R.drawable.test.applyRipple(context,0x00000000) |
+
+（5）Color资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToColor | 通过ColorRes获取Color值 | R.color.test.resToColor |
+| Int.resToColorOrNull | 通过ColorRes获取Color值，获取失败时返回null  | R.color.test.resToColorOrNull |
+| String.hexToColor | 把Hex Color转换为Color(Int格式) | "#00000000".hexToColor |
+| String.hexToColorOrNull | 把Hex Color转换为Color(Int格式)，获取失败时返回null  | "#000000".hexToColorOrNull |
+| Int.colorToHex | 把Color转换为Hex Color(String格式) | 0x00000000.colorToHex |
+| Int.colorToHexOrNull | 把Color转换为Hex Color(String格式)，获取失败时返回null  | 0x00000000.colorToHexOrNull |
+| Int.lightColorNess | 获取Color的亮度(0-1) | 0x00000000.lightColorNess |
+| Int.isLightColor | 判断Color是否为亮色调 | 0x00000000.isLightColor |
+
+（6）Dimension资源
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Int.resToDimenValue | 通过DimenRes获取Dimen值 | R.dimen.test.resToDimenValue |
+| Int.resToDimenValueOrNull | 通过DimenRes获取Dimen值，获取失败时返回null  | R.dimen.test.resToDimenValueOrNull |
+
+（7）Attr资源（Attr的Res资源与Context的theme相关，因此此处必须手动传入Attr对应的Context）
+| 方法 | 功能 | 用法 |
+| ------ | ------ | ------ |
+| Context.getAttributeResource(attr: Int, defResId: Int? = null) | 通过AttrResId获取Res资源 | context.getAttributeResource(R.attr.test) |
+| Context.selectableItemBackgroundRes | 获取selectableItemBackground资源 | context.selectableItemBackgroundRes |
+| Context.selectableItemBackgroundBorderlessRes | 获取selectableItemBackgroundBorderless资源 | context.selectableItemBackgroundBorderlessRes |
+| Context.actionBarItemBackgroundRes | 获取actionBarItemBackground资源 | context.actionBarItemBackgroundRes |
 
 ## 三、Fast Permission
 - 一行代码实现基于Activity Result API的动态权限获取`
@@ -530,8 +587,6 @@ allprojects {
 - 一行代码解决Android滚动控件嵌套产生的滑动事件冲突
 > 在日常开发中，我们经常需要解决NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2、Banner等各种滚动控件之间相互嵌套带来的滑动事件冲突问题，修复起来往往也比较麻烦，所以我做了一个开源Library项目，方便大家集成后，一行代码解决Android绝大多数场景下的滑动冲突。
 
-![集成效果](./image/nested_scroll_compat.gif)
-
 #### 1.实现思路：
 之所以会出现滚动控件嵌套后的滑动冲突，主要是因为里面嵌套的滚动控件不知道在什么时候需要把`TouchEvent`交给外层的滚动控件处理，所以会产生滑动冲突。
 因此我们可以考虑在里面嵌套的每个滚动控件的外面都添加上一个`处理控件`，根据TouchEvent机制，`处理控件`会优先于里面的滚动控件接收到`TouchEvent`，我们就可以在处理控件中判断是否需要把`TouchEvent`交给外层的滚动控件处理。
@@ -586,8 +641,6 @@ allprojects {
 - 一行代码实现Android仿小红书、Lemon8拖拽退出效果
 > 最近小伙伴有个需求，就是实现类似于小红书、Lemon8的拖拽退出效果，查了一圈发现并没有实现该功能的Library，于是便做了一个开源Library项目，方便大家集成后，一行代码实现Android仿小红书、Lemon8的拖拽退出效果。
 
-![集成效果](./image/drag_exit.gif)
-
 #### 1.实现思路：
 - （1）创建一个`自定义Layout`，作为实现拖拽退出的视图
 - （2）在`自定义Layout中`，重写`onInterceptTouchEvent`，用来检查`TouchEvent`的滑动方向是否可以执行退拽退出效果，如果可以执行退拽退出效果则返回`true`表示拦截`TouchEvent`
@@ -641,13 +694,4 @@ dragExitLayout.enableDragExit(
                  // 可选项：在拖拽退出时的回调
         }
 )
-```
-ps：如果你希望`dragExitLayout`在拖拽后，当前activity背景能够变得透明（即拖拽后可以看到上一个activity），那么你需要设置当前activity为透明样式：
-```
-<style name="TransitionTheme" parent="@style/YourAppTheme">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item> // 注意：因系统bug，API26时android:windowIsTranslucent必须为false
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowActivityTransitions">true</item>
- </style>
 ```
