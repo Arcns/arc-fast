@@ -530,6 +530,8 @@ allprojects {
 - 一行代码解决Android滚动控件嵌套产生的滑动事件冲突
 > 在日常开发中，我们经常需要解决NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2、Banner等各种滚动控件之间相互嵌套带来的滑动事件冲突问题，修复起来往往也比较麻烦，所以我做了一个开源Library项目，方便大家集成后，一行代码解决Android绝大多数场景下的滑动冲突。
 
+![集成效果](./image/nested_scroll_compat.gif)
+
 #### 1.实现思路：
 之所以会出现滚动控件嵌套后的滑动冲突，主要是因为里面嵌套的滚动控件不知道在什么时候需要把`TouchEvent`交给外层的滚动控件处理，所以会产生滑动冲突。
 因此我们可以考虑在里面嵌套的每个滚动控件的外面都添加上一个`处理控件`，根据TouchEvent机制，`处理控件`会优先于里面的滚动控件接收到`TouchEvent`，我们就可以在处理控件中判断是否需要把`TouchEvent`交给外层的滚动控件处理。
