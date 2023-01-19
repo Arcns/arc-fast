@@ -27,8 +27,8 @@ android {
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     compileOnly 'androidx.appcompat:appcompat:1.6.0'
-    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 afterEvaluate {
     publishing {
