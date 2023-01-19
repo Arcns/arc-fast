@@ -13,7 +13,6 @@ android {
         targetSdk versions.compile_sdk
         versionCode versions.publish_code
         versionName versions.publish_name
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 //    signingConfigs {
 //        release {
@@ -90,11 +89,11 @@ dependencies {
     //
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
     // 扫码
-    implementation "com.google.mlkit:barcode-scanning:17.0.2"
-    implementation "androidx.camera:camera-core:1.1.0"
-    implementation "androidx.camera:camera-camera2:1.1.0"
-    implementation "androidx.camera:camera-lifecycle:1.1.0"
-    implementation "androidx.camera:camera-view:1.1.0"
+    implementation "com.google.mlkit:barcode-scanning:17.0.3"
+    implementation "androidx.camera:camera-core:1.2.0"
+    implementation "androidx.camera:camera-camera2:1.2.0"
+    implementation "androidx.camera:camera-lifecycle:1.2.0"
+    implementation "androidx.camera:camera-view:1.2.0"
     // EventBus
     implementation "org.greenrobot:eventbus:3.3.1"
     //
@@ -102,7 +101,7 @@ dependencies {
     // core
     implementation project(path: ':core')
     implementation project(path: ':permission')
-    implementation project(path: ':immersive')
+//    implementation project(path: ':immersive')
     implementation project(path: ':span')
     implementation project(path: ':mask')
     implementation project(path: ':view')
