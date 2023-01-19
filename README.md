@@ -587,6 +587,8 @@ allprojects {
 - 一行代码解决Android滚动控件嵌套产生的滑动事件冲突
 > 在日常开发中，我们经常需要解决NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2、Banner等各种滚动控件之间相互嵌套带来的滑动事件冲突问题，修复起来往往也比较麻烦，所以我做了一个开源Library项目，方便大家集成后，一行代码解决Android绝大多数场景下的滑动冲突。
 
+![集成效果](./image/nested_scroll_compat.gif)
+
 #### 1.实现思路：
 之所以会出现滚动控件嵌套后的滑动冲突，主要是因为里面嵌套的滚动控件不知道在什么时候需要把`TouchEvent`交给外层的滚动控件处理，所以会产生滑动冲突。
 因此我们可以考虑在里面嵌套的每个滚动控件的外面都添加上一个`处理控件`，根据TouchEvent机制，`处理控件`会优先于里面的滚动控件接收到`TouchEvent`，我们就可以在处理控件中判断是否需要把`TouchEvent`交给外层的滚动控件处理。
@@ -641,6 +643,8 @@ allprojects {
 - 一行代码实现Android仿小红书、Lemon8拖拽退出效果
 > 最近小伙伴有个需求，就是实现类似于小红书、Lemon8的拖拽退出效果，查了一圈发现并没有实现该功能的Library，于是便做了一个开源Library项目，方便大家集成后，一行代码实现Android仿小红书、Lemon8的拖拽退出效果。
 
+![集成效果](./image/drag_exit.gif)
+
 #### 1.实现思路：
 - （1）创建一个`自定义Layout`，作为实现拖拽退出的视图
 - （2）在`自定义Layout中`，重写`onInterceptTouchEvent`，用来检查`TouchEvent`的滑动方向是否可以执行退拽退出效果，如果可以执行退拽退出效果则返回`true`表示拦截`TouchEvent`
@@ -694,4 +698,13 @@ dragExitLayout.enableDragExit(
                  // 可选项：在拖拽退出时的回调
         }
 )
+```
+ps：如果你希望`dragExitLayout`在拖拽后，当前activity背景能够变得透明（即拖拽后可以看到上一个activity），那么你需要设置当前activity为透明样式：
+```
+<style name="TransitionTheme" parent="@style/YourAppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item> // 注意：因系统bug，API26时android:windowIsTranslucent必须为false
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowActivityTransitions">true</item>
+ </style>
 ```
