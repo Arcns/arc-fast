@@ -101,7 +101,7 @@ dependencies {
     // core
     implementation project(path: ':core')
     implementation project(path: ':permission')
-//    implementation project(path: ':immersive')
+    implementation project(path: ':immersive')
     implementation project(path: ':span')
     implementation project(path: ':mask')
     implementation project(path: ':view')
