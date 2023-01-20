@@ -610,7 +610,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:view:1.16.1'
+ implementation 'com.gitee.arcns.arc-fast:nested-scroll-compat:latest.release'
 ```
 
 #### 3.使用方式
@@ -660,7 +660,8 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:view:1.16.1'
+ implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+ implementation 'com.gitee.arcns.arc-fast:drag-exit:latest.release'
 ```
 
 #### 3.使用方式
