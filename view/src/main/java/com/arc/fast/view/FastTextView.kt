@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.util.AttributeSet
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.arc.fast.view.rounded.IRoundedView
 import com.arc.fast.view.rounded.RoundedViewConfig
 
@@ -178,7 +177,7 @@ open class FastTextView @JvmOverloads constructor(
     ) =
         setImage(
             direction, try {
-                ContextCompat.getDrawable(context, imageRes)
+                context.getDrawable(imageRes)
             } catch (e: Exception) {
                 null
             },

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.ColorInt
 import com.arc.fast.view.R
 
 interface IRoundedView {
@@ -19,7 +18,7 @@ interface IRoundedView {
 
     val enableRoundedRadius: Boolean get() = true
 
-    fun setRoundedBackgroundColor(@ColorInt roundedBackgroundColor: Int) {
+    fun setRoundedBackgroundColor(roundedBackgroundColor: Int) {
         _config.backgroundColor = roundedBackgroundColor
         roundedView?.invalidate()
     }
