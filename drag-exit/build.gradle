@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
     id 'maven-publish'
 }
 android {
-    namespace 'com.arc.fast.mask'
+    namespace 'com.arc.fast.dragexit'
     compileSdk versions.compile_sdk
     defaultConfig {
         minSdk versions.min_sdk
@@ -25,6 +26,8 @@ android {
     }
 }
 dependencies {
+    compileOnly project(path: ':view')
+    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 afterEvaluate {
     publishing {

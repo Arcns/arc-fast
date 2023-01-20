@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -14,8 +15,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.arc.fast.permission.R
 
 /**
  * 权限工具
@@ -321,7 +320,7 @@ class FastPermissionUtil {
             onNegativeButton: () -> Unit
         ) -> Unit =
             { activity, message, positiveButton, onPositiveButton, negativeButton, onNegativeButton ->
-                MaterialAlertDialogBuilder(activity)
+                AlertDialog.Builder(activity)
                     .setMessage(message)
                     .setNegativeButton(negativeButton) { _, _ -> onNegativeButton.invoke() }
                     .setPositiveButton(positiveButton) { _, _ -> onPositiveButton.invoke() }

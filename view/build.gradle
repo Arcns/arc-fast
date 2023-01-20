@@ -26,12 +26,7 @@ android {
     }
 }
 dependencies {
-    compileOnly 'androidx.core:core-ktx:1.9.0'
-    compileOnly 'androidx.appcompat:appcompat:1.6.0'
     compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
-    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
-    compileOnly 'androidx.viewpager2:viewpager2:1.0.0'
-    compileOnly 'io.github.youth5201314:banner:2.2.2'
 }
 afterEvaluate {
     publishing {

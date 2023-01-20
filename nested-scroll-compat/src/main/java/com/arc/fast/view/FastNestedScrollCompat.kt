@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.arc.fast.nestedscrollcompat.R
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 

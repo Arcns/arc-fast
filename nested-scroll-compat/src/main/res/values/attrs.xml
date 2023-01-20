@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 嵌套滑动兼容器 -->
+    <declare-styleable name="FastNestedScrollableHost">
+        <attr name="fastNestedScrollableHost_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+            <enum name="auto" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

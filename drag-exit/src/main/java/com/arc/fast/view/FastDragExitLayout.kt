@@ -5,10 +5,12 @@ import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewConfiguration
-import androidx.core.view.updateLayoutParams
+import android.view.ViewGroup
 import com.arc.fast.view.rounded.RoundedConstraintLayout
 import kotlin.math.abs
+import com.arc.fast.dragexit.R
 
 /**
  * 拖拽退出视图
@@ -303,8 +305,22 @@ class FastDragExitLayout @JvmOverloads constructor(
         bindExitActivity?.finishAfterTransition()
         bindExitActivity = null
     }
+
+    private inline fun View.updateLayoutParams(block: ViewGroup.LayoutParams.() -> Unit) {
+        updateLayoutParams<ViewGroup.LayoutParams>(block)
+    }
+
+    @JvmName("updateLayoutParamsTyped")
+    private inline fun <reified T : ViewGroup.LayoutParams> View.updateLayoutParams(
+        block: T.() -> Unit
+    ) {
+        val params = layoutParams as T
+        block(params)
+        layoutParams = params
+    }
 }
 
 enum class InterceptCheckResult {
     NotIntercept, Intercept, Wait
 }
+

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.util.AttributeSet
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import com.arc.fast.view.rounded.IRoundedView
 import com.arc.fast.view.rounded.RoundedViewConfig
@@ -21,7 +20,7 @@ open class FastTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr), IRoundedView {
+) : TextView(context, attrs, defStyleAttr), IRoundedView {
 
     override var _config = RoundedViewConfig()
     override var _temporarilyConfig: RoundedViewConfig? = null

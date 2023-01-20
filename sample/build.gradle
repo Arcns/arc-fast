@@ -105,6 +105,8 @@ dependencies {
     implementation project(path: ':span')
     implementation project(path: ':mask')
     implementation project(path: ':view')
+    implementation project(path: ':nested-scroll-compat')
+    implementation project(path: ':drag-exit')
 //    implementation "com.gitee.arcns.arc-fast:core:1.11.18"
 //    implementation "com.gitee.arcns.arc-fast:permission:1.11.18"
 //    implementation "com.gitee.arcns.arc-fast:immersive:1.11.18"
