@@ -209,6 +209,8 @@ private fun createImmersiveDialogRootView(
     val viewNavigationBarBg =
         rootView.findViewById<View>(R.id.arc_fast_view_navigation_bar_bg)
     viewNavigationBarBg.apply {
+        (layoutParams as? ConstraintLayout.LayoutParams)?.bottomToBottom =
+            ConstraintLayout.LayoutParams.PARENT_ID
         if (dialogConfig.navigationColor != Color.TRANSPARENT && systemNavigationBarHeight > 0) {
             layoutParams.height = systemNavigationBarHeight
             setBackgroundColor(dialogConfig.navigationColor)
