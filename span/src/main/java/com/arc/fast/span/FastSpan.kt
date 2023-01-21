@@ -6,10 +6,8 @@ import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
-import android.text.method.MovementMethod
 import android.text.style.*
 import android.widget.TextView
-import androidx.annotation.DrawableRes
 
 /**
  * 启用ClickableSpan
@@ -76,7 +74,7 @@ fun SpannableStringBuilder.appendFastSpacing(size: Int): SpannableStringBuilder 
  */
 fun SpannableStringBuilder.appendFastImageStyle(
     context: Context,
-    @DrawableRes drawableRes: Int,
+    drawableRes: Int,
     flags: Int = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
     onApplyFastImageStyle: (FastImageSpanStyle.() -> Unit)
 ): SpannableStringBuilder = appendFastSpan(

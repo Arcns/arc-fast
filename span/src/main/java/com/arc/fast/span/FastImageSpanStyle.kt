@@ -8,18 +8,13 @@ import android.text.style.CharacterStyle
 import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 
 data class FastImageSpanStyle(
     // 图片
     var drawable: Drawable
 ) {
-    constructor(context: Context, @DrawableRes drawableRes: Int) : this(
-        ContextCompat.getDrawable(
-            context,
-            drawableRes
-        )!!
+    constructor(context: Context, drawableRes: Int) : this(
+        context.getDrawable(drawableRes)!!
     )
 
 
