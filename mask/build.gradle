@@ -24,8 +24,6 @@ android {
         jvmTarget = JavaVersion.VERSION_11
     }
 }
-dependencies {
-}
 afterEvaluate {
     publishing {
         publications {
