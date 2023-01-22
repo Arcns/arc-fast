@@ -460,7 +460,7 @@ allprojects {
 
 #### 2.使用方式
 ##### 方式一：通过Library内置的View实现圆角边框
-为方便使用，Library中内置了RoundedView、RoundedImageView、RoundedConstraintLayout、FastTextView四款支持圆角边框的View，适应绝大多数的使用场景。以RoundedView为例（其他View的使用方式相同），使用方式如下：
+为方便使用，Library中内置了RoundedView、RoundedImageView、RoundedConstraintLayout、RoundedTextView四款支持圆角边框的View，适应绝大多数的使用场景。以RoundedView为例（其他View的使用方式相同），使用方式如下：
 ```
 <com.arc.fast.view.rounded.RoundedView
             android:layout_width="match_parent"
