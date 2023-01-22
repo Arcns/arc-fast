@@ -629,6 +629,7 @@ allprojects {
 
 #### 3.使用方式
 使用时，只需要在里面嵌套的每个滚动控件的外面都添加上FastNestedScrollCompat即可
+
 （1）如果滚动控件是NestedScrollView、ScrollView、ViewPager等Android基础控件，那么需要使用的`兼容宿主`是`FastBaseNestedScrollCompat`
 ```
 <com.arc.fast.view.FastBaseNestedScrollCompat
