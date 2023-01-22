@@ -620,11 +620,28 @@ allprojects {
 ```
 ```
  implementation 'com.gitee.arcns.arc-fast:nested-scroll-compat:latest.release'
+// 可选：如果你需要使用FastNestedScrollCompat(兼容RecyclerView、ViewPager2)，那么你项目中需要引入recyclerview和viewpager2
+ implementation 'androidx.recyclerview:recyclerview:yourversion'
+ implementation 'androidx.viewpager2:viewpager2:yourversion'
+// 可选：如果你需要使用FastBannerNestedScrollCompat(兼容Banner)，那么你项目中需要引入banner
+ implementation 'io.github.youth5201314:banner:yourversion'
 ```
 
 #### 3.使用方式
 使用时，只需要在里面嵌套的每个滚动控件的外面都添加上FastNestedScrollCompat即可
-（1）NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2等滚动控件
+（1）如果滚动控件是NestedScrollView、ScrollView、ViewPager等Android基础控件，那么需要使用的`兼容宿主`是`FastBaseNestedScrollCompat`
+```
+<com.arc.fast.view.FastBaseNestedScrollCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+      // 注意：使用时，滚动控件必须是FastNestedScrollCompat直接且唯一的子元素
+      // 此处RecyclerView仅为示例，你可以替换为NestedScrollView、ScrollView、RecyclerView、ViewPager、ViewPager2等滚动控件
+      <ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/> 
+</com.arc.fast.view.FastNestedScrollCompat>
+```
+（2）如果滚动控件是RecyclerView或ViewPager2，那么需要使用的`兼容宿主`是`FastNestedScrollCompat`，同时`FastNestedScrollCompat`也支持NestedScrollView、ScrollView、ViewPager等`FastBaseNestedScrollCompat`支持的所有滚动控件
 ```
 <com.arc.fast.view.FastNestedScrollCompat
             android:layout_width="match_parent"
@@ -636,7 +653,7 @@ allprojects {
                 android:layout_height="match_parent"/> 
 </com.arc.fast.view.FastNestedScrollCompat>
 ```
-（2）Banner
+（3）如果滚动控件是Banner，那么需要使用的`兼容宿主`是`FastBannerNestedScrollCompat`，同时`FastBannerNestedScrollCompat`也支持NestedScrollView、ScrollView、ViewPager、RecyclerView、ViewPager2等`FastNestedScrollCompat`支持的所有滚动控件
 ```
 <com.arc.fast.view.FastBannerNestedScrollCompat
             android:layout_width="match_parent"
