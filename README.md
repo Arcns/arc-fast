@@ -453,7 +453,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+ implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
 // 可选：如果你需要使用RoundedConstraintLayout，但你的项目中未引入ConstraintLayout，那么你还需要：
  implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
@@ -545,7 +545,8 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+ implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
+ implementation 'com.gitee.arcns.arc-fast:text-view:latest.release'
 ```
 
 #### 3.使用方式
@@ -687,7 +688,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+ implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
  implementation 'com.gitee.arcns.arc-fast:drag-exit:latest.release'
 ```
 
