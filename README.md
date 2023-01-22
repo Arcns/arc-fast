@@ -281,7 +281,10 @@ allprojects {
 }
 ```
 ```
+// 注意，本项目基于androidx
  implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
+// Library中使用了Constraintlayout，如果你的项目中未引入，那么你还需要
+implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
 
 #### 2.使用方式
@@ -451,6 +454,8 @@ allprojects {
 ```
 ```
  implementation 'com.gitee.arcns.arc-fast:view:latest.release'
+// 可选：如果你需要使用RoundedConstraintLayout，但你的项目中未引入ConstraintLayout，那么你还需要：
+ implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
 
 #### 2.使用方式
