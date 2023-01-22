@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.arc.fast.view.R
+import com.arc.fast.rounded.R
 
 interface IRoundedView {
     var _config: RoundedViewConfig

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 圆角视图 -->
+    <declare-styleable name="RoundedView">
+        <attr name="rounded_radius" format="dimension" />
+        <attr name="rounded_radius_top_left" format="dimension" />
+        <attr name="rounded_radius_top_right" format="dimension" />
+        <attr name="rounded_radius_bottom_left" format="dimension" />
+        <attr name="rounded_radius_bottom_right" format="dimension" />
+        <attr name="rounded_background_color" format="color" />
+        <attr name="rounded_border_color" format="color" />
+        <attr name="rounded_border_size" format="dimension" />
+    </declare-styleable>
+</resources>

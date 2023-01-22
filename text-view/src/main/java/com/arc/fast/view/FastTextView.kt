@@ -1,14 +1,13 @@
 package com.arc.fast.view
 
 import android.content.Context
-import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.util.AttributeSet
 import android.widget.TextView
-import com.arc.fast.view.rounded.IRoundedView
-import com.arc.fast.view.rounded.RoundedViewConfig
+import com.arc.fast.textview.R
+import com.arc.fast.view.rounded.RoundedTextView
 
 /**
  * 更加方便设置的TextView
@@ -19,16 +18,12 @@ open class FastTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : TextView(context, attrs, defStyleAttr), IRoundedView {
-
-    override var _config = RoundedViewConfig()
-    override var _temporarilyConfig: RoundedViewConfig? = null
+) : RoundedTextView(context, attrs, defStyleAttr) {
 
     init {
         if (!isInEditMode) {
             init(context, attrs)
         }
-        if (attrs != null) initRoundedRadius(context, attrs)
     }
 
     var leftImageWidth = 0
@@ -296,13 +291,6 @@ open class FastTextView @JvmOverloads constructor(
             setSize(direction)
         }
         return this
-    }
-
-
-    override fun draw(canvas: Canvas) {
-        onDrawBefore(canvas)
-        super.draw(canvas)
-        onDrawAfter(canvas)
     }
 
     enum class ImageDirection {

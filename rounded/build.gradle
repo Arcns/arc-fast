@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
     id 'maven-publish'
 }
 android {
-    namespace 'com.arc.fast.immersive'
+    namespace 'com.arc.fast.rounded'
     compileSdk versions.compile_sdk
     defaultConfig {
         minSdk versions.min_sdk
@@ -25,8 +26,7 @@ android {
     }
 }
 dependencies {
-        compileOnly 'androidx.appcompat:appcompat:1.6.0'
-        compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
+    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 afterEvaluate {
     publishing {

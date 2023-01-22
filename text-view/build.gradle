@@ -5,7 +5,7 @@ plugins {
     id 'maven-publish'
 }
 android {
-    namespace 'com.arc.fast.view'
+    namespace 'com.arc.fast.textview'
     compileSdk versions.compile_sdk
     defaultConfig {
         minSdk versions.min_sdk
@@ -26,7 +26,7 @@ android {
     }
 }
 dependencies {
-    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
+    compileOnly project(path: ':rounded')
 }
 afterEvaluate {
     publishing {

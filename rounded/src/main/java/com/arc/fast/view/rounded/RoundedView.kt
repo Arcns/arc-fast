@@ -3,13 +3,13 @@ package com.arc.fast.view.rounded
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.widget.ImageView
+import android.view.View
 
-class RoundedImageView @JvmOverloads constructor(
+open class RoundedView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ImageView(context, attrs, defStyleAttr), IRoundedView {
+) : View(context, attrs, defStyleAttr), IRoundedView {
 
     override var _config = RoundedViewConfig()
     override var _temporarilyConfig: RoundedViewConfig? = null
