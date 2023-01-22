@@ -110,6 +110,7 @@ allprojects {
 }
 ```
 ```
+ // 注意：本Library基于androidx
  implementation 'com.gitee.arcns.arc-fast:permission:latest.release'
 ```
 #### 3.使用方式：
@@ -167,7 +168,10 @@ allprojects {
 }
 ```
 ```
+// 注意，本项目基于androidx
  implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
+// Library中使用了Constraintlayout，如果你的项目中未引入，那么你还需要
+implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
 #### 2.使用方式
 >第一步：Dialog改为继承ImmersiveDialog
