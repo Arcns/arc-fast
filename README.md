@@ -1,6 +1,12 @@
 # Arc Fast
 [![](https://jitpack.io/v/com.gitee.arcns/arc-fast.svg)](https://jitpack.io/#com.gitee.arcns/arc-fast)
 
+> 本项目长期维护，有问题请提Issues
+
+> 本项目所有Library，均有实际商业项目长期稳定运行，请放心使用
+
+> 本项目所有Library均无多余引用，如需额外引用会特殊注明，引用后大小基本都在10kb以下，无需担心体积问题
+
 #### 目录
 - [一、介绍](#一介绍)
 - [二、Fast Resource:一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取](#二fast-resource)
@@ -96,7 +102,7 @@ allprojects {
 
 #### 1.实现思路：
 相对比原来的`onRequestPermissionsResult`，`Activity Result API`使用起来更加的便捷友好，我们只需要简单的封装和实现权限理由相关的逻辑，即可方便的调用。
-唯一的难度在于：根据https://developer.android.com/training/basics/intents/result?hl=zh-cn，`registerForActivityResult`要求必须在`fragment`或`activity`的`Lifecycle`达到`CREATED`之前创建，这意味着我们无法进行按需加载，而且每次都要创建实例，无法通过静态方法进行一键调用。
+唯一的难度在于：根据`https://developer.android.com/training/basics/intents/result?hl=zh-cn`，`registerForActivityResult`要求必须在`fragment`或`activity`的`Lifecycle`达到`CREATED`之前创建，这意味着我们无法进行按需加载，而且每次都要创建实例，无法通过静态方法进行一键调用。
 经过研究，这里我们通过创建一个专用的`fragment`来解决上述的问题：
 在调用动态权限获取的时候，我们创建一个空布局的`fragment`，并在这个`fragment`的onCreate中进行`registerForActivityResult`，从而满足创建条件并实现按需加载；另外为了提高效率，我们也做了实例池避免这个专用`fragment`的重复创建问题，并实现了自动的生命周期管理。
 
