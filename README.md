@@ -17,7 +17,7 @@
 - [五、Immersive PopupWindow:一行代码简单实现Android沉浸式PopupWindow](#五immersive-popupwindow)
 - [六、Fast Span:一行代码简单实现Android TextView常用样式Span](#六fast-span)
 - [七、Fast Mask:一行代码简单实现Android遮罩镂空视图](#七fast-mask)
-- [八、Fast View:一行代码简单实现Android常用View的圆角边框](#八fast-view)
+- [八、Fast Rounded:一行代码简单实现Android常用View的圆角边框](#八fast-rounded)
 - [九、Fast TextView:一行代码实现TextView中粗、四个方向drawable的不同Padding和宽高](#九fast-textview)
 - [十、Fast NestedScrollCompat:一行代码解决Android滚动控件嵌套产生的滑动事件冲突](#十fast-nestedscrollcompat)
 - [十一、Fast DragExitLayout:一行代码实现Android仿小红书、Lemon8拖拽退出效果](#十一fast-dragexitlayout)
@@ -449,7 +449,7 @@ allprojects {
 | android:gravity | 镂空区域相对于遮罩区域的位置 | gravity，例如top | center |
 
 
-## 八、Fast View
+## 八、Fast Rounded
 - 一行代码简单实现Android常用View的圆角边框
 > 在日常开发中，我们经常需要为各种View实现圆角边框，例如圆角边框的ImageView、圆角边框的TextView、圆角边框的ConstraintLayout等等。通常情况下我们会使用shape drawable或自定义View去实现，使用shape drawable会造成项目中存在大量的drawable文件，使用自定义View会造成相同代码的冗余，所以我做了一个开源Library项目，方便大家集成后，一行代码简单实现Android常用View的圆角边框。
 
