@@ -71,8 +71,8 @@ allprojects {
 | ------ | ------ | ------ |
 | Int.resToDrawable | 通过DrawableRes获取Drawable值 | R.drawable.test.resToDrawable |
 | Int.resToDrawableOrNull | 通过DrawableRes获取Drawable值，获取失败时返回null | R.drawable.test.resToDrawableOrNull |
-| Drawable.applyTint(color: Int?) | 为Drawable实现着色效果 | R.drawable.test.applyTint(0x24000000) |
-| Drawable.applyRipple(context: Context,rippleColor: Int? = null,rippleColorStateList: ColorStateList? = null) | 为Drawable实现Ripple效果，ColorStateList优先级高于rippleColor | R.drawable.test.applyRipple(context,0x00000000) |
+| Drawable.applyTint(color: Int?) | 为Drawable实现着色效果 | drawable.applyTint(0x24000000) |
+| Drawable.applyRipple(context: Context,rippleColor: Int? = null,rippleColorStateList: ColorStateList? = null) | 为Drawable实现Ripple效果，ColorStateList优先级高于rippleColor | drawable.applyRipple(context,0x00000000) |
 
 （5）Color资源
 | 方法 | 功能 | 用法 |

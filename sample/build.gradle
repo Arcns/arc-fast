@@ -99,23 +99,23 @@ dependencies {
     //
     implementation 'io.github.youth5201314:banner:2.2.2'
     // arc-fast
-//    implementation project(path: ':core')
-//    implementation project(path: ':permission')
-//    implementation project(path: ':immersive')
-//    implementation project(path: ':span')
-//    implementation project(path: ':mask')
-//    implementation project(path: ':rounded')
-//    implementation project(path: ':nested-scroll-compat')
-//    implementation project(path: ':drag-exit')
-//    implementation project(path: ':text-view')
+    implementation project(path: ':core')
+    implementation project(path: ':permission')
+    implementation project(path: ':immersive')
+    implementation project(path: ':span')
+    implementation project(path: ':mask')
+    implementation project(path: ':rounded')
+    implementation project(path: ':nested-scroll-compat')
+    implementation project(path: ':drag-exit')
+    implementation project(path: ':text-view')
     def arcfast_version = "1.18.3"
-    implementation "com.gitee.arcns.arc-fast:core:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:permission:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:immersive:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:span:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:mask:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:rounded:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:nested-scroll-compat:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:drag-exit:$arcfast_version"
-    implementation "com.gitee.arcns.arc-fast:text-view:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:core:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:permission:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:immersive:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:span:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:mask:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:rounded:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:nested-scroll-compat:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:drag-exit:$arcfast_version"
+//    implementation "com.gitee.arcns.arc-fast:text-view:$arcfast_version"
 }

@@ -60,7 +60,7 @@
     <color name="md_theme_dark_surfaceTintColor">#5ED4FC</color>
 
     <color name="md_theme_light_primary_transparent_26">#42006780</color>
-    <color name="main">#FFF73173</color>
+    <color name="main">#5ED4FC</color>
     <color name="bg_1">#FFFFFF</color>
     <color name="bg_2">#F7F7F7</color>
     <color name="black">#000000</color>

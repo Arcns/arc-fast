@@ -1,26 +1,10 @@
 <resources>
     <string name="app_name">Arc Fast</string>
-    <string name="version">Version %1$s</string>
-    <string name="account">Account</string>
-    <string name="password">Password</string>
-    <string name="verification">Verification</string>
-    <string name="example_arc_com">example@arc.com</string>
-    <string name="required">required</string>
-    <string name="sign_in">Sign In..</string>
-    <string name="online">online</string>
-    <string name="testdev">testdev</string>
-    <string name="switch_environment_title">Switch network environment</string>
+    <string name="test">test</string>
+    <string name="test2">test %1$s %2$s</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="update">Update</string>
     <string name="install">Install</string>
     <string name="error">Error</string>
-    <string name="home">Home</string>
-    <string name="back">Back</string>
-    <string name="setting">Setting</string>
-    <string name="new_menu">New</string>
-    <string name="copyright">COPYRIGHT@2011-2022 ARC.COM ALL RIGHTS RESERVED.</string>
-    <string name="downloading">Downloading..</string>
-    <string name="app_update_downloaded">App update downloaded</string>
-    <string name="app_update_downloaded_tip">The app update has been downloaded, click \"Install\" to update</string>
 </resources>

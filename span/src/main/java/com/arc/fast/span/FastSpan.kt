@@ -6,8 +6,13 @@ import android.graphics.drawable.Drawable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
-import android.text.style.*
+import android.text.style.ReplacementSpan
 import android.widget.TextView
+
+object FastSpan {
+    @JvmStatic
+    fun createSpan(): SpannableStringBuilder = SpannableStringBuilder()
+}
 
 /**
  * 启用ClickableSpan
