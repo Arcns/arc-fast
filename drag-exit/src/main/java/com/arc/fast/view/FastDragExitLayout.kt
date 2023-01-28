@@ -8,9 +8,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import com.arc.fast.dragexit.R
 import com.arc.fast.view.rounded.RoundedConstraintLayout
 import kotlin.math.abs
-import com.arc.fast.dragexit.R
 
 /**
  * 拖拽退出视图
@@ -23,10 +23,38 @@ class FastDragExitLayout @JvmOverloads constructor(
     private var enableDragExit = false
 
     // 支持拖拽退出的方向
-    var enableLeftDragExit: Boolean = true
-    var enableRightDragExit: Boolean = true
-    var enableTopDragExit: Boolean = true
-    var enableBottomDragExit: Boolean = true
+    var enableLeftDragExit = true
+    var enableRightDragExit = true
+    var enableTopDragExit = true
+    var enableBottomDragExit = true
+
+    // 是否支持横向拖拽移动
+    var enableDragHorizontal = true
+
+    // 是否支持纵向拖拽移动
+    var enableDragVertical = true
+
+    // 是否支持拖拽缩放
+    var enableDragScale = true
+
+    // 拖拽缩放因子（该值越小，缩放效果越明显）
+    var dragScaleFactor = 2.5f
+        set(value) {
+            field = value
+            dragScaleFactorValue = if (layoutWidth > 0 && layoutHeight > 0) {
+                (layoutWidth + layoutHeight) * field
+            } else 0f
+        }
+
+    // 拖拽达到退出的距离（拖拽超过该距离回执行退出操作，未达到该距离则会恢复）
+    var dragExitDistance = DEFAULT_DRAG_EXIT_DISTANCE
+        get() {
+            if (field == DEFAULT_DRAG_EXIT_DISTANCE && layoutWidth > 0) {
+                field = layoutWidth * 0.2f
+            }
+            return field
+        }
+
 
     // 是否以初始化布局
     private var isInitLayout = false
@@ -68,15 +96,14 @@ class FastDragExitLayout @JvmOverloads constructor(
     var currentScale = 1f
         private set
 
-    // 缩放计算因子
-    private val scaleFactor by lazy {
-        (layoutWidth + layoutHeight) * 2.5f
-    }
-
-    // 退出因子
-    private val exitFactor by lazy {
-        layoutWidth * 0.2
-    }
+    // 缩放计算因子的实际大小
+    private var dragScaleFactorValue = 0f
+        get() {
+            if (field == 0f && layoutWidth > 0 && layoutHeight > 0) {
+                field = (layoutWidth + layoutHeight) * dragScaleFactor
+            }
+            return field
+        }
 
     // 是否启用圆角
     override val enableRoundedRadius: Boolean
@@ -84,7 +111,6 @@ class FastDragExitLayout @JvmOverloads constructor(
 
     // 拖拽回调
     private var onDragCallback: ((isDrag: Boolean) -> Unit)? = null
-
 
     // 退出等待回调（适用于延时操作，您必须确保操作完成后调用continueExit）
     private var onExitWaitCallback: ((currentScale: Float, continueExit: () -> Unit) -> Unit)? =
@@ -110,6 +136,22 @@ class FastDragExitLayout @JvmOverloads constructor(
                 )
                 enableBottomDragExit = typedArray.getBoolean(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_enableBottomDragExit, true
+                )
+                enableDragScale = typedArray.getBoolean(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableDragScale, true
+                )
+                dragScaleFactor = typedArray.getFloat(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleFactor, 2.5f
+                )
+                dragExitDistance = typedArray.getFloat(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragExitDistance,
+                    DEFAULT_DRAG_EXIT_DISTANCE
+                )
+                enableDragHorizontal = typedArray.getBoolean(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableDragHorizontal, true
+                )
+                enableDragVertical = typedArray.getBoolean(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_enableDragVertical, true
                 )
             } finally {
                 typedArray.recycle()
@@ -253,16 +295,22 @@ class FastDragExitLayout @JvmOverloads constructor(
                     val dy = y - currentTouchY
                     // 更改当前在窗体的位置
                     updateLayoutParams<MarginLayoutParams> {
-                        topMargin += dy.toInt()
-                        leftMargin += dx.toInt()
-                        currentTop = topMargin
-                        currentLeft = leftMargin
+                        if (enableDragHorizontal) {
+                            leftMargin += dx.toInt()
+                            currentLeft = leftMargin
+                        }
+                        if (enableDragVertical) {
+                            topMargin += dy.toInt()
+                            currentTop = topMargin
+                        }
                     }
                     // 缩放
-                    currentScale =
-                        1 - (abs(currentLeft) + abs(currentTop)) / scaleFactor - 0.05f
-                    scaleX = currentScale
-                    scaleY = currentScale
+                    if (enableDragScale && dragScaleFactorValue > 0f) {
+                        currentScale =
+                            1 - (abs(currentLeft) + abs(currentTop)) / dragScaleFactorValue - 0.05f
+                        scaleX = currentScale
+                        scaleY = currentScale
+                    }
                     // 获取移动后的位置
                     currentTouchX = x
                     currentTouchY = y
@@ -272,7 +320,7 @@ class FastDragExitLayout @JvmOverloads constructor(
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (enableTouch) {
                     enableTouch = false
-                    if (abs(currentTop) > exitFactor || abs(currentLeft) > exitFactor) {
+                    if (abs(currentTop) > dragExitDistance || abs(currentLeft) > dragExitDistance) {
                         // 退出页面
                         isAnimation = true
                         if (onExitWaitCallback != null) {
@@ -317,6 +365,10 @@ class FastDragExitLayout @JvmOverloads constructor(
         val params = layoutParams as T
         block(params)
         layoutParams = params
+    }
+
+    companion object {
+        const val DEFAULT_DRAG_EXIT_DISTANCE = -1f
     }
 }
 

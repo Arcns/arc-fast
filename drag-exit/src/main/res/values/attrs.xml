@@ -6,5 +6,10 @@
         <attr name="fastDragExitLayout_enableRightDragExit" format="boolean" />
         <attr name="fastDragExitLayout_enableTopDragExit" format="boolean" />
         <attr name="fastDragExitLayout_enableBottomDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragScale" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragHorizontal" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragVertical" format="boolean" />
+        <attr name="fastDragExitLayout_dragScaleFactor" format="float" />
+        <attr name="fastDragExitLayout_dragExitDistance" format="float" />
     </declare-styleable>
 </resources>
