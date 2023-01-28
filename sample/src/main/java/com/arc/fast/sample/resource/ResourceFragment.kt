@@ -1,13 +1,13 @@
-package com.arc.fast.sample.core
+package com.arc.fast.sample.resource
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arc.fast.sample.BaseFragment
-import com.arc.fast.sample.databinding.FragmentCoreBinding
+import com.arc.fast.sample.databinding.FragmentResourceBinding
 
-class CoreFragment : BaseFragment<FragmentCoreBinding>() {
+class ResourceFragment : BaseFragment<FragmentResourceBinding>() {
 
     override val toolbar get() = binding.toolbar
 
@@ -15,7 +15,7 @@ class CoreFragment : BaseFragment<FragmentCoreBinding>() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): FragmentCoreBinding = FragmentCoreBinding.inflate(inflater, container, false)
+    ): FragmentResourceBinding = FragmentResourceBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

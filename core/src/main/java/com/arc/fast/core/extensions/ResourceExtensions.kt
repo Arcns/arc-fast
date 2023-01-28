@@ -34,6 +34,17 @@ val Int.dpToPx: Int get() = toFloat().dpToPx.roundToInt()
 
 
 /**
+ * px转dp，如[xxhdpi](1080 -> 360)
+ */
+val Float.pxToDp: Float get() = this / Resources.getSystem().displayMetrics.density + 0.5f * if (this >= 0) 1 else -1
+
+/**
+ * px转dp，如[xxhdpi](1080 -> 360)
+ */
+val Int.pxToDp: Int get() = toFloat().pxToDp.roundToInt()
+
+
+/**
  * sp转px
  */
 val Float.spToPx: Float
@@ -46,16 +57,16 @@ val Float.spToPx: Float
  */
 val Int.spToPx: Int get() = toFloat().spToPx.roundToInt()
 
-/**
- * px转dp，如[xxhdpi](1080 -> 360)
- */
-val Float.pxToDp: Float get() = this / Resources.getSystem().displayMetrics.density + 0.5f * if (this >= 0) 1 else -1
 
 /**
- * px转dp，如[xxhdpi](1080 -> 360)
+ * px转sp
  */
-val Int.pxToDp: Int get() = toFloat().pxToDp.roundToInt()
+val Float.pxToSp: Float get() = this / Resources.getSystem().displayMetrics.scaledDensity + 0.5f * if (this >= 0) 1 else -1
 
+/**
+ * px转sp
+ */
+val Int.pxToSp: Int get() = toFloat().pxToSp.roundToInt()
 
 /**
  * 获取string资源

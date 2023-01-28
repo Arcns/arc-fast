@@ -29,7 +29,7 @@ class MainViewModel : ViewModel() {
             Menu(
                 "二、Fast Resource",
                 "一行代码简单实现Android dp2px、sp2px、常用Resource值(string/color/drawable)获取",
-                ACTION_CORE
+                ACTION_RESOURCE
             ),
             Menu(
                 "三、Fast Permission",

@@ -34,8 +34,8 @@
             android:id="@+id/action_mainFragment_to_nestedScrollCompatFragment"
             app:destination="@id/nestedScrollCompatFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_coreFragment"
-            app:destination="@id/coreFragment" />
+            android:id="@+id/action_mainFragment_to_resourceFragment"
+            app:destination="@id/resourceFragment" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -89,7 +89,7 @@
         android:name="com.arc.fast.sample.view.DragExitFragment"
         android:label="DragExitFragment" />
     <fragment
-        android:id="@+id/coreFragment"
-        android:name="com.arc.fast.sample.core.CoreFragment"
-        android:label="CoreFragment" />
+        android:id="@+id/resourceFragment"
+        android:name="com.arc.fast.sample.resource.ResourceFragment"
+        android:label="ResourceFragment" />
 </navigation>

@@ -1,6 +1,5 @@
 package com.arc.fast.sample.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arc.fast.sample.*
 import com.arc.fast.sample.common.data.entity.Menu
 import com.arc.fast.sample.databinding.FragmentMainBinding
-import com.arc.fast.sample.view.DragExitActivity
-import com.arc.fast.sample.view.DragExitMainFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -65,9 +62,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                     .setPositiveButton("确定") { _, _ -> }
                     .show()
             }
-            ACTION_CORE -> {
+            ACTION_RESOURCE -> {
                 findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToCoreFragment()
+                    MainFragmentDirections.actionMainFragmentToResourceFragment()
                 )
             }
             ACTION_PERMISSION -> {

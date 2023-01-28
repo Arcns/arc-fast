@@ -50,11 +50,13 @@ allprojects {
 | Float.pxToDp | 把px转换为dp(Float格式) | 100f.pxToDp |
 | Int.pxToDp | 把px转换为dp(Int格式) | 100.pxToDp |
 
-（2）sp2px
+（2）sp2px、pxToSp
 | 方法 | 功能 | 用法 |
 | ------ | ------ | ------ |
 | Float.spToPx | 把sp转换为px(Float格式) | 100f.spToPx |
 | Int.spToPx | 把sp转换为px(Int格式) | 100.spToPx |
+| Float.pxToSp | 把px转换为sp(Float格式) | 100f.pxToSp |
+| Int.pxToSp | 把px转换为sp(Int格式) | 100.pxToSp |
 
 （3）获取String资源
 | 方法 | 功能 | 用法 |
