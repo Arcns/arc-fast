@@ -747,3 +747,15 @@ ps：如果你希望`dragExitLayout`在拖拽后，当前activity背景能够变
         <item name="android:windowActivityTransitions">true</item>
  </style>
 ```
+FastDragExitLayout所有支持的参数如下：
+| 参数 | 说明 | 类型 | 默认值 |
+| ------ | ------ | ------ | ------ |
+| fastDragExitLayout_enableLeftDragExit | 是否支持从左面方向启动拖拽退出 | boolean，例如true | true |
+| fastDragExitLayout_enableRightDragExit | 是否支持从右面方向启动拖拽退出 | boolean，例如true | true |
+| fastDragExitLayout_enableTopDragExit | 是否支持从上面方向启动拖拽退出 | boolean，例如true | true |
+| fastDragExitLayout_enableBottomDragExit | 是否支持从下面方向启动拖拽退出 | boolean，例如true | true |
+| fastDragExitLayout_enableDragScale | 是否支持拖拽时缩放 | boolean，例如true | true |
+| fastDragExitLayout_enableDragHorizontal | 是否支持拖拽时横向移动 | boolean，例如true | true |
+| fastDragExitLayout_enableDragVertical | 是否支持拖拽时纵向移动 | boolean，例如true | true |
+| fastDragExitLayout_dragScaleFactor | 拖拽时的缩放因子（该值越小时，缩放效果越明显） | float，例如2.5f | 2.5f |
+| fastDragExitLayout_dragExitDistance | 拖拽达到退出的距离（拖拽超过该距离回执行退出操作，未达到该距离则会恢复） | dimension，例如100dp | 控件宽度的20% |
