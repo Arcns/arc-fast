@@ -64,7 +64,7 @@ android {
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     // ViewModel
@@ -90,27 +90,32 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
     // 扫码
     implementation "com.google.mlkit:barcode-scanning:17.0.3"
-    implementation "androidx.camera:camera-core:1.2.0"
-    implementation "androidx.camera:camera-camera2:1.2.0"
-    implementation "androidx.camera:camera-lifecycle:1.2.0"
-    implementation "androidx.camera:camera-view:1.2.0"
+    implementation "androidx.camera:camera-core:1.2.1"
+    implementation "androidx.camera:camera-camera2:1.2.1"
+    implementation "androidx.camera:camera-lifecycle:1.2.1"
+    implementation "androidx.camera:camera-view:1.2.1"
     // EventBus
     implementation "org.greenrobot:eventbus:3.3.1"
     //
     implementation 'io.github.youth5201314:banner:2.2.2'
-    // core
-    implementation project(path: ':core')
-    implementation project(path: ':permission')
-    implementation project(path: ':immersive')
-    implementation project(path: ':span')
-    implementation project(path: ':mask')
-    implementation project(path: ':rounded')
-    implementation project(path: ':nested-scroll-compat')
-    implementation project(path: ':drag-exit')
-    implementation project(path: ':text-view')
-//    implementation "com.gitee.arcns.arc-fast:core:1.11.18"
-//    implementation "com.gitee.arcns.arc-fast:permission:1.11.18"
-//    implementation "com.gitee.arcns.arc-fast:immersive:1.11.18"
-//    implementation "com.gitee.arcns.arc-fast:span:1.11.18"
-//    implementation "com.gitee.arcns.arc-fast:mask:1.11.18"
+    // arc-fast
+//    implementation project(path: ':core')
+//    implementation project(path: ':permission')
+//    implementation project(path: ':immersive')
+//    implementation project(path: ':span')
+//    implementation project(path: ':mask')
+//    implementation project(path: ':rounded')
+//    implementation project(path: ':nested-scroll-compat')
+//    implementation project(path: ':drag-exit')
+//    implementation project(path: ':text-view')
+    def arcfast_version = "1.18.3"
+    implementation "com.gitee.arcns.arc-fast:core:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:permission:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:immersive:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:span:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:mask:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:rounded:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:nested-scroll-compat:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:drag-exit:$arcfast_version"
+    implementation "com.gitee.arcns.arc-fast:text-view:$arcfast_version"
 }
