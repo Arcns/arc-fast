@@ -16,6 +16,8 @@
         android:background="@color/bg_2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:fastDragExitLayout_dragStartPosition="firstMove"
+        app:fastDragExitLayout_dragScaleFactor="0.9"
         app:rounded_radius="32dp">
 
 

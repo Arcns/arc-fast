@@ -46,6 +46,10 @@ class FastDragExitLayout @JvmOverloads constructor(
             } else 0f
         }
 
+    // 拖拽时缩放的保留比例值，如果有设置该值，那么在拖拽时缩放比例会叠加该值
+    // 用于强调首次触发拖拽缩放时的效果感
+    var dragScaleReserve = 0f
+
     // 拖拽达到退出的距离（拖拽超过该距离回执行退出操作，未达到该距离则会恢复）
     var dragExitDistance = DEFAULT_DRAG_EXIT_DISTANCE
         get() {
@@ -54,6 +58,9 @@ class FastDragExitLayout @JvmOverloads constructor(
             }
             return field
         }
+
+    // 拖拽开始的位置 0从按下的位置开始 1从首次可以移动的位置开始
+    var dragStartPosition = DragStartPosition.FirstMove
 
 
     // 是否以初始化布局
@@ -143,6 +150,9 @@ class FastDragExitLayout @JvmOverloads constructor(
                 dragScaleFactor = typedArray.getFloat(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleFactor, 2.5f
                 )
+                dragScaleReserve = typedArray.getFloat(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleReserve, 0f
+                )
                 dragExitDistance = typedArray.getFloat(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_dragExitDistance,
                     DEFAULT_DRAG_EXIT_DISTANCE
@@ -153,6 +163,12 @@ class FastDragExitLayout @JvmOverloads constructor(
                 enableDragVertical = typedArray.getBoolean(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_enableDragVertical, true
                 )
+                dragStartPosition = typedArray.getInt(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragStartPosition,
+                    DragStartPosition.FirstMove.value
+                ).let {
+                    if (it == DragStartPosition.Down.value) DragStartPosition.Down else DragStartPosition.FirstMove
+                }
             } finally {
                 typedArray.recycle()
             }
@@ -258,8 +274,13 @@ class FastDragExitLayout @JvmOverloads constructor(
             }
             if (isExceedScaledTouchSlop) {
 //                        if (System.currentTimeMillis() - startInterceptTouchTime > 150) {
-                currentTouchX = startInterceptTouchX
-                currentTouchY = startInterceptTouchY
+                if (dragStartPosition == DragStartPosition.Down) {
+                    currentTouchX = startInterceptTouchX
+                    currentTouchY = startInterceptTouchY
+                } else {
+                    currentTouchX = event.rawX
+                    currentTouchY = event.rawY
+                }
                 enableTouch = true
                 onDragCallback?.invoke(true)
                 return InterceptCheckResult.Intercept
@@ -307,7 +328,7 @@ class FastDragExitLayout @JvmOverloads constructor(
                     // 缩放
                     if (enableDragScale && dragScaleFactorValue > 0f) {
                         currentScale =
-                            1 - (abs(currentLeft) + abs(currentTop)) / dragScaleFactorValue - 0.05f
+                            1 - (abs(currentLeft) + abs(currentTop)) / dragScaleFactorValue - dragScaleReserve //0.05f
                         scaleX = currentScale
                         scaleY = currentScale
                     }
@@ -376,3 +397,11 @@ enum class InterceptCheckResult {
     NotIntercept, Intercept, Wait
 }
 
+// 拖拽开始的位置  1从首次可以移动的位置开始
+enum class DragStartPosition(val value: Int) {
+    // 0从按下的位置开始
+    Down(0),
+
+    // 1从首次可以移动的位置开始
+    FirstMove(1)
+}
