@@ -757,5 +757,8 @@ FastDragExitLayout所有支持的参数如下：
 | fastDragExitLayout_enableDragScale | 是否支持拖拽时缩放 | boolean，例如true | true |
 | fastDragExitLayout_enableDragHorizontal | 是否支持拖拽时横向移动 | boolean，例如true | true |
 | fastDragExitLayout_enableDragVertical | 是否支持拖拽时纵向移动 | boolean，例如true | true |
-| fastDragExitLayout_dragScaleFactor | 拖拽时的缩放因子（该值越小时，缩放效果越明显） | float，例如2.5f | 2.5f |
+| fastDragExitLayout_dragScaleFactor | 拖拽时的缩放因子（该值越小时，缩放效果越明显） | float，例如2.5f | 1f |
+| fastDragExitLayout_dragScaleReserve | 拖拽时缩放的保留比例值，如果有设置该值，那么在拖拽时缩放比例会叠加该值（用于强调首次触发拖拽缩放时的效果感） | float，例如0.05f | 0 |
 | fastDragExitLayout_dragExitDistance | 拖拽达到退出的距离（拖拽超过该距离回执行退出操作，未达到该距离则会恢复） | dimension，例如100dp | 控件宽度的20% |
+| fastDragExitLayout_dragResumeDuration | 拖拽为达到离开距离时的恢复动画时长（毫秒） | int | 100 |
+| fastDragExitLayout_dragStartPosition | 拖拽开始的位置 down:从按下的位置开始 firstMove:从首次可以移动的位置开始 | down/firstMove | firstMove |

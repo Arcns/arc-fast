@@ -29,9 +29,11 @@
         <activity
             android:name=".view.DragExitActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/TransitionBlackTheme" />
+        <activity
+            android:name=".view.ImageDragExitActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/TransitionTheme" />
-
-        <service android:name=".common.utils.SimpleDownloadService" />
     </application>
 
 </manifest>

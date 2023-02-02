@@ -5,9 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewConfiguration
-import android.view.ViewGroup
 import com.arc.fast.dragexit.R
 import com.arc.fast.view.rounded.RoundedConstraintLayout
 import kotlin.math.abs
@@ -38,7 +36,7 @@ class FastDragExitLayout @JvmOverloads constructor(
     var enableDragScale = true
 
     // 拖拽缩放因子（该值越小，缩放效果越明显）
-    var dragScaleFactor = 2.5f
+    var dragScaleFactor = 1f
         set(value) {
             field = value
             dragScaleFactorValue = if (layoutWidth > 0 && layoutHeight > 0) {
@@ -53,8 +51,8 @@ class FastDragExitLayout @JvmOverloads constructor(
     // 拖拽达到退出的距离（拖拽超过该距离回执行退出操作，未达到该距离则会恢复）
     var dragExitDistance = DEFAULT_DRAG_EXIT_DISTANCE
         get() {
-            if (field == DEFAULT_DRAG_EXIT_DISTANCE && layoutWidth > 0) {
-                field = layoutWidth * 0.2f
+            if (field == DEFAULT_DRAG_EXIT_DISTANCE && layoutWidth > 0 && layoutHeight > 0) {
+                field = if (!enableDragHorizontal) layoutHeight * 0.2f else layoutWidth * 0.2f
             }
             return field
         }
@@ -62,6 +60,8 @@ class FastDragExitLayout @JvmOverloads constructor(
     // 拖拽开始的位置 0从按下的位置开始 1从首次可以移动的位置开始
     var dragStartPosition = DragStartPosition.FirstMove
 
+    // 拖拽为达到离开距离时的恢复动画时长（毫秒）
+    var dragesumeDuration = 100L
 
     // 是否以初始化布局
     private var isInitLayout = false
@@ -112,12 +112,21 @@ class FastDragExitLayout @JvmOverloads constructor(
             return field
         }
 
+    // 拖拽恢复动画
+    private val dragResumeAnimator by lazy {
+        FastDragResumeAnimator(this) {
+            isAnimation = false
+            currentScale = 1f
+            onDragCallback?.onEnd(false)
+        }
+    }
+
     // 是否启用圆角
     override val enableRoundedRadius: Boolean
         get() = enableDragExit && (enableTouch || isAnimation)
 
     // 拖拽回调
-    private var onDragCallback: ((isDrag: Boolean) -> Unit)? = null
+    private var onDragCallback: OnDragCallback? = null
 
     // 退出等待回调（适用于延时操作，您必须确保操作完成后调用continueExit）
     private var onExitWaitCallback: ((currentScale: Float, continueExit: () -> Unit) -> Unit)? =
@@ -148,7 +157,7 @@ class FastDragExitLayout @JvmOverloads constructor(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_enableDragScale, true
                 )
                 dragScaleFactor = typedArray.getFloat(
-                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleFactor, 2.5f
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleFactor, 1f
                 )
                 dragScaleReserve = typedArray.getFloat(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleReserve, 0f
@@ -169,6 +178,10 @@ class FastDragExitLayout @JvmOverloads constructor(
                 ).let {
                     if (it == DragStartPosition.Down.value) DragStartPosition.Down else DragStartPosition.FirstMove
                 }
+                dragesumeDuration = typedArray.getInt(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragResumeDuration,
+                    100
+                ).toLong()
             } finally {
                 typedArray.recycle()
             }
@@ -186,7 +199,7 @@ class FastDragExitLayout @JvmOverloads constructor(
 
     fun enableDragExit(
         bindExitActivity: Activity? = null,
-        onDragCallback: ((isDrag: Boolean) -> Unit)? = null,
+        onDragCallback: OnDragCallback? = null,
         onExitWaitCallback: ((currentScale: Float, continueExit: () -> Unit) -> Unit)? = null,
         onExitCallback: ((currentScale: Float) -> Unit)? = null
     ) {
@@ -282,7 +295,7 @@ class FastDragExitLayout @JvmOverloads constructor(
                     currentTouchY = event.rawY
                 }
                 enableTouch = true
-                onDragCallback?.invoke(true)
+                onDragCallback?.onStart()
                 return InterceptCheckResult.Intercept
 //                        }
             } else {
@@ -332,6 +345,7 @@ class FastDragExitLayout @JvmOverloads constructor(
                         scaleX = currentScale
                         scaleY = currentScale
                     }
+                    onDragCallback?.onDrag(currentLeft, currentTop, currentScale)
                     // 获取移动后的位置
                     currentTouchX = x
                     currentTouchY = y
@@ -351,14 +365,8 @@ class FastDragExitLayout @JvmOverloads constructor(
                         }
                     } else {
                         // 恢复
-                        updateLayoutParams<MarginLayoutParams> {
-                            topMargin = 0
-                            leftMargin = 0
-                        }
-                        currentScale = 1f
-                        scaleX = currentScale
-                        scaleY = currentScale
-                        onDragCallback?.invoke(false)
+                        isAnimation = true
+                        dragResumeAnimator.resume(dragesumeDuration)
                     }
                     return true
                 }
@@ -368,6 +376,7 @@ class FastDragExitLayout @JvmOverloads constructor(
     }
 
     private fun onExit() {
+        onDragCallback?.onEnd(true)
         onExitWaitCallback = null
         onExitCallback?.invoke(currentScale)
         onExitCallback = null
@@ -375,17 +384,10 @@ class FastDragExitLayout @JvmOverloads constructor(
         bindExitActivity = null
     }
 
-    private inline fun View.updateLayoutParams(block: ViewGroup.LayoutParams.() -> Unit) {
-        updateLayoutParams<ViewGroup.LayoutParams>(block)
-    }
-
-    @JvmName("updateLayoutParamsTyped")
-    private inline fun <reified T : ViewGroup.LayoutParams> View.updateLayoutParams(
-        block: T.() -> Unit
-    ) {
-        val params = layoutParams as T
-        block(params)
-        layoutParams = params
+    interface OnDragCallback {
+        fun onStart() {}
+        fun onEnd(isExit: Boolean) {}
+        fun onDrag(left: Int, top: Int, scale: Float) {}
     }
 
     companion object {

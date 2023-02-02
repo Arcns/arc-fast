@@ -12,6 +12,7 @@
         <attr name="fastDragExitLayout_dragScaleReserve" format="float" />
         <attr name="fastDragExitLayout_dragScaleFactor" format="float" />
         <attr name="fastDragExitLayout_dragExitDistance" format="float" />
+        <attr name="fastDragExitLayout_dragResumeDuration" format="integer" />
         <attr name="fastDragExitLayout_dragStartPosition" format="enum">
             <enum name="down" value="0" />
             <enum name="firstMove" value="1" />

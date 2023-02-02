@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TransitionTheme" parent="@style/AppTheme">
+    <style name="TransitionBlackTheme" parent="@style/AppTheme">
         <item name="android:windowBackground">@color/black_30</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <style name="TransitionTheme" parent="@style/AppTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/EmptyAnimationStyle</item>
         <item name="android:windowActivityTransitions">true</item>
     </style>
 

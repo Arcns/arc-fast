@@ -29,5 +29,8 @@ class DragExitMainFragment : BaseFragment<FragmentDragExitMainBinding>() {
         binding.btn2.setOnClickListener {
             startActivity(Intent(requireContext(), DragExitActivity::class.java))
         }
+        binding.btn3.setOnClickListener {
+            startActivity(Intent(requireContext(), ImageDragExitActivity::class.java))
+        }
     }
 }
