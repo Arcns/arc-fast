@@ -17,5 +17,10 @@
             <enum name="down" value="0" />
             <enum name="firstMove" value="1" />
         </attr>
+        <attr name="fastDragExitLayout_dragScaleReference" format="enum">
+            <enum name="x" value="0" />
+            <enum name="y" value="1" />
+            <enum name="all" value="2" />
+        </attr>
     </declare-styleable>
 </resources>

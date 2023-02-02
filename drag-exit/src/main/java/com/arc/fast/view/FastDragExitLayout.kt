@@ -35,14 +35,12 @@ class FastDragExitLayout @JvmOverloads constructor(
     // 是否支持拖拽缩放
     var enableDragScale = true
 
+    // 拖拽缩放的参照物
+    var dragScaleReference = DragScaleReference.All
+
     // 拖拽缩放因子（该值越小，缩放效果越明显）
+    // 缩放计算公式为：scale=1-abs(reference)/referenceMax*dragScaleFactor
     var dragScaleFactor = 1f
-        set(value) {
-            field = value
-            dragScaleFactorValue = if (layoutWidth > 0 && layoutHeight > 0) {
-                (layoutWidth + layoutHeight) * field
-            } else 0f
-        }
 
     // 拖拽时缩放的保留比例值，如果有设置该值，那么在拖拽时缩放比例会叠加该值
     // 用于强调首次触发拖拽缩放时的效果感
@@ -102,15 +100,6 @@ class FastDragExitLayout @JvmOverloads constructor(
     // 当前缩放比例
     var currentScale = 1f
         private set
-
-    // 缩放计算因子的实际大小
-    private var dragScaleFactorValue = 0f
-        get() {
-            if (field == 0f && layoutWidth > 0 && layoutHeight > 0) {
-                field = (layoutWidth + layoutHeight) * dragScaleFactor
-            }
-            return field
-        }
 
     // 拖拽恢复动画
     private val dragResumeAnimator by lazy {
@@ -175,13 +164,21 @@ class FastDragExitLayout @JvmOverloads constructor(
                 dragStartPosition = typedArray.getInt(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_dragStartPosition,
                     DragStartPosition.FirstMove.value
-                ).let {
-                    if (it == DragStartPosition.Down.value) DragStartPosition.Down else DragStartPosition.FirstMove
+                ).let { position ->
+                    DragStartPosition.values().firstOrNull { it.value == position }
+                        ?: DragStartPosition.FirstMove
                 }
                 dragesumeDuration = typedArray.getInt(
                     R.styleable.FastDragExitLayout_fastDragExitLayout_dragResumeDuration,
                     100
                 ).toLong()
+                dragScaleReference = typedArray.getInt(
+                    R.styleable.FastDragExitLayout_fastDragExitLayout_dragScaleReference,
+                    DragScaleReference.All.value
+                ).let { reference ->
+                    DragScaleReference.values().firstOrNull { it.value == reference }
+                        ?: DragScaleReference.All
+                }
             } finally {
                 typedArray.recycle()
             }
@@ -339,9 +336,15 @@ class FastDragExitLayout @JvmOverloads constructor(
                         }
                     }
                     // 缩放
-                    if (enableDragScale && dragScaleFactorValue > 0f) {
-                        currentScale =
-                            1 - (abs(currentLeft) + abs(currentTop)) / dragScaleFactorValue - dragScaleReserve //0.05f
+                    if (enableDragScale && dragScaleFactor > 0) {
+                        // 缩放计算公式为：scale=1-abs(reference)/referenceMax*dragScaleFactor
+                        currentScale = if (dragScaleReference == DragScaleReference.X) {
+                            1 - abs(currentLeft) / (layoutWidth * dragScaleFactor)
+                        } else if (dragScaleReference == DragScaleReference.Y) {
+                            1 - abs(currentTop) / (layoutHeight * dragScaleFactor)
+                        } else {
+                            1 - (abs(currentLeft) + abs(currentTop)) / ((layoutWidth + layoutHeight) * dragScaleFactor)
+                        } - dragScaleReserve //0.05f
                         scaleX = currentScale
                         scaleY = currentScale
                     }
@@ -406,4 +409,8 @@ enum class DragStartPosition(val value: Int) {
 
     // 1从首次可以移动的位置开始
     FirstMove(1)
+}
+
+enum class DragScaleReference(val value: Int) {
+    X(0), Y(1), All(2)
 }
