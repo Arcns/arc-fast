@@ -56,6 +56,9 @@ open class FastTextWrapSpan(
         bottom: Int,
         paint: Paint
     ) {
+        // 优先更改画笔文字，以便正确计算所占空间
+        paint.textSize = textSize ?: defaultTextSize
+
         //绘制圆角矩形
         val metrics = paint.fontMetrics;
         val top = y + metrics.top
@@ -89,7 +92,6 @@ open class FastTextWrapSpan(
         }
 
         //绘制文字
-        paint.textSize = textSize ?: defaultTextSize
         paint.color = textColor ?: defaultColor
         paint.style = Paint.Style.FILL
         paint.strokeWidth = defaultStrokeWidth
