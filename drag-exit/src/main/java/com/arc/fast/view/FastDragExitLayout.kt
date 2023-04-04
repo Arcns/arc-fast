@@ -207,9 +207,17 @@ class FastDragExitLayout @JvmOverloads constructor(
         this.onExitCallback = onExitCallback
     }
 
+    private fun onFixInterceptTouchEvent(event: MotionEvent): Boolean {
+        return try {
+            super.onInterceptTouchEvent(event)
+        } catch (e: IllegalArgumentException) {
+            false
+        }
+    }
+
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (!enableDragExit || (!enableLeftDragExit && !enableRightDragExit && !enableTopDragExit && !enableBottomDragExit)) {
-            return super.onInterceptTouchEvent(event)
+            return onFixInterceptTouchEvent(event)
         }
         if (!isInitLayout) {
             isInitLayout = true
@@ -234,14 +242,14 @@ class FastDragExitLayout @JvmOverloads constructor(
             }
             MotionEvent.ACTION_MOVE -> {
                 if (!enableInterceptCheck) {
-                    return super.onInterceptTouchEvent(event)
+                    return onFixInterceptTouchEvent(event)
                 }
                 return if (onInterceptCheck(event) == InterceptCheckResult.Intercept) true
-                else super.onInterceptTouchEvent(event)
+                else onFixInterceptTouchEvent(event)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {}
         }
-        return super.onInterceptTouchEvent(event)
+        return onFixInterceptTouchEvent(event)
     }
 
     private fun onInterceptCheck(event: MotionEvent): InterceptCheckResult {

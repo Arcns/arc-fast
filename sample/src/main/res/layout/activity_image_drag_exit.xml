@@ -27,14 +27,20 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <com.github.chrisbanes.photoview.PhotoView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/s1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="w,1:1"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@mipmap/s1" />
+
+            <!--            <ImageView-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="0dp"-->
+            <!--                android:scaleType="centerCrop"-->
+            <!--                android:src="@mipmap/s1"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintDimensionRatio="w,1:1"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
         </com.arc.fast.view.FastDragExitLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
