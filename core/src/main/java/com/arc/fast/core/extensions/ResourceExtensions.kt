@@ -212,14 +212,3 @@ val Context.selectableItemBackgroundBorderlessRes: Int? get() = getAttributeReso
  * 获取attr资源 actionBarItemBackground
  */
 val Context.actionBarItemBackgroundRes: Int? get() = getAttributeResource(android.R.attr.actionBarItemBackground)
-
-/**
- * string转html
- */
-val String.html: Spanned
-    get() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(this, 0)
-        } else {
-            Html.fromHtml(this)
-        }

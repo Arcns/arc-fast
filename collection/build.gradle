@@ -1,10 +1,12 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
     id 'maven-publish'
+    id 'kotlin-kapt'
 }
 android {
-    namespace 'com.arc.fast.core'
+    namespace 'com.arc.fast.collection'
     compileSdk versions.compile_sdk
     defaultConfig {
         minSdk versions.min_sdk
@@ -23,13 +25,26 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11
     }
+    // dataBinding
+    buildFeatures {
+        dataBinding true
+    }
 }
 dependencies {
-    implementation 'androidx.core:core-ktx:1.10.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    // 仅编译，若项目需要使用到，需要在项目中自行引用
-    compileOnly 'com.google.code.gson:gson:2.9.1'
+    compileOnly 'androidx.appcompat:appcompat:1.6.1'
+    compileOnly 'androidx.constraintlayout:constraintlayout:2.1.4'
+    compileOnly 'androidx.recyclerview:recyclerview:1.3.0'
+    compileOnly 'androidx.viewpager2:viewpager2:1.0.0'
+    compileOnly 'io.github.youth5201314:banner:2.2.2'
+    api project(path: ':core')
+    api project(path: ':permission')
+    api project(path: ':immersive')
+    api project(path: ':span')
+    api project(path: ':mask')
+    api project(path: ':rounded')
+    api project(path: ':nested-scroll-compat')
+    api project(path: ':drag-exit')
+    api project(path: ':text-view')
 }
 afterEvaluate {
     publishing {
