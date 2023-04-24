@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -274,11 +275,13 @@ class ImmersivePopupWindowBackground(
                         height = parentWindow!!.decorView.measuredHeight - anchorY
                         gravity = Gravity.TOP
                     }
+
                     ImmersivePopupWindowBackgroundConstraint.BottomToAnchorTop -> {
                         anchorY = 0
                         height = location.last() - yoff
                         gravity = Gravity.TOP
                     }
+
                     else -> {
                         showBackground()
                         return@post
@@ -304,6 +307,7 @@ class ImmersivePopupWindowBackground(
     private fun showBackground() {
         if (config.enableBackgroundAnimator) {
             animator.cancel()
+            rootView.isVisible = true
             backgroundView.alpha = 0f
             backgroundView.isVisible = true
             animator.setFloatValues(0f, 1f)
@@ -317,6 +321,7 @@ class ImmersivePopupWindowBackground(
     private fun dismissBackground() {
         if ((context as? Activity)?.let { it.isFinishing || it.isDestroyed } == true) return
         try {
+            rootView.isVisible = false
             windowManager.removeView(rootView)
         } catch (e: Exception) {
             e.printStackTrace()
