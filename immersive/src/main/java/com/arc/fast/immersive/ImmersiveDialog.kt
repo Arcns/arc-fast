@@ -10,6 +10,7 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
@@ -290,6 +291,7 @@ class ImmersiveDialogBackground(
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         if (backgroundView.alpha == 0f) {
+                            rootView.isVisible = false
                             windowManager.removeView(
                                 rootView
                             )
@@ -312,6 +314,7 @@ class ImmersiveDialogBackground(
 
     private fun executeShowAnimator() {
         animator.cancel()
+        rootView.isVisible = true
         backgroundView.alpha = 0f
         backgroundView.isVisible = true
         animator.setFloatValues(0f, 1f)
