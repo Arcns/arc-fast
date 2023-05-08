@@ -93,7 +93,6 @@ fun FragmentActivity.setupAutoHideSoftInput(
         override fun onDestroy(owner: LifecycleOwner) {
             lifecycleOwner.lifecycle.removeObserver(this)
             rvView.onFocusChangeListener = null
-            super.onDestroy(owner)
         }
     })
 }

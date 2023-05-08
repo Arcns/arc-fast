@@ -201,7 +201,6 @@ class FastPermissionUtil {
             override fun onDestroy(owner: LifecycleOwner) {
                 lifecycle.removeObserver(this)
                 onLauncherResultCallback = null
-                super.onDestroy(owner)
             }
         })
         // 开始请求
@@ -291,7 +290,6 @@ class FastPermissionUtil {
             override fun onDestroy(owner: LifecycleOwner) {
                 lifecycle.removeObserver(this)
                 release()
-                super.onDestroy(owner)
             }
         })
     }
@@ -502,7 +500,6 @@ class FastPermissionUtil {
                             override fun onDestroy(owner: LifecycleOwner) {
                                 fragment.lifecycle.removeObserver(this)
                                 fastInstances.remove(activity.hashCode())
-                                super.onDestroy(owner)
                             }
                         })
                     }, null).commit()

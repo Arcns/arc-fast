@@ -385,7 +385,6 @@ class ImmersiveDialogBackground(
         dialogFragment.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onDestroy(owner: LifecycleOwner) {
                 dialogFragment.lifecycle.removeObserver(this)
-                super.onDestroy(owner)
                 executeDismissAnimator()
             }
         })

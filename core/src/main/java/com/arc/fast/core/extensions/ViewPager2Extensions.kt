@@ -124,7 +124,6 @@ fun <Data> TabLayout.bindToViewPager2(
             lifecycle.removeObserver(this)
             viewPager.removeAllViews()
             tabLayoutMediator.detach()
-            super.onDestroy(owner)
         }
     })
     disabledTooltipText()
