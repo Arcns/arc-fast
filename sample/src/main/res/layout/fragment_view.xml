@@ -92,6 +92,33 @@
             app:layout_constraintRight_toRightOf="@id/rv"
             app:layout_constraintTop_toTopOf="@id/rv" />
 
+        <com.arc.fast.view.rounded.RoundedShadowView
+            android:id="@+id/rsv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/rsv_content"
+            app:layout_constraintLeft_toLeftOf="@id/rsv_content"
+            app:layout_constraintRight_toRightOf="@id/rsv_content"
+            app:layout_constraintTop_toTopOf="@id/rsv_content"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp"
+            app:rounded_shadow_blur="12dp"
+            app:rounded_shadow_offsetY="2dp"
+            app:rounded_shadow_shadowColor="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/rsv_content"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:text="RoundedView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/rv" />
+
         <com.arc.fast.view.rounded.RoundedTextView
             android:id="@+id/ftv"
             android:layout_width="match_parent"
@@ -102,7 +129,7 @@
             android:text="RoundedTextView"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/rv"
+            app:layout_constraintTop_toBottomOf="@id/rsv_content"
             app:rounded_background_color="@android:color/holo_red_light"
             app:rounded_border_color="@android:color/holo_blue_light"
             app:rounded_border_size="5dp"

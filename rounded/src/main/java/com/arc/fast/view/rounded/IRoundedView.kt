@@ -15,7 +15,7 @@ interface IRoundedView {
     val roundedRadiusBottomLeft: Float get() = _config.radius.roundedRadiusBottomLeft
     val roundedRadiusBottomRight: Float get() = _config.radius.roundedRadiusBottomRight
     val roundedView: View? get() = this as? View
-
+    open val defaultDrawOffset: Float get() = 0f
     val enableRoundedRadius: Boolean get() = true
 
     fun setRoundedBackgroundColor(roundedBackgroundColor: Int) {
@@ -155,7 +155,8 @@ interface IRoundedView {
         roundedView?.invalidate()
     }
 
-    fun onDrawBefore(canvas: Canvas): Boolean {
+
+    fun onDrawBefore(canvas: Canvas, drawOffset: Float = defaultDrawOffset): Boolean {
         if (_temporarilyConfig == null && (!enableRoundedRadius || !_config.hasRadius)) {
             if (_config.backgroundColor != null && _config.backgroundColor != Color.TRANSPARENT) {
                 canvas.drawColor(_config.backgroundColor!!)
@@ -165,35 +166,36 @@ interface IRoundedView {
         canvas.save()
         roundedView?.clipToOutline = true
         if (_temporarilyConfig != null) {
-            drawClipAndBackground(canvas, _temporarilyConfig!!)
+            drawClipAndBackground(canvas, _temporarilyConfig!!, drawOffset)
             _temporarilyConfig = null
         } else {
-            drawClipAndBackground(canvas, _config)
+            drawClipAndBackground(canvas, _config, drawOffset)
         }
         return true
     }
 
 
-    fun onDrawAfter(canvas: Canvas) {
+    fun onDrawAfter(canvas: Canvas, drawOffset: Float = defaultDrawOffset) {
         canvas.save()
         if (_temporarilyConfig != null) {
-            drawBorder(canvas, _temporarilyConfig!!)
+            drawBorder(canvas, _temporarilyConfig!!, drawOffset)
         } else {
-            drawBorder(canvas, _config)
+            drawBorder(canvas, _config, drawOffset)
         }
     }
 
     fun drawClipAndBackground(
         canvas: Canvas,
-        drawConfig: RoundedViewConfig
+        drawConfig: RoundedViewConfig,
+        drawOffset: Float = 0f
     ) {
         val path = Path()
         path.addRoundRect(
             RectF(
-                0f,
-                0f,
-                roundedView!!.width.toFloat(),
-                roundedView!!.height.toFloat()
+                drawOffset,
+                drawOffset,
+                roundedView!!.width.toFloat() - drawOffset,
+                roundedView!!.height.toFloat() - drawOffset
             ),
             drawConfig.getRadii(),
             Path.Direction.CCW
@@ -201,10 +203,7 @@ interface IRoundedView {
         if (drawConfig.hasBackgroundColor) {
             canvas.drawPath(
                 path,
-                Paint().apply {
-                    color = drawConfig.backgroundColor!!
-                    style = Paint.Style.FILL
-                }
+                drawConfig.backgroundPaint
             )
         }
         canvas.clipPath(path)
@@ -213,28 +212,25 @@ interface IRoundedView {
 
     fun drawBorder(
         canvas: Canvas,
-        drawConfig: RoundedViewConfig
+        drawConfig: RoundedViewConfig,
+        drawOffset: Float = 0f
     ) {
         if (!drawConfig.hasBorder) return
-        val offset = drawConfig.borderSize!! / 2
+        val borderOffset = drawConfig.borderSize!! / 2
         val path = Path()
         path.addRoundRect(
             RectF(
-                offset,
-                offset,
-                roundedView!!.width.toFloat() - offset,
-                roundedView!!.height.toFloat() - offset
+                drawOffset + borderOffset,
+                drawOffset + borderOffset,
+                roundedView!!.width.toFloat() - borderOffset - drawOffset,
+                roundedView!!.height.toFloat() - borderOffset - drawOffset
             ),
-            drawConfig.getRadii(-offset),
+            drawConfig.getRadii(-borderOffset),
             Path.Direction.CCW
         )
         canvas.drawPath(
             path,
-            Paint().apply {
-                color = drawConfig.borderColor!!
-                style = Paint.Style.STROKE
-                strokeWidth = drawConfig.borderSize!!
-            }
+            drawConfig.borderPaint
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.arc.fast.view.rounded
 
 import android.graphics.Color
+import android.graphics.Paint
 
 open class RoundedViewConfig(
     var radius: RoundedRadius = RoundedRadius(),
@@ -8,6 +9,21 @@ open class RoundedViewConfig(
     var borderColor: Int? = null,
     var borderSize: Float? = null
 ) {
+    val paint by lazy { Paint(Paint.ANTI_ALIAS_FLAG) }
+
+    val borderPaint
+        get() = paint.apply {
+            style = Paint.Style.STROKE
+            color = borderColor ?: return@apply
+            strokeWidth = borderSize ?: return@apply
+        }
+
+    val backgroundPaint
+        get() = paint.apply {
+            style = Paint.Style.FILL
+            color = backgroundColor ?: return@apply
+        }
+
     fun getRadii(offset: Float = 0f): FloatArray {
         return floatArrayOf(
             radius.roundedRadiusTopLeft + offset,

@@ -11,4 +11,11 @@
         <attr name="rounded_border_color" format="color" />
         <attr name="rounded_border_size" format="dimension" />
     </declare-styleable>
+    <!-- 圆角阴影视图 -->
+    <declare-styleable name="RoundedShadowView">
+        <attr name="rounded_shadow_blur" format="dimension" />
+        <attr name="rounded_shadow_offsetX" format="dimension" />
+        <attr name="rounded_shadow_offsetY" format="dimension" />
+        <attr name="rounded_shadow_shadowColor" format="color" />
+    </declare-styleable>
 </resources>
