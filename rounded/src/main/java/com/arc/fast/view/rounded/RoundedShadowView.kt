@@ -74,7 +74,7 @@ open class RoundedShadowView @JvmOverloads constructor(
                 )
             shadowColor =
                 typedArray.getColor(
-                    R.styleable.RoundedShadowView_rounded_shadow_shadowColor,
+                    R.styleable.RoundedShadowView_rounded_shadow_color,
                     Color.TRANSPARENT
                 )
         } finally {

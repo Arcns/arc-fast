@@ -16,6 +16,6 @@
         <attr name="rounded_shadow_blur" format="dimension" />
         <attr name="rounded_shadow_offsetX" format="dimension" />
         <attr name="rounded_shadow_offsetY" format="dimension" />
-        <attr name="rounded_shadow_shadowColor" format="color" />
+        <attr name="rounded_shadow_color" format="color" />
     </declare-styleable>
 </resources>
