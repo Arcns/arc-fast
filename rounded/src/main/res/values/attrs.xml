@@ -13,9 +13,13 @@
     </declare-styleable>
     <!-- 圆角阴影视图 -->
     <declare-styleable name="RoundedShadowView">
+        <!-- 阴影的模糊度 -->
         <attr name="rounded_shadow_blur" format="dimension" />
+        <!-- 阴影X方向的偏移值 -->
         <attr name="rounded_shadow_offsetX" format="dimension" />
+        <!-- 阴影Y方向的偏移值 -->
         <attr name="rounded_shadow_offsetY" format="dimension" />
+        <!-- 阴影的颜色 -->
         <attr name="rounded_shadow_color" format="color" />
     </declare-styleable>
 </resources>

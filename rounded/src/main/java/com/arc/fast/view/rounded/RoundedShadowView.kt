@@ -30,23 +30,23 @@ open class RoundedShadowView @JvmOverloads constructor(
         const val shadowMultiplier = 1.5f
     }
 
-    // 阴影Blur
+    // 阴影的模糊度
     var shadowBlur = 0f
         private set
 
-    // 阴影OffsetX
+    // 阴影X方向的偏移值
     var shadowOffsetX = 0f
         private set
 
-    // 阴影OffsetY
+    // 阴影Y方向的偏移值
     var shadowOffsetY = 0f
         private set
 
-    // 阴影颜色
+    // 阴影的颜色
     var shadowColor = Color.TRANSPARENT
         private set
 
-    // 阴影Padding
+    // 阴影的Padding(实际占用空间大小)
     var shadowPadding = 0f
 
     override val defaultDrawOffset: Float get() = shadowPadding
