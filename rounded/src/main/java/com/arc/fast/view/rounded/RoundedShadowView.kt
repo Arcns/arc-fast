@@ -48,6 +48,7 @@ open class RoundedShadowView @JvmOverloads constructor(
 
     // 阴影的Padding(实际占用空间大小)
     var shadowPadding = 0f
+        private set
 
     override val defaultDrawOffset: Float get() = shadowPadding
 
