@@ -106,7 +106,7 @@
             app:rounded_radius="32dp"
             app:rounded_shadow_blur="12dp"
             app:rounded_shadow_offsetY="2dp"
-            app:rounded_shadow_shadowColor="@android:color/holo_orange_light" />
+            app:rounded_shadow_color="@android:color/holo_orange_light" />
 
         <TextView
             android:id="@+id/rsv_content"
