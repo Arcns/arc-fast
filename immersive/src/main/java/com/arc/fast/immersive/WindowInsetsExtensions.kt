@@ -45,14 +45,16 @@ fun View.getMargins() = MarginPaddings(
 /**
  * 请求应用Insets
  */
-fun View.requestApplyInsetsWhenAttached() {
+fun View.requestApplyInsetsWhenAttached(onAttached: (() -> Unit)? = null) {
     if (isAttachedToWindow) {
         // 已添加到window时，重新请求应用Insets
+        onAttached?.invoke()
         requestApplyInsets()
     } else {
         // 未添加到window时，添加监听器在添加到window时请求应用Insets
         addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
+                onAttached?.invoke()
                 v.removeOnAttachStateChangeListener(this)
                 v.requestApplyInsets()
             }

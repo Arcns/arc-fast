@@ -288,24 +288,25 @@ fun Activity.getSystemBarHeight(
         systemStatusBarHeight,
         systemNavigationBarHeight
     ) else {
-        ViewCompat.setOnApplyWindowInsetsListener(
-            window.decorView
-        ) { _, insets ->
-            val statusBarHeight =
-                insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
-            // 只有当statusBarHeight>0，才证明是正常的回调
-            if (statusBarHeight > 0) {
-                if (realSystemStatusBarHeight == null)
-                    realSystemStatusBarHeight = statusBarHeight
-                if (realSystemNavigationBarHeight == null)
-                    realSystemNavigationBarHeight =
-                        insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
-                ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
-                handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+        window.decorView.requestApplyInsetsWhenAttached{
+            ViewCompat.setOnApplyWindowInsetsListener(
+                window.decorView
+            ) { _, insets ->
+                val statusBarHeight =
+                    insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
+                // 只有当statusBarHeight>0，才证明是正常的回调
+                if (statusBarHeight > 0) {
+                    if (realSystemStatusBarHeight == null)
+                        realSystemStatusBarHeight = statusBarHeight
+                    if (realSystemNavigationBarHeight == null)
+                        realSystemNavigationBarHeight =
+                            insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
+                    ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
+                    handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+                }
+                insets
             }
-            insets
         }
-        window.decorView.requestApplyInsetsWhenAttached()
     }
 }
 
