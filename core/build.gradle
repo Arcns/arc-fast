@@ -25,9 +25,9 @@ android {
     }
 }
 dependencies {
-    compileOnly 'androidx.core:core-ktx:1.10.0'
-    compileOnly 'androidx.appcompat:appcompat:1.6.1'
-    compileOnly  'com.google.android.material:material:1.8.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation  'com.google.android.material:material:1.8.0'
     // 仅编译，若项目需要使用到，需要在项目中自行引用
     compileOnly 'com.google.code.gson:gson:2.9.1'
 }
