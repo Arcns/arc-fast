@@ -13,6 +13,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 
 /**
  * 设置自动初始化状态栏和导航栏高度
@@ -283,37 +285,61 @@ fun Activity.setSystemBarVisible(
  */
 fun Activity.getSystemBarHeight(
     forceReRequest: Boolean = false, /* 强制重新获取 */
-    handler: (statusBarHeight: Int, navigationBarHeight: Int) -> Unit
+    handler: OnSystemBarHeightCallback
 ) {
-    if (!forceReRequest && realSystemStatusBarHeight != null && realSystemNavigationBarHeight != null) handler.invoke(
-        systemStatusBarHeight,
-        systemNavigationBarHeight
-    ) else {
-        window.decorView.requestApplyInsetsWhenAttached {
-            Log.e("getSystemBarHeight", "setOnApplyWindowInsetsListener")
-            ViewCompat.setOnApplyWindowInsetsListener(
-                window.decorView
-            ) { _, insets ->
-                val statusBarHeight =
-                    insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
-                // 只有当statusBarHeight>0，才证明是正常的回调
-                Log.e("getSystemBarHeight", "getInsetsIgnoringVisibility:$statusBarHeight")
-                if (statusBarHeight > 0) {
-                    if (realSystemStatusBarHeight == null)
-                        realSystemStatusBarHeight = statusBarHeight
-                    if (realSystemNavigationBarHeight == null)
-                        realSystemNavigationBarHeight =
-                            insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
-                    ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
-                    Log.e("getSystemBarHeight", "setOnApplyWindowInsetsListener null")
-                    handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
-                }
-                insets
-            }
+    if (!forceReRequest && realSystemStatusBarHeight != null && realSystemNavigationBarHeight != null) {
+        handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+        requestSystemBarHeightCallback.forEach {
+            it.invoke(systemStatusBarHeight, systemNavigationBarHeight)
         }
+        requestSystemBarHeightCallback.clear()
+    } else {
+        requestSystemBarHeight(handler)
     }
 }
 
+
+/**
+ * 获取系统栏高度
+ */
+fun Activity.requestSystemBarHeight(
+    handler: OnSystemBarHeightCallback
+) {
+    requestSystemBarHeightCallback.add(handler)
+    (this as? LifecycleOwner)?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
+        override fun onDestroy(owner: LifecycleOwner) {
+            super.onDestroy(owner)
+            owner.lifecycle.removeObserver(this)
+            requestSystemBarHeightCallback.remove(handler)
+        }
+    })
+    window.decorView.requestApplyInsetsWhenAttached {
+        Log.e("requestSystemBarHeight", "setOnApplyWindowInsetsListener")
+        ViewCompat.setOnApplyWindowInsetsListener(
+            window.decorView
+        ) { _, insets ->
+            val statusBarHeight =
+                insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
+            // 只有当statusBarHeight>0，才证明是正常的回调
+            Log.e("requestSystemBarHeight", "getInsetsIgnoringVisibility:$statusBarHeight")
+            if (statusBarHeight > 0) {
+                if (realSystemStatusBarHeight == null)
+                    realSystemStatusBarHeight = statusBarHeight
+                if (realSystemNavigationBarHeight == null)
+                    realSystemNavigationBarHeight =
+                        insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
+                ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
+                Log.e("getSystemBarHeight", "setOnApplyWindowInsetsListener null")
+                handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+                requestSystemBarHeightCallback.forEach {
+                    it.invoke(systemStatusBarHeight, systemNavigationBarHeight)
+                }
+                requestSystemBarHeightCallback.clear()
+            }
+            insets
+        }
+    }
+}
 
 /**
  * 获取系统状态栏高度
@@ -340,6 +366,10 @@ fun Activity.getNavigationBarHeight(handler: (Int) -> Unit) {
     if (realSystemNavigationBarHeight != null) handler.invoke(systemNavigationBarHeight)
     else getSystemBarHeight { _, _ -> handler.invoke(systemNavigationBarHeight) }
 }
+
+typealias OnSystemBarHeightCallback = (statusBarHeight: Int, navigationBarHeight: Int) -> Unit
+
+private val requestSystemBarHeightCallback by lazy { ArrayList<OnSystemBarHeightCallback>() }
 
 
 /**
