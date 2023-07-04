@@ -1,6 +1,7 @@
 package com.arc.fast.immersive
 
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.Insets
@@ -46,6 +47,7 @@ fun View.getMargins() = MarginPaddings(
  * 请求应用Insets
  */
 fun View.requestApplyInsetsWhenAttached(onAttached: (() -> Unit)? = null) {
+    Log.e("WindowInsetsExtensions","requestApplyInsetsWhenAttached:$isAttachedToWindow")
     if (isAttachedToWindow) {
         // 已添加到window时，重新请求应用Insets
         onAttached?.invoke()

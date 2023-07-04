@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -288,13 +289,14 @@ fun Activity.getSystemBarHeight(
         systemStatusBarHeight,
         systemNavigationBarHeight
     ) else {
-        window.decorView.requestApplyInsetsWhenAttached{
+        window.decorView.requestApplyInsetsWhenAttached {
             ViewCompat.setOnApplyWindowInsetsListener(
                 window.decorView
             ) { _, insets ->
                 val statusBarHeight =
                     insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.statusBars()).top
                 // 只有当statusBarHeight>0，才证明是正常的回调
+                Log.e("getSystemBarHeight", "getInsetsIgnoringVisibility:$statusBarHeight")
                 if (statusBarHeight > 0) {
                     if (realSystemStatusBarHeight == null)
                         realSystemStatusBarHeight = statusBarHeight
@@ -314,7 +316,8 @@ fun Activity.getSystemBarHeight(
 /**
  * 获取系统状态栏高度
  */
-private var realSystemStatusBarHeight: Int? = null
+var realSystemStatusBarHeight: Int? = null
+    private set
 val systemStatusBarHeight: Int get() = realSystemStatusBarHeight ?: 0
 fun Activity.getStatusBarHeight(handler: (Int) -> Unit) {
     if (realSystemStatusBarHeight != null) handler.invoke(systemStatusBarHeight)
