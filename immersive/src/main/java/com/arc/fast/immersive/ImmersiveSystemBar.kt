@@ -381,7 +381,11 @@ fun View.setPaddingForStatusBarHeight(
 ) {
     (context as? Activity)?.getStatusBarHeight { statusBarHeight ->
         if (statusBarHeight == 0) return@getStatusBarHeight
-        if (notRepeat && paddingTop == statusBarHeight) {
+        if (paddingTop != 0 && paddingTop != statusBarHeight && defaultPaddingTop == null) {
+            defaultPaddingTop = paddingTop
+        }
+        val newPaddingTop = statusBarHeight + (defaultPaddingTop ?: 0)
+        if (notRepeat && paddingTop == newPaddingTop) {
             return@getStatusBarHeight
         }
         if (keepOriginalHeight && layoutParams.height > 0) {
@@ -391,7 +395,7 @@ fun View.setPaddingForStatusBarHeight(
         }
         setPadding(
             paddingLeft,
-            paddingTop + statusBarHeight,
+            newPaddingTop,
             paddingRight,
             paddingBottom
         )
@@ -408,12 +412,16 @@ fun View.setMarginStatusBarHeight(
         (context as? Activity)?.getStatusBarHeight { statusBarHeight ->
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 if (statusBarHeight == 0) return@getStatusBarHeight
-                if (notRepeat && topMargin == statusBarHeight) {
+                if (topMargin != 0 && topMargin != statusBarHeight && defaultMarginTop == null) {
+                    defaultMarginTop = topMargin
+                }
+                val newMarginTop = statusBarHeight + (defaultMarginTop ?: 0)
+                if (notRepeat && topMargin == newMarginTop) {
                     return@getStatusBarHeight
                 }
                 setMargins(
                     leftMargin,
-                    topMargin + statusBarHeight,
+                    newMarginTop,
                     rightMargin,
                     bottomMargin
                 )
@@ -421,3 +429,17 @@ fun View.setMarginStatusBarHeight(
         }
     }
 }
+
+
+var View.defaultPaddingTop: Int?
+    get() = getTag(R.id.arc_fast_default_padding_top) as? Int
+    set(value) {
+        setTag(R.id.arc_fast_default_padding_top, value)
+    }
+
+
+var View.defaultMarginTop: Int?
+    get() = getTag(R.id.arc_fast_default_margin_top) as? Int
+    set(value) {
+        setTag(R.id.arc_fast_default_margin_top, value)
+    }
