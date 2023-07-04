@@ -290,6 +290,7 @@ fun Activity.getSystemBarHeight(
         systemNavigationBarHeight
     ) else {
         window.decorView.requestApplyInsetsWhenAttached {
+            Log.e("getSystemBarHeight", "setOnApplyWindowInsetsListener")
             ViewCompat.setOnApplyWindowInsetsListener(
                 window.decorView
             ) { _, insets ->
@@ -304,6 +305,7 @@ fun Activity.getSystemBarHeight(
                         realSystemNavigationBarHeight =
                             insets.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.navigationBars()).bottom
                     ViewCompat.setOnApplyWindowInsetsListener(window.decorView, null)
+                    Log.e("getSystemBarHeight", "setOnApplyWindowInsetsListener null")
                     handler.invoke(systemStatusBarHeight, systemNavigationBarHeight)
                 }
                 insets
