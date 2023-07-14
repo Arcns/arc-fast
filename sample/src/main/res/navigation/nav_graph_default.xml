@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_default"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.arc.fast.sample.main.MainFragment">
+        <action
+            android:id="@+id/action_mainFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_dialogFragment"
+            app:destination="@id/dialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_popupFragment"
+            app:destination="@id/popupFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_spanFragment"
+            app:destination="@id/spanFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_maskFragment"
+            app:destination="@id/maskFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_viewFragment"
+            app:destination="@id/viewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_fastTextViewFragment"
+            app:destination="@id/fastTextViewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_dragExitMainFragment"
+            app:destination="@id/dragExitMainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_nestedScrollCompatFragment"
+            app:destination="@id/nestedScrollCompatFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_resourceFragment"
+            app:destination="@id/resourceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.arc.fast.sample.test.TestFragment"
+        android:label="TestFragment" />
+    <action
+        android:id="@+id/action_global_testFragment"
+        app:destination="@id/testFragment" />
+    <fragment
+        android:id="@+id/dialogFragment"
+        android:name="com.arc.fast.sample.dialog.DialogFragment"
+        android:label="DialogFragment" />
+    <fragment
+        android:id="@+id/popupFragment"
+        android:name="com.arc.fast.sample.popup.PopupFragment"
+        android:label="PopupFragment" />
+    <fragment
+        android:id="@+id/spanFragment"
+        android:name="com.arc.fast.sample.span.SpanFragment"
+        android:label="SpanFragment" />
+    <fragment
+        android:id="@+id/maskFragment"
+        android:name="com.arc.fast.sample.mask.MaskFragment"
+        android:label="MaskFragment" />
+    <fragment
+        android:id="@+id/viewFragment"
+        android:name="com.arc.fast.sample.view.ViewFragment"
+        android:label="ViewFragment" />
+    <fragment
+        android:id="@+id/fastTextViewFragment"
+        android:name="com.arc.fast.sample.view.FastTextViewFragment"
+        android:label="FastTextViewFragment" />
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.arc.fast.sample.permission.PermissionFragment"
+        android:label="PermissionFragment" />
+    <fragment
+        android:id="@+id/nestedScrollCompatFragment"
+        android:name="com.arc.fast.sample.nsc.NestedScrollCompatFragment"
+        android:label="NestedScrollCompatFragment" />
+    <fragment
+        android:id="@+id/dragExitMainFragment"
+        android:name="com.arc.fast.sample.view.DragExitMainFragment"
+        android:label="DragExitMainFragment">
+        <action
+            android:id="@+id/action_dragExitMainFragment_to_dragExitFragment"
+            app:destination="@id/dragExitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dragExitFragment"
+        android:name="com.arc.fast.sample.view.DragExitFragment"
+        android:label="DragExitFragment" />
+    <fragment
+        android:id="@+id/resourceFragment"
+        android:name="com.arc.fast.sample.resource.ResourceFragment"
+        android:label="ResourceFragment" />
+</navigation>

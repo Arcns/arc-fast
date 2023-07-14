@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="arc_fast_default_padding_top" type="id" />
+    <item name="arc_fast_default_margin_top" type="id" />
+</resources>

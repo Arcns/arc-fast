@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 文本视图 -->
+    <declare-styleable name="FastTextView">
+        <attr name="fastTextView_leftImageHeight" format="dimension" />
+        <attr name="fastTextView_leftImageWidth" format="dimension" />
+        <attr name="fastTextView_leftImagePadding" format="dimension" />
+        <attr name="fastTextView_rightImageHeight" format="dimension" />
+        <attr name="fastTextView_rightImageWidth" format="dimension" />
+        <attr name="fastTextView_rightImagePadding" format="dimension" />
+        <attr name="fastTextView_topImageHeight" format="dimension" />
+        <attr name="fastTextView_topImageWidth" format="dimension" />
+        <attr name="fastTextView_topImagePadding" format="dimension" />
+        <attr name="fastTextView_bottomImageHeight" format="dimension" />
+        <attr name="fastTextView_bottomImageWidth" format="dimension" />
+        <attr name="fastTextView_bottomImagePadding" format="dimension" />
+        <attr name="fastTextView_textMediumBold" format="boolean" />
+    </declare-styleable>
+</resources>

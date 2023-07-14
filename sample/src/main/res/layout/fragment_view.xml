@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        paddingBottomSystemWindowInsets="@{true}"
+        paddingTopSystemWindowInsets="@{true}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Fast View"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/styleToolbarTitle" />
+
+        <com.arc.fast.view.rounded.RoundedConstraintLayout
+            android:id="@+id/rcl"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RoundedConstraintLayout"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.arc.fast.view.rounded.RoundedConstraintLayout>
+
+        <com.arc.fast.view.rounded.RoundedImageView
+            android:id="@+id/riv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintTop_toBottomOf="@id/rcl"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RoundedImageView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/riv"
+            app:layout_constraintLeft_toLeftOf="@id/riv"
+            app:layout_constraintRight_toRightOf="@id/riv"
+            app:layout_constraintTop_toTopOf="@id/riv" />
+
+        <com.arc.fast.view.rounded.RoundedView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintTop_toBottomOf="@id/riv"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RoundedView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/rv"
+            app:layout_constraintLeft_toLeftOf="@id/rv"
+            app:layout_constraintRight_toRightOf="@id/rv"
+            app:layout_constraintTop_toTopOf="@id/rv" />
+
+        <com.arc.fast.view.rounded.RoundedShadowView
+            android:id="@+id/rsv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/rsv_content"
+            app:layout_constraintLeft_toLeftOf="@id/rsv_content"
+            app:layout_constraintRight_toRightOf="@id/rsv_content"
+            app:layout_constraintTop_toTopOf="@id/rsv_content"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp"
+            app:rounded_shadow_blur="12dp"
+            app:rounded_shadow_offsetY="2dp"
+            app:rounded_shadow_color="@android:color/holo_orange_light" />
+
+        <TextView
+            android:id="@+id/rsv_content"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:text="RoundedView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/rv" />
+
+        <com.arc.fast.view.rounded.RoundedTextView
+            android:id="@+id/ftv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher"
+            android:text="RoundedTextView"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/rsv_content"
+            app:rounded_background_color="@android:color/holo_red_light"
+            app:rounded_border_color="@android:color/holo_blue_light"
+            app:rounded_border_size="5dp"
+            app:rounded_radius="32dp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

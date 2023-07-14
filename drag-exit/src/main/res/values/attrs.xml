@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 拖拽退出视图 -->
+    <declare-styleable name="FastDragExitLayout">
+        <attr name="fastDragExitLayout_enableLeftDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableRightDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableTopDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableBottomDragExit" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragScale" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragHorizontal" format="boolean" />
+        <attr name="fastDragExitLayout_enableDragVertical" format="boolean" />
+        <attr name="fastDragExitLayout_dragScaleReserve" format="float" />
+        <attr name="fastDragExitLayout_dragScaleFactor" format="float" />
+        <attr name="fastDragExitLayout_dragExitDistance" format="float" />
+        <attr name="fastDragExitLayout_dragResumeDuration" format="integer" />
+        <attr name="fastDragExitLayout_dragStartPosition" format="enum">
+            <enum name="down" value="0" />
+            <enum name="firstMove" value="1" />
+        </attr>
+        <attr name="fastDragExitLayout_dragScaleReference" format="enum">
+            <enum name="x" value="0" />
+            <enum name="y" value="1" />
+            <enum name="all" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'maven-publish'
+}
+android {
+    namespace 'com.arc.fast.core'
+    compileSdk versions.compile_sdk
+    defaultConfig {
+        minSdk versions.min_sdk
+        targetSdk versions.compile_sdk
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+}
+dependencies {
+    compileOnly 'androidx.core:core-ktx:1.10.0'
+    compileOnly 'androidx.appcompat:appcompat:1.6.1'
+    compileOnly  'com.google.android.material:material:1.8.0'
+    // 仅编译，若项目需要使用到，需要在项目中自行引用
+    compileOnly 'com.google.code.gson:gson:2.9.1'
+}
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+rootProject.name = "arc-fast"
+include ':core'
+include ':permission'
+include ':sample'
+include ':immersive'
+include ':span'
+include ':mask'
+include ':rounded'
+include ':nested-scroll-compat'
+include ':drag-exit'
+include ':text-view'
+include ':collection'

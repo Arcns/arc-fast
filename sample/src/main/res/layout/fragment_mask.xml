@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/view_finder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <com.arc.fast.mask.MaskHollowView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top|center_horizontal"
+            app:maskHollowView_hollow_border_color="@android:color/holo_red_light"
+            app:maskHollowView_hollow_border_rect="36dp"
+            app:maskHollowView_hollow_border_size="6dp"
+            app:maskHollowView_hollow_dimension_ratio="w,1:1"
+            app:maskHollowView_hollow_height="0dp"
+            app:maskHollowView_hollow_margin_top="160dp"
+            app:maskHollowView_hollow_radius="16dp"
+            app:maskHollowView_hollow_width="0dp"
+            app:maskHollowView_hollow_width_ratio="0.8"
+            app:maskHollowView_mask_background="#66000000" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
