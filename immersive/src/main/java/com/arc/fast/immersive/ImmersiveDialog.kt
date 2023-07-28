@@ -10,6 +10,7 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -241,7 +242,7 @@ class ImmersiveDialogBackground(
     private val windowManager: WindowManager by lazy {
         dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
-    private val isContainerReleased: Boolean get() = dialogFragment.activity?.let { it.isFinishing || it.isDestroyed } != false
+    private val isContainerReleased: Boolean get() = dialogFragment.activity.let { it?.isFinishing == true || it?.isDestroyed == true }
 
     private val currentIsAppearanceLightNavigationBars =
         !dialogConfig.isLightNavigationBarForegroundColor
@@ -296,6 +297,7 @@ class ImmersiveDialogBackground(
             .setDuration(300).apply {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
+                        Log.i("ImmersiveDialog", "onAnimationEnd isContainerReleased:" + isContainerReleased)
                         if (backgroundView.alpha == 0f && rootView.windowToken != null && !isContainerReleased) {
                             try {
                                 rootView.isVisible = false
