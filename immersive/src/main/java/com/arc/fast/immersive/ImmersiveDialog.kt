@@ -298,7 +298,7 @@ class ImmersiveDialogBackground(
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         Log.i("ImmersiveDialog", "onAnimationEnd isContainerReleased:" + isContainerReleased)
-                        if (backgroundView.alpha == 0f && rootView.windowToken != null && !isContainerReleased) {
+                        if (backgroundView.alpha == 0f && rootView.windowToken != null) {
                             try {
                                 rootView.isVisible = false
                                 windowManager.removeView(rootView)
