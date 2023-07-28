@@ -241,6 +241,8 @@ class ImmersiveDialogBackground(
     private val windowManager: WindowManager by lazy {
         dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
+    private val isContainerReleased: Boolean get() = dialogFragment.activity?.let { it.isFinishing || it.isDestroyed } != false
+
     private val currentIsAppearanceLightNavigationBars =
         !dialogConfig.isLightNavigationBarForegroundColor
     private val currentIsLightStatusBarForegroundColor =
@@ -294,7 +296,7 @@ class ImmersiveDialogBackground(
             .setDuration(300).apply {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        if (backgroundView.alpha == 0f && rootView.windowToken != null) {
+                        if (backgroundView.alpha == 0f && rootView.windowToken != null && !isContainerReleased) {
                             try {
                                 rootView.isVisible = false
                                 windowManager.removeView(rootView)
@@ -355,6 +357,7 @@ class ImmersiveDialogBackground(
     }
 
     fun show() {
+        if (isContainerReleased) return
         if (parentWindowController != null) {
             if (parentWindowController?.isAppearanceLightNavigationBars != currentIsAppearanceLightNavigationBars) {
                 parentWindowIsAppearanceLightNavigationBars =
