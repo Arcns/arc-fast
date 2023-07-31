@@ -6,9 +6,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.RippleDrawable
-import android.os.Build
-import android.text.Html
-import android.text.Spanned
 import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -161,12 +158,31 @@ val String.hexToColorOrNull: Int? get() = invokeOrNull { hexToColor }
 /**
  * color 转 hex color
  */
-val Int.colorToHex: String get() = "#${Integer.toHexString(this)}"
+val Int.colorToHex: String get() = colorToHex()
+
+
+/**
+ * color 转 hex color
+ */
+fun Int.colorToHex(enableTransparent: Boolean = false): String = "#${
+    Integer.toHexString(this).let {
+        if (!enableTransparent && it.length == 8) {
+            return@let it.substring(2)
+        }
+        return it
+    }
+}"
 
 /**
  * color 转 hex color
  */
 val Int.colorToHexOrNull: String? get() = invokeOrNull { colorToHex }
+
+/**
+ * color 转 hex color
+ */
+fun Int.colorToHexOrNull(enableTransparent: Boolean = false): String? =
+    invokeOrNull { colorToHex(enableTransparent) }
 
 
 /**

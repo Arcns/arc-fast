@@ -43,6 +43,8 @@
             app:fastTextView_rightImagePadding="20dp"
             app:fastTextView_rightImageWidth="20dp"
             app:fastTextView_textMediumBold="true"
+            app:fastTextView_topImageHeight="40dp"
+            app:fastTextView_topImageWidth="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

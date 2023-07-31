@@ -144,7 +144,7 @@ open class FastTextView @JvmOverloads constructor(
         imageHeight: Int?,
         imagePadding: Int?
     ) {
-        val image = image?.setSize(direction, imageWidth, imageHeight, imagePadding)
+        val image = image?.updateSize(direction, imageWidth, imageHeight, imagePadding, false)
         when (direction) {
             ImageDirection.Left -> setImages(leftImage = image)
             ImageDirection.Top -> setImages(topImage = image)
@@ -196,14 +196,17 @@ open class FastTextView @JvmOverloads constructor(
                 leftImageWidth = imageWidth
                 leftImageHeight = imageHeight
             }
+
             ImageDirection.Top -> {
                 topImageWidth = imageWidth
                 topImageHeight = imageHeight
             }
+
             ImageDirection.Right -> {
                 rightImageWidth = imageWidth
                 rightImageHeight = imageHeight
             }
+
             ImageDirection.Bottom -> {
                 bottomImageWidth = imageWidth
                 bottomImageHeight = imageHeight
@@ -219,14 +222,14 @@ open class FastTextView @JvmOverloads constructor(
         enableSetSize: Boolean = false
     ) {
         setCompoundDrawables(
-            leftImage?.let { if (enableSetSize) it.setSize(ImageDirection.Left) else it },
-            topImage?.let { if (enableSetSize) it.setSize(ImageDirection.Top) else it },
-            rightImage?.let { if (enableSetSize) it.setSize(ImageDirection.Right) else it },
-            bottomImage?.let { if (enableSetSize) it.setSize(ImageDirection.Bottom) else it }
+            leftImage?.let { if (enableSetSize) it.resetSizeByDirection(ImageDirection.Left) else it },
+            topImage?.let { if (enableSetSize) it.resetSizeByDirection(ImageDirection.Top) else it },
+            rightImage?.let { if (enableSetSize) it.resetSizeByDirection(ImageDirection.Right) else it },
+            bottomImage?.let { if (enableSetSize) it.resetSizeByDirection(ImageDirection.Bottom) else it }
         )
     }
 
-    private fun Drawable.setSize(direction: ImageDirection): Drawable {
+    private fun Drawable.resetSizeByDirection(direction: ImageDirection): Drawable {
         var imageWidth = 0
         var imageHeight = 0
         var imagePadding = 0
@@ -236,30 +239,34 @@ open class FastTextView @JvmOverloads constructor(
                 imageHeight = leftImageHeight
                 imagePadding = leftImagePadding
             }
+
             ImageDirection.Top -> {
                 imageWidth = topImageWidth
                 imageHeight = topImageHeight
                 imagePadding = topImagePadding
             }
+
             ImageDirection.Right -> {
                 imageWidth = rightImageWidth
                 imageHeight = rightImageHeight
                 imagePadding = rightImagePadding
             }
+
             ImageDirection.Bottom -> {
                 imageWidth = bottomImageWidth
                 imageHeight = bottomImageHeight
                 imagePadding = bottomImagePadding
             }
         }
-        return setSize(direction, imageWidth, imageHeight, imagePadding)
+        return updateSize(direction, imageWidth, imageHeight, imagePadding, true)
     }
 
-    private fun Drawable.setSize(
+    private fun Drawable.updateSize(
         direction: ImageDirection,
         imageWidth: Int?,
         imageHeight: Int?,
         imagePadding: Int?,
+        isExplicitlySetSize: Boolean,
         isAlsoSaveSize: Boolean = false
     ): Drawable {
         if (imageWidth != null && imageHeight != null && imageWidth > 0 && imageHeight > 0) {
@@ -287,8 +294,8 @@ open class FastTextView @JvmOverloads constructor(
                     )
                 }
             }
-        } else {
-            setSize(direction)
+        } else if (!isExplicitlySetSize) {
+            return resetSizeByDirection(direction)
         }
         return this
     }
