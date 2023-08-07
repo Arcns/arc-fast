@@ -1,5 +1,5 @@
 # Arc Fast
-[![](https://jitpack.io/v/com.gitee.arcns/arc-fast.svg)](https://jitpack.io/#com.gitee.arcns/arc-fast)
+[![](https://jitpack.io/v/Arcns/arc-fast.svg)](https://jitpack.io/#Arcns/arc-fast)
 
 > 本项目长期维护，有问题请提Issues
 
@@ -38,7 +38,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:core:latest.release'
+ implementation 'com.github.Arcns.arc-fast:core:latest.release'
 ```
 
 #### 2.使用方式
@@ -121,7 +121,7 @@ allprojects {
 ```
 ```
  // 注意：本Library基于androidx
- implementation 'com.gitee.arcns.arc-fast:permission:latest.release'
+ implementation 'com.github.Arcns.arc-fast:permission:latest.release'
 ```
 #### 3.使用方式：
 - 简单获取权限
@@ -179,7 +179,7 @@ allprojects {
 ```
 ```
 // 注意，本项目基于androidx
- implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
+ implementation 'com.github.Arcns.arc-fast:immersive:latest.release'
 // Library中使用了Constraintlayout，如果你的项目中未引入，那么你还需要
 implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
@@ -292,7 +292,7 @@ allprojects {
 ```
 ```
 // 注意，本项目基于androidx
- implementation 'com.gitee.arcns.arc-fast:immersive:latest.release'
+ implementation 'com.github.Arcns.arc-fast:immersive:latest.release'
 // Library中使用了Constraintlayout，如果你的项目中未引入，那么你还需要
 implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
@@ -346,7 +346,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:span:latest.release'
+ implementation 'com.github.Arcns.arc-fast:span:latest.release'
 ```
 
 #### 2.使用方式
@@ -412,7 +412,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:mask:latest.release'
+ implementation 'com.github.Arcns.arc-fast:mask:latest.release'
 ```
 
 #### 2.使用方式
@@ -463,7 +463,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
+ implementation 'com.github.Arcns.arc-fast:rounded:latest.release'
 // 可选：如果你需要使用RoundedConstraintLayout，但你的项目中未引入ConstraintLayout，那么你还需要：
  implementation 'androidx.constraintlayout:constraintlayout:yourversion'
 ```
@@ -555,8 +555,8 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
- implementation 'com.gitee.arcns.arc-fast:text-view:latest.release'
+ implementation 'com.github.Arcns.arc-fast:rounded:latest.release'
+ implementation 'com.github.Arcns.arc-fast:text-view:latest.release'
 ```
 
 #### 3.使用方式
@@ -630,7 +630,7 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:nested-scroll-compat:latest.release'
+ implementation 'com.github.Arcns.arc-fast:nested-scroll-compat:latest.release'
 // 可选：如果你需要使用FastNestedScrollCompat(兼容RecyclerView、ViewPager2)，那么你项目中需要引入recyclerview和viewpager2
  implementation 'androidx.recyclerview:recyclerview:yourversion'
  implementation 'androidx.viewpager2:viewpager2:yourversion'
@@ -698,8 +698,8 @@ allprojects {
 }
 ```
 ```
- implementation 'com.gitee.arcns.arc-fast:rounded:latest.release'
- implementation 'com.gitee.arcns.arc-fast:drag-exit:latest.release'
+ implementation 'com.github.Arcns.arc-fast:rounded:latest.release'
+ implementation 'com.github.Arcns.arc-fast:drag-exit:latest.release'
 ```
 
 #### 3.使用方式

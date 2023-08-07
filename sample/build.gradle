@@ -110,14 +110,14 @@ dependencies {
     implementation project(path: ':nested-scroll-compat')
     implementation project(path: ':drag-exit')
     implementation project(path: ':text-view')
-    def arcfast_version = "1.18.3"
-//    implementation "com.gitee.arcns.arc-fast:core:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:permission:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:immersive:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:span:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:mask:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:rounded:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:nested-scroll-compat:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:drag-exit:$arcfast_version"
-//    implementation "com.gitee.arcns.arc-fast:text-view:$arcfast_version"
+    def arcfast_version = "1.23.1"
+//    implementation "com.github.Arcns.arc-fast:core:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:permission:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:immersive:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:span:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:mask:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:rounded:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:nested-scroll-compat:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:drag-exit:$arcfast_version"
+//    implementation "com.github.Arcns.arc-fast:text-view:$arcfast_version"
 }
