@@ -31,6 +31,7 @@ fun <Data> TabLayout.bindToViewPager2(
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
     isEnableScrollPage: Boolean = true,
+    isSmoothScroll: Boolean = true,
     onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
 ) = this.bindToViewPager2(
     activity.supportFragmentManager,
@@ -41,6 +42,7 @@ fun <Data> TabLayout.bindToViewPager2(
     currentItemId,
     offscreenPageLimit,
     isEnableScrollPage,
+    isSmoothScroll,
     onCreateFragment
 )
 
@@ -54,6 +56,7 @@ fun <Data> TabLayout.bindToViewPager2(
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
     isEnableScrollPage: Boolean = true,
+    isSmoothScroll: Boolean = true,
     onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
 ) = this.bindToViewPager2(
     fragment.childFragmentManager,
@@ -64,6 +67,7 @@ fun <Data> TabLayout.bindToViewPager2(
     currentItemId,
     offscreenPageLimit,
     isEnableScrollPage,
+    isSmoothScroll,
     onCreateFragment
 )
 
@@ -77,6 +81,7 @@ fun <Data> TabLayout.bindToViewPager2(
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
     isEnableScrollPage: Boolean = true,
+    isSmoothScroll: Boolean = true,
     onCreateFragment: (Int, ViewPager2FragmentItem<Data>) -> Fragment
 ) {
     bindToViewPager2(
@@ -89,7 +94,8 @@ fun <Data> TabLayout.bindToViewPager2(
         customView = customView,
         currentItemId = currentItemId,
         offscreenPageLimit = offscreenPageLimit,
-        isEnableScrollPage = isEnableScrollPage
+        isEnableScrollPage = isEnableScrollPage,
+        isSmoothScroll = isSmoothScroll
     )
 }
 
@@ -102,7 +108,8 @@ fun <Data> TabLayout.bindToViewPager2(
     customView: ((TabLayout.Tab, ViewPager2Item<Data>, Int) -> Unit)? = null,
     currentItemId: String? = null,
     offscreenPageLimit: Int = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT,
-    isEnableScrollPage: Boolean = true
+    isEnableScrollPage: Boolean = true,
+    isSmoothScroll: Boolean = true
 ) {
     (viewPager.getChildAt(0) as? RecyclerView)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
     viewPager.offscreenPageLimit = offscreenPageLimit
@@ -113,7 +120,7 @@ fun <Data> TabLayout.bindToViewPager2(
             this,
             viewPager,
             true,
-//            isEnableScrollPage
+            isSmoothScroll
         ) { tab, position ->
             if (customView != null) customView.invoke(tab, items[position], position)
             else tab.text = items[position].title
