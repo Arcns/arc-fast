@@ -2,7 +2,6 @@ package com.arc.fast.core.extensions
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -14,12 +13,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-// 禁用TabLayout的长按提示
-fun TabLayout.disabledTooltipText() {
-    for (index in 0 until tabCount) {
-        TooltipCompat.setTooltipText(getTabAt(index)?.view ?: return, null)
-    }
-}
 
 // 绑定ViewPager2与TabLayout
 fun <Data> TabLayout.bindToViewPager2(
