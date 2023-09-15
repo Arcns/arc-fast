@@ -180,6 +180,14 @@ open class FastViewPager @JvmOverloads constructor(
 
     var scrollable = true
 
+    override fun canScrollHorizontally(direction: Int): Boolean {
+        return scrollable && super.canScrollHorizontally(direction)
+    }
+
+    override fun canScrollVertically(direction: Int): Boolean {
+        return scrollable && super.canScrollVertically(direction)
+    }
+
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         return if (!scrollable) {
             false
