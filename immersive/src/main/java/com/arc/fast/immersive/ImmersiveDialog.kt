@@ -239,10 +239,10 @@ class ImmersiveDialogBackground(
     private val backgroundView: View
     private val navigationBarView: View?
     private val animator: ObjectAnimator
-    private val windowManager: WindowManager by lazy {
-        dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    private val windowManager: WindowManager? by lazy {
+        dialogFragment.activity?.getSystemService(Context.WINDOW_SERVICE) as? WindowManager
     }
-    private val isContainerReleased: Boolean get() = dialogFragment.activity.let { it?.isFinishing == true || it?.isDestroyed == true }
+    private val isContainerReleased: Boolean get() = dialogFragment.activity.let { it == null || it.isFinishing || it.isDestroyed }
 
     private val currentIsAppearanceLightNavigationBars =
         !dialogConfig.isLightNavigationBarForegroundColor
@@ -297,11 +297,14 @@ class ImmersiveDialogBackground(
             .setDuration(300).apply {
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        Log.i("ImmersiveDialog", "onAnimationEnd isContainerReleased:" + isContainerReleased)
+                        Log.i(
+                            "ImmersiveDialog",
+                            "onAnimationEnd isContainerReleased:" + isContainerReleased
+                        )
                         if (backgroundView.alpha == 0f && rootView.windowToken != null) {
                             try {
                                 rootView.isVisible = false
-                                windowManager.removeView(rootView)
+                                windowManager?.removeView(rootView)
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -370,24 +373,29 @@ class ImmersiveDialogBackground(
                     parentWindowController?.isAppearanceLightStatusBars
             }
         }
-        windowManager.addView(
-            rootView,
-            WindowManager.LayoutParams(
-                WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
-                PixelFormat.TRANSLUCENT
-            ).apply {
-                token = parentWindow?.decorView?.windowToken
-                gravity = Gravity.CENTER
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    layoutInDisplayCutoutMode =
-                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        try {
+            windowManager?.addView(
+                rootView,
+                WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.TYPE_APPLICATION_PANEL,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS,
+                    PixelFormat.TRANSLUCENT
+                ).apply {
+                    token = parentWindow?.decorView?.windowToken
+                    gravity = Gravity.CENTER
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        layoutInDisplayCutoutMode =
+                            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        fitInsetsTypes =
+                            fitInsetsTypes and WindowInsetsCompat.Type.systemBars().inv()
+                    }
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    fitInsetsTypes = fitInsetsTypes and WindowInsetsCompat.Type.systemBars().inv()
-                }
-            }
-        )
+            )
+        } catch (e: WindowManager.BadTokenException) {
+            e.printStackTrace()
+        }
         // 显示时尝试设置背景
         dialogFragment.dialog?.setOnShowListener {
             executeShowAnimator()

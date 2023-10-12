@@ -1,6 +1,10 @@
 package com.arc.fast.span
 
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.text.style.ReplacementSpan
 
 /**
@@ -14,7 +18,7 @@ open class FastTextWrapSpan(
     private val backgroundColor: Int = Color.TRANSPARENT,
     private val textSize: Float? = null,
     private val textColor: Int? = null,
-    private val textStyle: Int? = null,
+    private val textTypeface: Typeface? = null,
     private val textLeftMargin: Float = 0f,
     private val textRightMargin: Float = 0f,
     private val leftPadding: Float = 0f,
@@ -25,6 +29,7 @@ open class FastTextWrapSpan(
     private var textWidth = 0
     private var defaultTextSize = 0f
     private var defaultTextTypeface = Typeface.DEFAULT
+    private var defaultTextSkewX = 0f
     private var defaultColor = Color.BLACK
     private var defaultStrokeWidth = 0f
     private val strokeWidthOffset: Float by lazy { borderSize / 2 }
@@ -38,9 +43,10 @@ open class FastTextWrapSpan(
             defaultColor = paint.color
             defaultStrokeWidth = paint.strokeWidth
             defaultTextTypeface = paint.typeface
+            defaultTextSkewX = paint.textSkewX
         }
         if (textSize != null) paint.textSize = textSize
-        if (textStyle != null) paint.typeface = Typeface.create(defaultTextTypeface, textStyle)
+        if (textTypeface != null) paint.typeface = textTypeface
         textWidth = (paint.measureText(text, start, end) + leftPadding + rightPadding).toInt()
         return textWidth + textLeftMargin.toInt() + textRightMargin.toInt()
     }
@@ -63,7 +69,12 @@ open class FastTextWrapSpan(
         val metrics = paint.fontMetrics;
         val top = y + metrics.top
         val bottom = y + metrics.bottom
-        paint.typeface = Typeface.DEFAULT
+        if (textTypeface != null) {
+            paint.typeface = textTypeface
+            if (textTypeface.isItalic) {
+                paint.textSkewX = -0.25f
+            }
+        }
         val rectF = RectF(
             x + strokeWidthOffset + textLeftMargin,
             top + strokeWidthOffset - topPadding - bottomPadding,
@@ -105,6 +116,7 @@ open class FastTextWrapSpan(
         )
         //恢复画笔
         paint.typeface = defaultTextTypeface
+        paint.textSkewX = defaultTextSkewX
         paint.color = defaultColor
         paint.textSize = defaultTextSize
     }
