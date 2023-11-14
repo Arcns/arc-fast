@@ -43,6 +43,11 @@ open class FastTextView @JvmOverloads constructor(
             field = value
             if (value) setTextMediumBold() else disableTextMediumBold()
         }
+    var textBoldFontWeight: Float = 0f
+        set(value) {
+            field = value
+            setTextBoldFontWeight(value)
+        }
 
     /**
      * 初始化读取参数
@@ -112,8 +117,18 @@ open class FastTextView @JvmOverloads constructor(
                     R.styleable.FastTextView_fastTextView_bottomImagePadding,
                     0
                 )
-            isTextMediumBold =
-                typedArray.getBoolean(R.styleable.FastTextView_fastTextView_textMediumBold, false)
+            val fontWeight =
+                typedArray.getFloat(R.styleable.FastTextView_fastTextView_textBoldFontWeight, 0f)
+            if (fontWeight > 0f) {
+                textBoldFontWeight = fontWeight
+            } else {
+                isTextMediumBold =
+                    typedArray.getBoolean(
+                        R.styleable.FastTextView_fastTextView_textMediumBold,
+                        false
+                    )
+            }
+
         } finally {
             typedArray.recycle()
         }
@@ -309,14 +324,18 @@ open class FastTextView @JvmOverloads constructor(
 /**
  * 设置文本字体为中粗
  */
-fun TextView.setTextMediumBold() = this.setTextMediumBold(1f)
-fun TextView.setTextMediumBold(mediumWeight: Float) {
+fun TextView.setTextMediumBold() = this.setTextBoldFontWeight(1f)
+
+/**
+ * 设置文字粗体
+ */
+fun TextView.setTextBoldFontWeight(fontWeight: Float) {
     paint.style = Paint.Style.FILL_AND_STROKE
-    paint.strokeWidth = mediumWeight
+    paint.strokeWidth = fontWeight
     invalidate()
 }
 
 /**
  * 禁用文本字体中粗
  */
-fun TextView.disableTextMediumBold() = setTextMediumBold(0f)
+fun TextView.disableTextMediumBold() = setTextBoldFontWeight(0f)

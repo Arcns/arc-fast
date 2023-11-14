@@ -15,5 +15,6 @@
         <attr name="fastTextView_bottomImageWidth" format="dimension" />
         <attr name="fastTextView_bottomImagePadding" format="dimension" />
         <attr name="fastTextView_textMediumBold" format="boolean" />
+        <attr name="fastTextView_textBoldFontWeight" format="float" />
     </declare-styleable>
 </resources>
