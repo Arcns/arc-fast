@@ -10,8 +10,16 @@ import androidx.core.content.FileProvider
 import com.arc.fast.core.FastCore
 import com.arc.fast.core.extensions.tryClose
 import com.arc.fast.core.util.notNullOrBlankElse
-import java.io.*
-import java.util.*
+import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 
 /**
@@ -92,6 +100,7 @@ val String?.supplementaryFileDirPath: String get() = supplementaryFileDirPathOrN
  * 拼接文件路径（会自动确保拼接字符是/）
  */
 fun String?.splicingFilePath(fileName: String): String {
+    if (fileName.startsWith("/")) return (this ?: "") + fileName
     return supplementaryFileDirPath + fileName
 }
 
@@ -177,7 +186,7 @@ fun String?.readFileContent(): String? {
 fun writeFileViaWriterBuffered(
     toFileDir: String?,
     toFileName: String?,
-    onWrite: (BufferedWriter) -> Unit
+    onWrite: (BufferedWriter) -> Unit,
 ): String? {
     if (toFileDir.isNullOrBlank() || toFileName.isNullOrBlank()) return null
     // 判断目标目录是否存在
@@ -203,7 +212,7 @@ fun writeFileViaWriterBuffered(
  */
 fun writeUriViaOutputStream(
     toFileUri: Uri?,
-    onWrite: (FileOutputStream) -> Unit
+    onWrite: (FileOutputStream) -> Unit,
 ): Boolean {
     if (toFileUri == null) return false
     // 判断目标目录是否存在
@@ -262,7 +271,7 @@ fun Uri?.getFileUriInfo(): FileUriInfo {
  * 返回Uri的对应文件信息
  */
 fun Uri?.getFileUriInfo(
-    infoProjection: Array<String>?
+    infoProjection: Array<String>?,
 ): LinkedHashMap<String, String?> {
     val values = LinkedHashMap<String, String?>()
     if (this == null || infoProjection.isNullOrEmpty()) return values
@@ -292,7 +301,7 @@ fun Uri?.getFileUriInfo(
 fun String?.copyFile(
     toFileDir: String,
     toFileName: String? = null,
-    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null
+    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null,
 ): String? {
     if (isNullOrBlank()) return null
     return File(this).copyFile(toFileDir, toFileName, onProgress)
@@ -304,7 +313,7 @@ fun String?.copyFile(
 fun File.copyFile(
     toFileDir: String?,
     toFileName: String? = null,
-    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null
+    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null,
 ): String? {
     if (toFileDir.isNullOrBlank() && toFileName.isNullOrBlank()) {
         return null
@@ -335,7 +344,7 @@ fun File.copyFile(
 fun InputStream.copyFile(
     toFileDir: String?,
     toFileName: String?,
-    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null
+    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null,
 ): String? {
     if (toFileDir.isNullOrBlank() || toFileName.isNullOrBlank()) {
         return null
@@ -361,7 +370,7 @@ fun InputStream.copyFile(
  */
 fun InputStream.copyFile(
     outputStream: OutputStream?,
-    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null
+    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null,
 ): Boolean {
     if (outputStream == null) {
         return false
@@ -431,7 +440,7 @@ fun String?.copyDir(toDirPath: String?) {
 fun String?.moveFile(
     toFileDir: String?,
     toFileName: String? = null,
-    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null
+    onProgress: ((total: Long, current: Long, progress: Double) -> Unit)? = null,
 ): String? {
     if (isNullOrBlank() || toFileDir.isNullOrBlank()) {
         return null
@@ -535,7 +544,7 @@ fun File?.asBase64(): String? {
 fun File.asUri(
     context: Context,
     /*The authority of a FileProvider defined in a <provider> element in your app's manifest.*/
-    authority: String
+    authority: String,
 ): Uri? = try {
     if (!isAvailableFile) null
     else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
