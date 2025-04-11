@@ -581,6 +581,7 @@ allprojects {
 -FastTextView不仅支持支持四个方向drawable的不同Padding和宽高，也支持设置中粗和圆角边框，所有支持的参数如下：
 | 参数 | 说明 | 类型 | 默认值 |
 | ------ | ------ | ------ | ------ |
+| fastTextView_textBoldFontWeight | 设置粗体大小，优先级高于fastTextView_textMediumBold | Float，例如1 | 0 |
 | fastTextView_textMediumBold | 设置中粗 | boolean，例如true | false |
 | fastTextView_leftImageHeight | 左边方向drawable高度 | dimension，例如10dp | 0 |
 | fastTextView_leftImageWidth | 左边方向drawable宽度 | dimension，例如10dp | 0 |
