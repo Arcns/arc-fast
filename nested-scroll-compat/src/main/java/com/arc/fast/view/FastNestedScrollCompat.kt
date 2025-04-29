@@ -35,7 +35,7 @@ open class FastNestedScrollCompat @JvmOverloads constructor(
         if (orientation != Orientation.Auto) return orientation
         val child = child ?: return Orientation.Vertical
         if (child is RecyclerView) {
-            when (val layoutManager = child.layoutManager) {
+            return when (val layoutManager = child.layoutManager) {
                 is LinearLayoutManager -> layoutManager.orientation.toOrientation
                 is StaggeredGridLayoutManager -> layoutManager.orientation.toOrientation
                 else -> Orientation.Vertical
